@@ -17,7 +17,7 @@ specifiers:
   encoding: ^0.1.13
   eslint: 8.26.0
   eslint-config-next: 13.0.0
-  eslint-config-prettier: ^8.5.0
+  eslint-config-prettier: ^8.6.0
   eslint-plugin-prettier: ^4.2.1
   husky: ^8.0.1
   next: 13.1.1
