@@ -1,7 +1,8 @@
-import "../styles/globals.css"
 import { Poppins, Roboto } from "@next/font/google"
 import localFont from "@next/font/local"
 import { cn } from "@/lib/utils"
+import "../styles/globals.css"
+import { Providers } from "@/lib/providers"
 
 const roboto = Roboto({
   weight: ["400", "700"],
@@ -44,12 +45,10 @@ export default function RootLayout({
         satoshi.variable
       )}
     >
-      {/*
-        <head /> will contain the components returned by the nearest parent
-        head.tsx. Find out more at https://beta.nextjs.org/docs/api-reference/file-conventions/head
-      */}
       <head />
-      <body>{children}</body>
+      <body>
+        <Providers>{children}</Providers>
+      </body>
     </html>
   )
 }
