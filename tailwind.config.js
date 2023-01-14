@@ -3,6 +3,7 @@ const { fontFamily } = require("tailwindcss/defaultTheme")
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+    darkMode: 'class',
     content: [
         "./app/**/*.{js,ts,jsx,tsx}", // Note the addition of the `app` directory.
         "./components/**/*.{js,ts,jsx,tsx}",
@@ -22,6 +23,7 @@ module.exports = {
                 sans: ['var(--font-poppins)', ...fontFamily.sans],
                 mono: ['var(--font-roboto)', ...fontFamily.mono],
                 serif: ['var(--font-satoshi)', ...fontFamily.serif],
+                satoshi: ['var(--font-satoshi)', ...fontFamily.serif],
             },
         },
     },
