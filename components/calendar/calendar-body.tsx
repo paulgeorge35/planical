@@ -1,17 +1,23 @@
+import { ToolbarContext } from "@/contexts/ToolbarContext"
 import { cn, compareDates } from "@/lib/utils"
+import { TriangleRightIcon } from "@radix-ui/react-icons"
 import { format } from "date-fns"
-import { useState } from "react"
+import { useContext, useState } from "react"
 import Task from "./task"
 
 type CalendarHourProps = {
   isFirst: boolean
+  isToday: boolean
   date: Date
   hour: number
+  hourProgress: number
   timeSlots?: number
 }
 
 type CalendarHourHeadProps = {
   hour: number
+  isCurrentHour: boolean
+  hourProgress: number
   timeSlots?: number
 }
 
@@ -24,6 +30,8 @@ type CalendarTimeSlotProps = {
 
 const CalendarHour = ({
   isFirst,
+  isToday,
+  hourProgress,
   date,
   hour,
   timeSlots = 12,
@@ -31,11 +39,17 @@ const CalendarHour = ({
   return (
     <td
       className={cn(
-        "w-full border-neutral-300",
+        "w-full border-neutral-300 relative",
         "dark:border-neutral-600",
         !isFirst && "border-l-[0.5px]"
       )}
     >
+      {isToday && (
+        <div
+          style={{ top: `${hourProgress - 1}px` }}
+          className={cn("absolute w-full left-0 h-[1px] bg-red-500 top-[-1px]")}
+        />
+      )}
       <div className="flex flex-col">
         {Array.from({ length: timeSlots }, (_, index) => {
           const minute = index * (60 / timeSlots)
@@ -53,7 +67,12 @@ const CalendarHour = ({
   )
 }
 
-const CalendarHourHead = ({ hour, timeSlots = 12 }: CalendarHourHeadProps) => {
+const CalendarHourHead = ({
+  hour,
+  isCurrentHour,
+  hourProgress,
+  timeSlots = 12,
+}: CalendarHourHeadProps) => {
   const getTimeStamp = (slot: number) => {
     let date = new Date()
     date.setHours(hour)
@@ -66,10 +85,17 @@ const CalendarHourHead = ({ hour, timeSlots = 12 }: CalendarHourHeadProps) => {
   return (
     <td
       className={cn(
-        "border-neutral-300 border-r-[0.5px]",
+        "border-neutral-300 border-r-[0.5px] relative",
         "dark:border-neutral-600"
       )}
     >
+      {isCurrentHour && (
+        <TriangleRightIcon
+          color="red"
+          style={{ top: `${hourProgress - 1}px` }}
+          className={cn("absolute left-[-6px] top-[-8px]")}
+        />
+      )}
       <div className="flex flex-col w-[50px]">
         {Array.from({ length: timeSlots }, (_, index) => {
           return (
@@ -118,6 +144,7 @@ const CalendarTimeSlot = ({
 }
 
 const CalendarBody = ({ weekToView }: { weekToView?: Date[] }) => {
+  const { today, isWeekToView } = useContext(ToolbarContext)
   return (
     <tbody
       className={cn(
@@ -175,11 +202,27 @@ const CalendarBody = ({ weekToView }: { weekToView?: Date[] }) => {
                       "dark:border-neutral-600"
                     )}
                   >
-                    <CalendarHourHead key={index} hour={index} />
+                    <CalendarHourHead
+                      key={index}
+                      hour={index}
+                      isCurrentHour={
+                        index === today.getHours() && isWeekToView()
+                      }
+                      hourProgress={Math.round(
+                        (98 / 3600000) * (new Date().getTime() % 3600000)
+                      )}
+                    />
                     {weekToView?.map((date: Date, indexSecond: number) => (
                       <CalendarHour
                         key={`${index}${indexSecond}}`}
                         date={date}
+                        isToday={
+                          index === today.getHours() &&
+                          compareDates(date, today)
+                        }
+                        hourProgress={Math.round(
+                          (98 / 3600000) * (new Date().getTime() % 3600000)
+                        )}
                         isFirst={indexSecond === 0}
                         hour={index}
                       />

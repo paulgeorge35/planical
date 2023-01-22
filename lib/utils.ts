@@ -67,3 +67,7 @@ export function compareDates(date1: Date, date2: Date) {
     date1.getDate() === date2.getDate()
   )
 }
+
+export function isWeekToView(date: Date, week: Date[]) {
+  return week.some((day) => compareDates(date, day))
+}
