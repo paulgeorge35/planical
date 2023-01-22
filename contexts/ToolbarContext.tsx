@@ -1,8 +1,9 @@
 import { createContext, useEffect, useState } from "react"
 import addDays from "date-fns/esm/fp/addDays/index.js"
 import { DayOfWeekNumber, ToolbarContextType } from "types"
-import { getWeekIntervalOfDate } from "@/lib/utils"
+import { getWeekIntervalOfDate, isWeekToView } from "@/lib/utils"
 import { format } from "date-fns"
+import { boolean } from "zod"
 
 export const ToolbarContext = createContext({
   today: new Date(),
@@ -20,6 +21,7 @@ export const ToolbarContext = createContext({
   toggleMainView: (_: "CALENDAR" | "TASKS") => null,
   sidebarLeftWidth: 300,
   setSidebarLeftWidth: (_: number) => null,
+  isWeekToView: () => false,
 } as ToolbarContextType)
 
 export const ToolbarProvider = ({
@@ -41,7 +43,7 @@ export const ToolbarProvider = ({
   }, [dateToView, firstDayOfWeek, getWeekIntervalOfDate, setWeekToView])
 
   const value = {
-    today,
+    today: new Date(),
     firstDayOfWeek,
     setFirstDayOfWeek: (value: DayOfWeekNumber) => setFirstDayOfWeek(value),
     dateToView,
@@ -57,6 +59,7 @@ export const ToolbarProvider = ({
       setMainView(mainView === "CALENDAR" ? "TASKS" : "CALENDAR"),
     sidebarLeftWidth,
     setSidebarLeftWidth: (value: number) => setSidebarLeftWidth(value),
+    isWeekToView: () => isWeekToView(today, weekToView),
   }
   return (
     <ToolbarContext.Provider value={value}>{children}</ToolbarContext.Provider>
