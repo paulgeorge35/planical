@@ -1,82 +1,50 @@
 "use client"
 
-import { Auth, ThemeSupa } from "@supabase/auth-ui-react"
-import supabase from "@/lib/supabase"
 import { cn } from "@/lib/utils"
-import ThemeSwitch from "@/components/theme-switcher"
+import { useContext } from "react"
+import { SidebarContext } from "@/contexts/SidebarContext"
+import Logo from "@/components/appbar/logo"
+import Toolbar from "@/components/appbar/toolbar"
+import TasksToolbar from "@/components/appbar/tasks-toolbar"
+import { ToolbarContext } from "@/contexts/ToolbarContext"
+import SidebarLeft from "@/components/sidebar-left"
+import SidebarRight from "@/components/sidebar-right"
+import CalendarView from "@/components/calendar-view"
 
 export default function Home() {
+  const { left, right } = useContext(SidebarContext)
+  const { mainView, sidebarLeftWidth, setSidebarLeftWidth } =
+    useContext(ToolbarContext)
   return (
-    <div className="p-0 ">
+    <div className="p-0 flex flex-col h-screen overflow-hidden">
       <div
         className={cn(
-          "flex w-screen h-12 bg-white border-b-[0.5px]",
+          "flex h-12 bg-white border-b-[0.5px] border-neutral-200",
           "dark:bg-neutral-900 dark:border-neutral-600"
         )}
       >
-        <div
-          className={cn(
-            "p-4 h-full border-r-[0.5px] w-[300px] flex items-center",
-            "dark:border-neutral-600"
-          )}
-        >
-          <h1 className={cn("text-2xl font-sans")}>
-            <span className="text-[#0070f3]">Daily</span>
-            <span className="text-red-500 font-bold">Planner</span>
-          </h1>
-        </div>
-        <div className={cn("h-full grow ")} />
-        <div
-          className={cn(
-            "h-full border-l-[0.5px] w-[300px]",
-            "dark:border-neutral-600"
-          )}
-        >
-          <ThemeSwitch />
-        </div>
+        <Logo left={left} sidebarWidth={sidebarLeftWidth} />
+        <Toolbar />
+        <TasksToolbar right={right} />
       </div>
       <div className="flex flex-row">
-        <div
-          className={cn(
-            "p-4 border-r-[0.5px] w-[300px] min-h-screen bg-slate-50",
-            "dark:bg-neutral-900 dark:border-neutral-600"
-          )}
-        >
-          <h1 className="text-3xl font-satoshi font-bold text-[#0070f3]">
-            BRAINDUMP
-          </h1>
-        </div>
+        <SidebarLeft
+          left={left}
+          sidebarWidth={sidebarLeftWidth}
+          setSidebarWidth={setSidebarLeftWidth}
+        />
         <main
           className={cn(
-            "min-h-screen p-0 py-16 flex flex-1 flex-col justify-center items-center",
-            "dark:bg-neutral-800"
+            "p-0 flex flex-1 flex-col justify-center items-center",
+            "dark:bg-neutral-800",
+            mainView === "CALENDAR"
+              ? "dark:bg-neutral-800 bg-white"
+              : "dark:bg-neutral-900 bg-slate-50"
           )}
         >
-          <h1 className="text-3xl font-satoshi font-bold text-[#0070f3]">
-            Satoshi
-          </h1>
-          <h1 className="text-3xl font-sans font-bold text-[#0070f3] dark:text-red-500">
-            Poppins
-          </h1>
-          <h1 className="text-3xl font-mono font-bold text-[#0070f3]">
-            Roboto
-          </h1>
-          <Auth
-            supabaseClient={supabase}
-            appearance={{ theme: ThemeSupa }}
-            // providers={["google", "facebook", "twitter", "github", "discord"]}
-          />
+          {mainView === "CALENDAR" && <CalendarView />}
         </main>
-        <div
-          className={cn(
-            "p-4 border-l-[0.5px] w-[300px] min-h-screen bg-slate-50",
-            "dark:bg-neutral-900 dark:border-neutral-600"
-          )}
-        >
-          <h1 className="text-3xl font-satoshi font-bold text-[#0070f3]">
-            TODAY
-          </h1>
-        </div>
+        <SidebarRight right={right} mainView={mainView} />
       </div>
     </div>
   )

@@ -1,3 +1,5 @@
+"use client"
+
 import { Poppins, Roboto } from "@next/font/google"
 import localFont from "@next/font/local"
 import { cn } from "@/lib/utils"
@@ -39,10 +41,10 @@ export default function RootLayout({
     <html
       lang="en"
       className={cn(
-        "font-sans antialiased",
         roboto.variable,
         poppins.variable,
-        satoshi.variable
+        satoshi.variable,
+        "font-sans antialiased max-h-screen light"
       )}
     >
       <head />

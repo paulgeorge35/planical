@@ -1,9 +1,11 @@
 import { useTheme } from "next-themes"
 import { useMounted } from "@/hooks/use-mounted"
 
+//TODO: write a component in the settings page to change the theme
+//INFO: this component exists for debugging purposes
+
 const ThemeSwitch = () => {
   const { theme, setTheme } = useTheme()
-
   const mounted = useMounted()
 
   return mounted ? (
