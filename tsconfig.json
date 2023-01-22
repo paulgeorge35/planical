@@ -19,6 +19,7 @@
       "@/components/*": ["components/*"],
       "@/ui/*": ["ui/*"],
       "@/hooks/*": ["hooks/*"],
+      "@/contexts/*": ["contexts/*"],
       "@/lib/*": ["lib/*"],
       "@/config/*": ["config/*"],
       "@/styles/*": ["styles/*"],
