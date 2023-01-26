@@ -29,7 +29,7 @@ const ToggleButton = ({
         defaultValue="CALENDAR"
         aria-label="Section options"
         className={cn(
-          "flex p-[2px] rounded",
+          "flex p-[1px] rounded",
           "bg-neutral-200",
           "dark:bg-neutral-600"
         )}
@@ -44,7 +44,7 @@ const ToggleButton = ({
             <Toolbar.ToggleItem
               key={index}
               className={cn(
-                "px-2 flex items-center py-1 rounded text-xs h-full",
+                "px-2 flex items-center py-1 rounded text-xs h-[28px]",
                 "text-neutral-600",
                 "hover:text-neutral-900",
                 "dark:text-neutral-200",
