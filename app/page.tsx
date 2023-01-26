@@ -16,7 +16,7 @@ export default function Home() {
   const { mainView, sidebarLeftWidth, setSidebarLeftWidth } =
     useContext(ToolbarContext)
   return (
-    <div className="p-0 flex flex-col h-screen overflow-hidden">
+    <div className="p-0 flex flex-col h-screen">
       <div
         className={cn(
           "flex h-12 bg-white border-b-[0.5px] border-neutral-200",
@@ -27,7 +27,7 @@ export default function Home() {
         <Toolbar />
         <TasksToolbar right={right} />
       </div>
-      <div className="flex flex-row">
+      <div className="flex flex-row grow">
         <SidebarLeft
           left={left}
           sidebarWidth={sidebarLeftWidth}
@@ -35,7 +35,7 @@ export default function Home() {
         />
         <main
           className={cn(
-            "p-0 flex flex-1 flex-col justify-center items-center",
+            "p-0 flex flex-1 flex-col justify-center items-center h-full",
             "dark:bg-neutral-800",
             mainView === "CALENDAR"
               ? "dark:bg-neutral-800 bg-white"

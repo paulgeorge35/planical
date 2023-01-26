@@ -15,7 +15,7 @@ const SidebarRight = ({
   return (
     <div
       className={cn(
-        "p-3 border-l-[0.5px] w-[300px] min-h-screen bg-slate-50 transition-all border-neutral-200 overflow-hidden",
+        "p-3 border-l-[0.5px] w-[300px] min-h-full bg-slate-50 transition-all border-neutral-200 overflow-hidden",
         "dark:bg-neutral-900 dark:border-neutral-600",
         right ? "p-3 w-[300px]" : "p-0 w-0",
         mainView === "CALENDAR"
