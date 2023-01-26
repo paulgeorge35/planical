@@ -2,7 +2,7 @@ import { ToolbarContext } from "@/contexts/ToolbarContext"
 import { cn, compareDates } from "@/lib/utils"
 import { TriangleRightIcon } from "@radix-ui/react-icons"
 import { format } from "date-fns"
-import { useContext, useState } from "react"
+import { useContext, useEffect, useRef, useState } from "react"
 import Task from "./task"
 
 type CalendarHourProps = {
@@ -36,6 +36,11 @@ const CalendarHour = ({
   hour,
   timeSlots = 12,
 }: CalendarHourProps) => {
+  const currentHourRef = useRef<null | HTMLDivElement>(null)
+
+  useEffect(() => {
+    currentHourRef.current?.scrollIntoView({ behavior: "smooth" })
+  }, [])
   return (
     <td
       className={cn(
@@ -50,7 +55,7 @@ const CalendarHour = ({
           className={cn("absolute w-full left-0 h-[1px] bg-red-500 top-[-1px]")}
         />
       )}
-      <div className="flex flex-col">
+      <div ref={isToday ? currentHourRef : null} className="flex flex-col">
         {Array.from({ length: timeSlots }, (_, index) => {
           const minute = index * (60 / timeSlots)
           return (
@@ -92,7 +97,7 @@ const CalendarHourHead = ({
       {isCurrentHour && (
         <TriangleRightIcon
           color="red"
-          style={{ top: `${hourProgress - 1}px` }}
+          style={{ top: `${hourProgress - 8}px` }}
           className={cn("absolute left-[-6px] top-[-8px]")}
         />
       )}
@@ -148,7 +153,7 @@ const CalendarBody = ({ weekToView }: { weekToView?: Date[] }) => {
   return (
     <tbody
       className={cn(
-        "w-full border-neutral-300 border-b-[0.5px]",
+        "w-full border-neutral-300 border-b-[0.5px] flex flex-col grow",
         "dark:border-neutral-600"
       )}
     >
@@ -160,7 +165,7 @@ const CalendarBody = ({ weekToView }: { weekToView?: Date[] }) => {
       >
         <td
           className={cn(
-            "border-neutral-300 border-r-[0.5px]",
+            "border-neutral-300 border-r-[0.5px] ",
             "dark:border-neutral-600"
           )}
         >
@@ -189,9 +194,9 @@ const CalendarBody = ({ weekToView }: { weekToView?: Date[] }) => {
           </td>
         ))}
       </tr>
-      <tr className="w-full p-0">
-        <td className="w-full p-0">
-          <div className="h-[calc(100vh-120px)] overflow-y-auto">
+      <tr className="w-full p-0 flex grow">
+        <td className="w-full p-0 h-[calc(100vh-110.1px)]">
+          <div className="h-full overflow-y-scroll">
             <table className="w-full">
               <tbody className="w-full">
                 {Array.from({ length: 24 }, (_, index) => (
