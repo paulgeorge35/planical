@@ -3,12 +3,12 @@
 An open source application built using the new router, server components and everything new in Next.js 13.
 
 > **Warning**
-> This app is a work in progress. I'm building this in public.
+> This app is a work in progress.
 > See the roadmap below.
 
 ## About this project
 
-Right now, I'm using this project as an experiment to see how a modern app (with features like authentication, subscriptions, API routes, ...etc) would work in Next.js 13 and server components.
+Right now, I'm using this project as an experiment to see how a modern app (with features like authentication, subscriptions, API routes etc) would work in Next.js 13 and server components.
 
 ## Note on Performance
 
@@ -29,6 +29,7 @@ Right now, I'm using this project as an experiment to see how a modern app (with
 - Styled using **Tailwind CSS**
 - Validations using **Zod**
 - Written in **TypeScript**
+- Deployed using **Vercel**
 
 ## Roadmap
 
@@ -61,7 +62,7 @@ pnpm install
 cp .env.example .env.local
 ```
 
-3. Create a supabase project and update the API key, Project key and database URL:
+3. Create a supabase project and update the API key, Project key and database URL.
 
 4. Start the development server:
 
