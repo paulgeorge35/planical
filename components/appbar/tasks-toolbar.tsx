@@ -4,14 +4,19 @@ import { ChevronLeftIcon } from "@radix-ui/react-icons"
 import { useContext } from "react"
 import Button from "../button"
 
-const TasksToolbar = ({ right }: { right: boolean }) => {
-  const { mainView, nextDay, prevDay, resetToday } = useContext(ToolbarContext)
+type TasksToolbarProps = {
+  right: boolean
+  mainView: "CALENDAR" | "TASKS"
+}
+
+const TasksToolbar = ({ right, mainView }: TasksToolbarProps) => {
+  const { nextDay, prevDay, resetToday } = useContext(ToolbarContext)
   return (
     <div
       className={cn(
         "flex justify-between items-center h-full border-l-[0.5px] w-[300px] transition-all border-neutral-200",
         "dark:border-neutral-600",
-        right ? "w-[300px] px-4" : "w-0 p-0 hidden",
+        right ? "w-[300px] px-4" : "w-0 p-0",
         mainView === "CALENDAR" ? "dark:bg-neutral-900" : "dark:bg-neutral-800"
       )}
     >
@@ -35,7 +40,7 @@ const TasksToolbar = ({ right }: { right: boolean }) => {
             "dark:hover:text-neutral-300"
           )}
         />
-        <Button onClick={resetToday} className="mx-1">
+        <Button onClick={resetToday} rootClassName="h-full" className="mx-1">
           Today
         </Button>
         <ChevronLeftIcon

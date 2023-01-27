@@ -7,11 +7,51 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model users {
-    id        Int      @id @default(autoincrement())
+model User {
+    id        String   @id @default(uuid())
     email     String   @unique
-    password  String
     name      String
+    tasks     Task[]
+    labels    Label[]
+    createdAt DateTime @default(now())
+    updatedAt DateTime
+}
+
+model Task {
+    id        Int       @id @default(autoincrement())
+    title     String
+    notes     String
+    recurrent Boolean
+    dump      Boolean
+    done      Boolean
+    estimate  Int
+    actual    Int
+    userId    String
+    user      User      @relation(fields: [userId], references: [id])
+    labelId   Int?
+    label     Label?    @relation(fields: [labelId], references: [id])
+    subtasks  Subtask[]
+    createdAt DateTime  @default(now())
+    updatedAt DateTime
+}
+
+model Subtask {
+    id        Int      @id @default(autoincrement())
+    title     String
+    done      Boolean
+    taskId    Int
+    task      Task     @relation(fields: [taskId], references: [id])
+    createdAt DateTime @default(now())
+    updatedAt DateTime
+}
+
+model Label {
+    id        Int      @id @default(autoincrement())
+    name      String
+    color     String
+    userId    String
+    user      User     @relation(fields: [userId], references: [id])
+    tasks     Task[]
     createdAt DateTime @default(now())
     updatedAt DateTime
 }

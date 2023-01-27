@@ -1,9 +1,12 @@
 import { createContext, useEffect, useState } from "react"
 import addDays from "date-fns/esm/fp/addDays/index.js"
 import { DayOfWeekNumber, ToolbarContextType } from "types"
-import { getWeekIntervalOfDate, isWeekToView } from "@/lib/utils"
+import {
+  getWeekIntervalFromDate,
+  getWeekIntervalOfDate,
+  isWeekToView,
+} from "@/lib/utils"
 import { format } from "date-fns"
-import { boolean } from "zod"
 
 export const ToolbarContext = createContext({
   today: new Date(),
@@ -16,11 +19,10 @@ export const ToolbarContext = createContext({
   weekToView: getWeekIntervalOfDate(new Date(), 1),
   nextWeek: () => null,
   prevWeek: () => null,
+  weekFromNow: getWeekIntervalFromDate(new Date()),
+  addPrevWeek: () => null,
+  addNextWeek: () => null,
   month: format(new Date(), "MMM yyyy"),
-  mainView: "CALENDAR",
-  toggleMainView: (_: "CALENDAR" | "TASKS") => null,
-  sidebarLeftWidth: 300,
-  setSidebarLeftWidth: (_: number) => null,
   isWeekToView: () => false,
 } as ToolbarContextType)
 
@@ -35,8 +37,9 @@ export const ToolbarProvider = ({
   const [weekToView, setWeekToView] = useState<Date[]>(
     getWeekIntervalOfDate(today, firstDayOfWeek)
   )
-  const [mainView, setMainView] = useState<"CALENDAR" | "TASKS">("CALENDAR")
-  const [sidebarLeftWidth, setSidebarLeftWidth] = useState(300)
+  const [weekFromNow, setWeekFromNow] = useState<Date[]>(
+    getWeekIntervalFromDate(today)
+  )
 
   useEffect(() => {
     setWeekToView(getWeekIntervalOfDate(dateToView, firstDayOfWeek))
@@ -53,12 +56,18 @@ export const ToolbarProvider = ({
     weekToView,
     nextWeek: () => setDateToView(addDays(7, dateToView)),
     prevWeek: () => setDateToView(addDays(-7, dateToView)),
+    weekFromNow,
+    addPrevWeek: () =>
+      setWeekFromNow([
+        ...getWeekIntervalFromDate(addDays(-7, weekFromNow[0])),
+        ...weekFromNow,
+      ]),
+    addNextWeek: () =>
+      setWeekFromNow([
+        ...weekFromNow,
+        ...getWeekIntervalFromDate(addDays(1, weekFromNow[6])),
+      ]),
     month: format(weekToView[6], "MMM yyyy"),
-    mainView,
-    toggleMainView: (_: "CALENDAR" | "TASKS") =>
-      setMainView(mainView === "CALENDAR" ? "TASKS" : "CALENDAR"),
-    sidebarLeftWidth,
-    setSidebarLeftWidth: (value: number) => setSidebarLeftWidth(value),
     isWeekToView: () => isWeekToView(today, weekToView),
   }
   return (
