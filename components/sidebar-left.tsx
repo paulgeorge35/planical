@@ -1,5 +1,8 @@
 import { cn } from "@/lib/utils"
 import React from "react"
+import { TaskType } from "types"
+import NewTaskButton from "./new-task-button"
+import Task from "./task"
 
 const SidebarLeft = ({
   left,
@@ -42,34 +45,130 @@ const SidebarLeft = ({
     }
   }, [resize, stopResizing])
 
+  const MockTasks: TaskType[] = [
+    {
+      id: "1",
+      title: "Task 1",
+      notes: "This is a note",
+      recurrent: false,
+      dump: false,
+      done: false,
+      estimate: 0,
+      actual: 15,
+      userId: "1",
+      label: {
+        id: "1",
+        name: "Label 1",
+        color: "#FF0000",
+      },
+      subtasks: [
+        {
+          id: "1",
+          title: "Subtask 1 which is longer",
+          done: false,
+          taskId: "1",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: "2",
+          title: "Subtask 2",
+          done: true,
+          taskId: "1",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      ],
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+    {
+      id: "2",
+      title: "Task 2",
+      notes: "This is a note",
+      recurrent: false,
+      dump: false,
+      done: false,
+      estimate: 145,
+      actual: 250,
+      userId: "1",
+      subtasks: [
+        {
+          id: "1",
+          title: "Subtask 1",
+          done: false,
+          taskId: "1",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: "2",
+          title: "Subtask 2",
+          done: true,
+          taskId: "1",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      ],
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+  ]
+
   return (
     <div
       ref={sidebarRef}
       onMouseDown={(e) => e.preventDefault()}
       className={cn(
-        "relative p-3 border-r-[0.5px] min-w-[250px] max-w-[500px] w-[300px] min-h-full bg-slate-50 transition-all border-neutral-200",
+        "relative border-r-[0.5px] min-h-full bg-slate-50 transition-all border-neutral-200 grow",
         "dark:bg-neutral-900 dark:border-neutral-600",
-        left ? `p-3 w-[${"300"}px]` : "w-0 min-w-0 p-0 overflow-hidden",
-        isResizing && "border-red-500 dark:border-red-500"
+        !left && "w-0 p-0 overflow-hidden",
+        isResizing && "border-red-500 dark:border-red-500 transition-none"
       )}
       style={{ width: `${left ? sidebarWidth : 0}px` }}
     >
+      <span
+        className={cn(
+          "h-12 flex items-center transition-all border-b-[0.5px] border-neutral-200",
+          "dark:border-neutral-600",
+          left ? "p-4" : "w-0",
+          isResizing && "transition-none"
+        )}
+        style={{ width: `${left ? sidebarWidth : 0}px` }}
+      >
+        <h1
+          className={cn(
+            "text-2xl font-sans transition-all",
+            `${left ? "block" : "hidden"}`
+          )}
+        >
+          <span className="text-primary">Daily</span>
+          <span className="text-secondary font-bold">Planner</span>
+        </h1>
+      </span>
       <div
         className={cn(
           "absolute top-0 right-0 h-full w-1 cursor-col-resize transition-all",
-          left ? "block" : "hidden"
+          left ? "block" : "hidden",
+          isResizing && "transition-none"
         )}
         onMouseDown={startResizing}
       />
       <h1
         className={cn(
-          "text-xl font-satoshi font-semibold",
+          "p-3 pb-0 text-xl font-satoshi font-semibold mb-3",
           "text-black",
           "dark:text-white"
         )}
       >
         🧠 Brain Dump
       </h1>
+      <div className="p-3 pt-0 flex flex-col space-y-2">
+        <NewTaskButton className="mb-2" tasks={MockTasks} />
+        {MockTasks.map((task, index) => (
+          <Task key={index} data={task} />
+        ))}
+      </div>
     </div>
   )
 }

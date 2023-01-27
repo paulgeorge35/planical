@@ -1,3 +1,4 @@
+import { SessionContext } from "@/contexts/SessionContext"
 import { SidebarContext } from "@/contexts/SidebarContext"
 import { ToolbarContext } from "@/contexts/ToolbarContext"
 import { cn } from "@/lib/utils"
@@ -14,9 +15,10 @@ import ThemeSwitch from "../theme-switcher"
 import ToggleButton from "../toggle-button"
 
 const Toolbar = () => {
-  const { left, setLeft, right, setRight } = useContext(SidebarContext)
-  const { month, mainView, toggleMainView, nextWeek, prevWeek, resetToday } =
-    useContext(ToolbarContext)
+  const { mainView, toggleMainView, left, setLeft, right, setRight } =
+    useContext(SidebarContext)
+  const { month, nextWeek, prevWeek, resetToday } = useContext(ToolbarContext)
+  const { signOut } = useContext(SessionContext)
   return (
     <div className={cn("px-4 h-full grow flex justify-between items-center")}>
       <ArrowLeftIcon
@@ -41,7 +43,9 @@ const Toolbar = () => {
           >
             {month}
           </h1>
-          <Button onClick={resetToday}>Today</Button>
+          <Button onClick={resetToday} rootClassName="h-full">
+            Today
+          </Button>
           <ChevronLeftIcon
             onClick={(_) => prevWeek()}
             className={cn(
@@ -65,7 +69,9 @@ const Toolbar = () => {
         </span>
         <span className="flex items-center h-full py-2">
           <ThemeSwitch />
-          <Button className="mr-4">Filter</Button>
+          <Button className="mr-4" rootClassName="h-full">
+            Filter
+          </Button>
           <ToggleButton
             className="mr-4"
             toggleValue={mainView}
@@ -77,7 +83,7 @@ const Toolbar = () => {
               { label: "Tasks", value: "TASKS", icon: CheckboxIcon },
             ]}
           />
-          <Avatar />
+          <Avatar onClick={signOut} />
         </span>
       </div>
       <ArrowLeftIcon

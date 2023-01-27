@@ -3,8 +3,18 @@
 import { Auth, ThemeSupa } from "@supabase/auth-ui-react"
 import supabase from "@/lib/supabase"
 import { cn } from "@/lib/utils"
+import { useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
 
 export default function Home() {
+  const router = useRouter()
+
+  useEffect(() => {
+    supabase.auth.onAuthStateChange((event, session) => {
+      if (event === "SIGNED_IN" && session) router.push("/")
+    })
+  }, [])
+
   return (
     <div className="p-0">
       <main

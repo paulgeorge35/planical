@@ -2,6 +2,7 @@ import { ToolbarContext } from "@/contexts/ToolbarContext"
 import { cn, compareDates } from "@/lib/utils"
 import { format } from "date-fns"
 import { useContext } from "react"
+import NewTaskButton from "./new-task-button"
 import Separator from "./separator"
 
 const SidebarRight = ({
@@ -20,11 +21,11 @@ const SidebarRight = ({
         right ? "p-3 w-[300px]" : "p-0 w-0",
         mainView === "CALENDAR"
           ? "dark:bg-neutral-900 bg-slate-50"
-          : "dark:bg-neutral-800 bg-white absolute right-0"
+          : "dark:bg-neutral-800 bg-white absolute right-0 min-h-[calc(100vh-48px)]"
       )}
     >
       {mainView === "CALENDAR" ? (
-        <span className="flex items-center">
+        <span className="flex items-center pb-3">
           <h1 className="text-xl font-satoshi font-semibold">
             {format(dateToView, "EEE")}
             <span className="text-neutral-500">
@@ -47,7 +48,9 @@ const SidebarRight = ({
         </span>
       )}
       {mainView === "CALENDAR" ? (
-        <span className="flex items-center"></span>
+        <span className="w-full">
+          <NewTaskButton className="mb-2" tasks={[]} />
+        </span>
       ) : (
         <span className="">
           <Separator />

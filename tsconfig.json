@@ -24,7 +24,8 @@
       "@/config/*": ["config/*"],
       "@/styles/*": ["styles/*"],
       "@/prisma/*": ["prisma/*"],
-      "contentlayer/generated": ["./.contentlayer/generated"]
+      "contentlayer/generated": ["./.contentlayer/generated"],
+      "@/assets/*": ["assets/*"]
     },
     "plugins": [
       {

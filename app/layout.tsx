@@ -5,6 +5,7 @@ import localFont from "@next/font/local"
 import { cn } from "@/lib/utils"
 import "../styles/globals.css"
 import { Providers } from "@/lib/providers"
+import { Suspense } from "react"
 
 const roboto = Roboto({
   weight: ["400", "700"],
@@ -49,8 +50,20 @@ export default function RootLayout({
     >
       <head />
       <body>
-        <Providers>{children}</Providers>
+        <Providers>
+          {/* <Suspense fallback={<Loading />}> */}
+          {children}
+          {/* </Suspense> */}
+        </Providers>
       </body>
     </html>
+  )
+}
+
+const Loading = () => {
+  return (
+    <div className="flex justify-center items-center h-screen w-screen bg-red-300">
+      <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900" />
+    </div>
   )
 }

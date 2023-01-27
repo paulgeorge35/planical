@@ -9,13 +9,17 @@
     "start": "next start",
     "lint": "next lint",
     "preview": "next build && next start",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "prisma:generate": "prisma generate",
+    "prisma:db:push": "prisma db push",
+    "prisma:db:pull": "prisma db pull"
   },
   "dependencies": {
     "@next/font": "13.1.1",
     "@prisma/client": "^4.5.0",
     "@radix-ui/colors": "^0.1.8",
     "@radix-ui/react-avatar": "^1.0.1",
+    "@radix-ui/react-checkbox": "^1.0.1",
     "@radix-ui/react-icons": "^1.1.1",
     "@radix-ui/react-separator": "^1.0.1",
     "@radix-ui/react-toolbar": "^1.0.1",

@@ -150,6 +150,24 @@ const CalendarTimeSlot = ({
 
 const CalendarBody = ({ weekToView }: { weekToView?: Date[] }) => {
   const { today, isWeekToView } = useContext(ToolbarContext)
+  const [hourProgress, setHourProgress] = useState(
+    Math.round((98 / 3600000) * (new Date().getTime() % 3600000))
+  )
+  const [timeDiff, setTimeDiff] = useState(
+    Math.round(new Date().getTime() % 60000)
+  )
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setHourProgress(
+        Math.round((98 / 3600000) * (new Date().getTime() % 3600000))
+      )
+      setTimeDiff(60000)
+    }, timeDiff)
+    return () => {
+      clearInterval(interval)
+    }
+  }, [])
   return (
     <tbody
       className={cn(
@@ -213,9 +231,7 @@ const CalendarBody = ({ weekToView }: { weekToView?: Date[] }) => {
                       isCurrentHour={
                         index === today.getHours() && isWeekToView()
                       }
-                      hourProgress={Math.round(
-                        (98 / 3600000) * (new Date().getTime() % 3600000)
-                      )}
+                      hourProgress={hourProgress}
                     />
                     {weekToView?.map((date: Date, indexSecond: number) => (
                       <CalendarHour
@@ -225,9 +241,7 @@ const CalendarBody = ({ weekToView }: { weekToView?: Date[] }) => {
                           index === today.getHours() &&
                           compareDates(date, today)
                         }
-                        hourProgress={Math.round(
-                          (98 / 3600000) * (new Date().getTime() % 3600000)
-                        )}
+                        hourProgress={hourProgress}
                         isFirst={indexSecond === 0}
                         hour={index}
                       />

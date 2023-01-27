@@ -30,11 +30,18 @@ export function getWeekIntervalOfDate(date: Date, firstDayOfWeek: number = 1) {
   const start = addDays(-day + (day === 0 ? -6 : firstDayOfWeek), dateCopy)
   const end = addDays(6, start)
   const dates = []
-  for (
-    let dateCopy = start;
-    dateCopy <= end;
-    dateCopy.setDate(dateCopy.getDate() + 1)
-  ) {
+  for (let dateCopy = start; dateCopy <= end; dateCopy = addDays(1, dateCopy)) {
+    dates.push(new Date(dateCopy))
+  }
+  return dates
+}
+
+export function getWeekIntervalFromDate(date: Date) {
+  let dateCopy = new Date(date.getTime())
+  const start = dateCopy
+  const end = addDays(6, start)
+  const dates = []
+  for (let dateCopy = start; dateCopy <= end; dateCopy = addDays(1, dateCopy)) {
     dates.push(new Date(dateCopy))
   }
   return dates
@@ -71,3 +78,6 @@ export function compareDates(date1: Date, date2: Date) {
 export function isWeekToView(date: Date, week: Date[]) {
   return week.some((day) => compareDates(date, day))
 }
+
+export const formatTime = (time: number) =>
+  `${Math.floor(time / 100)}:${time % 100}`
