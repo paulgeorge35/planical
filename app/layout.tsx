@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils"
 import "../styles/globals.css"
 import { Providers } from "@/lib/providers"
 import { Suspense } from "react"
+import { AnalyticsWrapper } from "@/components/analytics"
 
 const roboto = Roboto({
   weight: ["400", "700"],
@@ -48,7 +49,9 @@ export default function RootLayout({
         "font-sans antialiased max-h-screen light"
       )}
     >
-      <head />
+      <head>
+        <AnalyticsWrapper />
+      </head>
       <body>
         <Providers>
           {/* <Suspense fallback={<Loading />}> */}
