@@ -1,4 +1,5 @@
-import { createContext, useEffect, useState } from "react"
+import { useLocalStorage } from "@/hooks/use-local-storage"
+import { createContext } from "react"
 import { SidebarContextType } from "types"
 
 export const SidebarContext = createContext({
@@ -17,25 +18,19 @@ export const SidebarProvider = ({
 }: {
   children: React.ReactNode
 }) => {
-  const [isOpenLeftSidebar, setIsOpenLeftSidebar] = useState(
-    localStorage.getItem("isOpenLeftSidebar") === "true"
+  const [isOpenLeftSidebar, setIsOpenLeftSidebar] = useLocalStorage(
+    "isOpenLeftSidebar",
+    true
   )
-  const [isOpenRightSidebar, setIsOpenRightSidebar] = useState(
-    localStorage.getItem("isOpenRightSidebar") === "true"
+  const [isOpenRightSidebar, setIsOpenRightSidebar] = useLocalStorage(
+    "isOpenRightSidebar",
+    true
   )
-  const [sidebarLeftWidth, setSidebarLeftWidth] = useState(
-    parseInt(localStorage.getItem("sidebarLeftWidth") || "300")
+  const [sidebarLeftWidth, setSidebarLeftWidth] = useLocalStorage(
+    "sidebarLeftWidth",
+    300
   )
-  const [mainView, setMainView] = useState<"CALENDAR" | "TASKS">(
-    (localStorage.getItem("mainView") as "CALENDAR" | "TASKS") || "CALENDAR"
-  )
-
-  useEffect(() => {
-    localStorage.setItem("isOpenLeftSidebar", isOpenLeftSidebar.toString())
-    localStorage.setItem("isOpenRightSidebar", isOpenRightSidebar.toString())
-    localStorage.setItem("sidebarLeftWidth", sidebarLeftWidth.toString())
-    localStorage.setItem("mainView", mainView)
-  }, [isOpenLeftSidebar, isOpenRightSidebar, sidebarLeftWidth, mainView])
+  const [mainView, setMainView] = useLocalStorage("mainView", "CALENDAR")
 
   const value = {
     left: isOpenLeftSidebar,
@@ -45,7 +40,8 @@ export const SidebarProvider = ({
     sidebarLeftWidth,
     setSidebarLeftWidth: (value: number) =>
       setSidebarLeftWidth(value > 500 ? 500 : value < 250 ? 250 : value),
-    mainView,
+    // cast mainView to "CALENDAR" | "TASKS" to avoid type error
+    mainView: mainView as "CALENDAR" | "TASKS",
     toggleMainView: (_: "CALENDAR" | "TASKS") =>
       setMainView(mainView === "CALENDAR" ? "TASKS" : "CALENDAR"),
   }
