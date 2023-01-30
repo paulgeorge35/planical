@@ -1,12 +1,19 @@
 "use client"
 
+import { useContext } from "react"
 import { Poppins, Roboto } from "@next/font/google"
 import localFont from "@next/font/local"
-import { cn } from "@/lib/utils"
-import "../styles/globals.css"
-import { Providers } from "@/lib/providers"
-import { Suspense } from "react"
+import { Toolbar } from "@radix-ui/react-toolbar"
+
 import { AnalyticsWrapper } from "@/components/analytics"
+import TasksToolbar from "@/components/appbar/tasks-toolbar"
+import SidebarLeft from "@/components/sidebar-left"
+import SidebarRight from "@/components/sidebar-right"
+import { SidebarContext } from "@/contexts/SidebarContext"
+import { Providers } from "@/lib/providers"
+import { cn } from "@/lib/utils"
+
+import "../styles/globals.css"
 
 const roboto = Roboto({
   weight: ["400", "700"],
@@ -39,6 +46,8 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  const { mainView, left, right, sidebarLeftWidth, setSidebarLeftWidth } =
+    useContext(SidebarContext)
   return (
     <html
       lang="en"
@@ -54,19 +63,40 @@ export default function RootLayout({
       </head>
       <body>
         <Providers>
-          {/* <Suspense fallback={<Loading />}> */}
-          {children}
-          {/* </Suspense> */}
+          <div className="flex flex-row h-screen">
+            <SidebarLeft
+              left={left}
+              sidebarWidth={sidebarLeftWidth}
+              setSidebarWidth={setSidebarLeftWidth}
+            />
+            <span className="flex flex-col">
+              <div
+                className={cn(
+                  "flex h-12 bg-white border-b-[0.5px] border-neutral-200",
+                  "dark:bg-neutral-900 dark:border-neutral-600"
+                )}
+              >
+                <Toolbar />
+                <TasksToolbar right={right} mainView={mainView} />
+              </div>
+              <span className="flex flex-row h-full">
+                <main
+                  className={cn(
+                    "p-0 flex flex-1 flex-col justify-center items-center h-full",
+                    "dark:bg-neutral-800",
+                    mainView === "CALENDAR"
+                      ? "dark:bg-neutral-800 bg-white"
+                      : "dark:bg-neutral-900 bg-slate-50"
+                  )}
+                >
+                  {children}
+                </main>
+                <SidebarRight right={right} mainView={mainView} />
+              </span>
+            </span>
+          </div>
         </Providers>
       </body>
     </html>
-  )
-}
-
-const Loading = () => {
-  return (
-    <div className="flex justify-center items-center h-screen w-screen bg-red-300">
-      <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900" />
-    </div>
   )
 }
