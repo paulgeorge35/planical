@@ -75,6 +75,8 @@ export default function RootLayout({
             className="p-0"
             open={profileDialogueOpen}
             toggle={toggleProfileDialogue}
+            dismissOnClickOutside={true}
+            dismissOnEscapeKey={true}
           >
             <ProfileDialogContent />
           </Dialog>
