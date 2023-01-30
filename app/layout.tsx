@@ -1,19 +1,21 @@
 "use client"
 
-import { useContext } from "react"
+import { useCallback, useContext, useState } from "react"
 import { Poppins, Roboto } from "@next/font/google"
 import localFont from "@next/font/local"
-import { Toolbar } from "@radix-ui/react-toolbar"
 
 import { AnalyticsWrapper } from "@/components/analytics"
 import TasksToolbar from "@/components/appbar/tasks-toolbar"
 import SidebarLeft from "@/components/sidebar-left"
 import SidebarRight from "@/components/sidebar-right"
+import Toolbar from "@/components/appbar/toolbar"
 import { SidebarContext } from "@/contexts/SidebarContext"
 import { Providers } from "@/lib/providers"
 import { cn } from "@/lib/utils"
 
 import "../styles/globals.css"
+import Dialog from "@/components/dialog"
+import ProfileDialogContent from "@/components/dialog/profile-dialog-content"
 
 const roboto = Roboto({
   weight: ["400", "700"],
@@ -22,7 +24,7 @@ const roboto = Roboto({
 })
 
 const poppins = Poppins({
-  weight: ["400", "700"],
+  weight: ["400", "500", "600", "700"],
   subsets: ["latin"],
   variable: "--font-poppins",
 })
@@ -48,6 +50,12 @@ export default function RootLayout({
 }) {
   const { mainView, left, right, sidebarLeftWidth, setSidebarLeftWidth } =
     useContext(SidebarContext)
+  const [profileDialogueOpen, setProfileDialogueOpen] = useState(false)
+
+  const toggleProfileDialogue = useCallback(() => {
+    setProfileDialogueOpen(!profileDialogueOpen)
+  }, [profileDialogueOpen])
+
   return (
     <html
       lang="en"
@@ -63,6 +71,13 @@ export default function RootLayout({
       </head>
       <body>
         <Providers>
+          <Dialog
+            className="p-0"
+            open={profileDialogueOpen}
+            toggle={toggleProfileDialogue}
+          >
+            <ProfileDialogContent />
+          </Dialog>
           <div className="flex flex-row h-screen">
             <SidebarLeft
               left={left}
@@ -76,7 +91,9 @@ export default function RootLayout({
                   "dark:bg-neutral-900 dark:border-neutral-600"
                 )}
               >
-                <Toolbar />
+                <Toolbar
+                  openProfileDialogue={() => setProfileDialogueOpen(true)}
+                />
                 <TasksToolbar right={right} mainView={mainView} />
               </div>
               <span className="flex flex-row h-full">
