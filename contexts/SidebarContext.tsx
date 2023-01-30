@@ -40,7 +40,6 @@ export const SidebarProvider = ({
     sidebarLeftWidth,
     setSidebarLeftWidth: (value: number) =>
       setSidebarLeftWidth(value > 500 ? 500 : value < 250 ? 250 : value),
-    // cast mainView to "CALENDAR" | "TASKS" to avoid type error
     mainView: mainView as "CALENDAR" | "TASKS",
     toggleMainView: (_: "CALENDAR" | "TASKS") =>
       setMainView(mainView === "CALENDAR" ? "TASKS" : "CALENDAR"),
