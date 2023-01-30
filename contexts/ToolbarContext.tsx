@@ -7,6 +7,7 @@ import {
   isWeekToView,
 } from "@/lib/utils"
 import { format } from "date-fns"
+import { useLocalStorage } from "@/hooks/use-local-storage"
 
 export const ToolbarContext = createContext({
   today: new Date(),
@@ -32,7 +33,10 @@ export const ToolbarProvider = ({
   children: React.ReactNode
 }) => {
   let today = new Date()
-  const [firstDayOfWeek, setFirstDayOfWeek] = useState<DayOfWeekNumber>(1)
+  const [firstDayOfWeek, setFirstDayOfWeek] = useLocalStorage<DayOfWeekNumber>(
+    "firstDayOfWeek",
+    1
+  )
   const [dateToView, setDateToView] = useState<Date>(new Date())
   const [weekToView, setWeekToView] = useState<Date[]>(
     getWeekIntervalOfDate(today, firstDayOfWeek)
