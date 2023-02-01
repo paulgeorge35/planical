@@ -4,20 +4,33 @@ import { cn } from "@/lib/utils"
 type SeparatorProps = {
   orientation?: "horizontal" | "vertical"
   className?: string
+  rootClassName?: string
 }
 
-const Separator = ({ orientation, className }: SeparatorProps) => (
-  <RadixSeparator.Root
+const Separator = ({
+  orientation = "horizontal",
+  className,
+  rootClassName,
+}: SeparatorProps) => (
+  <span
     className={cn(
-      "m-4 w-full h-[1px]",
-      "bg-neutral-200",
-      "dark:bg-neutral-600",
-      orientation === "horizontal" ? "w-full h-[1px]" : "h-full w-[1px]",
-      className
+      orientation === "horizontal"
+        ? "w-full h-[1px] py-4"
+        : "h-full w-[1px] px-4",
+      rootClassName
     )}
-    orientation={orientation}
-    style={{ margin: "15px 0" }}
-  />
+  >
+    <RadixSeparator.Root
+      className={cn(
+        "w-full h-[1px]",
+        "bg-neutral-200",
+        "dark:bg-neutral-600",
+        orientation === "horizontal" ? "w-full h-[1px]" : "h-full w-[1px]",
+        className
+      )}
+      orientation={orientation}
+    />
+  </span>
 )
 
 export default Separator

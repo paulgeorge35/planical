@@ -72,7 +72,6 @@ const Toolbar = ({ openProfileDialogue }: ToolbarProps) => {
           />
         </span>
         <span className="flex items-center h-full py-2">
-          <ThemeSwitch />
           <Button className="mr-4" rootClassName="h-full">
             Filter
           </Button>

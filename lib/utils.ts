@@ -1,6 +1,16 @@
 import addDays from "date-fns/esm/fp/addDays/index.js"
 import { ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
+import {
+  BookmarkIcon,
+  EnvelopeClosedIcon,
+  GearIcon,
+  HeartIcon,
+  KeyboardIcon,
+  QuestionMarkCircledIcon,
+  RocketIcon,
+  StarIcon,
+} from "@radix-ui/react-icons"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -81,3 +91,61 @@ export function isWeekToView(date: Date, week: Date[]) {
 
 export const formatTime = (time: number) =>
   `${Math.floor(time / 100)}:${time % 100}`
+
+export const ProfileDialogTabSections = [
+  {
+    title: "User Settings",
+    tabs: [
+      {
+        label: "Account Settings",
+        icon: GearIcon,
+        value: "account-settings",
+      },
+      {
+        label: "Subscription",
+        icon: RocketIcon,
+        value: "subscription-settings",
+      },
+    ],
+  },
+  {
+    title: "App Settings",
+    tabs: [
+      {
+        label: "Personalization",
+        icon: HeartIcon,
+        value: "personalization-settings",
+      },
+      {
+        label: "Labels",
+        icon: BookmarkIcon,
+        value: "labels-settings",
+      },
+    ],
+  },
+  {
+    title: undefined,
+    tabs: [
+      {
+        label: "Keyboard Shortcuts",
+        icon: KeyboardIcon,
+        value: "keyboard-shortcuts",
+      },
+      {
+        label: "What's New",
+        icon: StarIcon,
+        value: "whats-new",
+      },
+      {
+        label: "Help & Support",
+        icon: QuestionMarkCircledIcon,
+        value: "help",
+      },
+      {
+        label: "Give Feedback",
+        icon: EnvelopeClosedIcon,
+        value: "feedback",
+      },
+    ],
+  },
+]
