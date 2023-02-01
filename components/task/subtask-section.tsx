@@ -29,12 +29,11 @@ const Subtask = ({ subtask }: { subtask: SubtaskType }) => {
         checked={subtask.done}
         onChange={() => console.log(subtask.done)}
       />
-      {/* <p className={cn("text-xs grow px-2")}>{subtask.title}</p> */}
       <textarea
         className={cn(
           "text-xs ml-2 bg-transparent break-words resize-none outline-none p-0 flex-auto max-w-[calc(100%-4rem)] overflow-y-hidden"
         )}
-        value={title}
+        defaultValue={title}
         onChange={(e) => setTitle(e.target.value)}
         placeholder="Subtask description"
       />

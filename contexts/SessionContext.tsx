@@ -32,14 +32,8 @@ export const SessionProvider = ({
   }, [])
 
   useEffect(() => {
-    if (session) {
-      //   console.log("Existing session: ", session, pathname)
-      router.push("/")
-    }
-    if (!session && pathname !== "/login") {
-      //   console.log(session, pathname)
-      router.push("/login")
-    }
+    if (session) router.push("/")
+    if (!session && pathname !== "/login") router.push("/login")
   }, [session])
 
   const value = {

@@ -1,24 +1,28 @@
-import { SessionContext } from "@/contexts/SessionContext"
-import { SidebarContext } from "@/contexts/SidebarContext"
-import { ToolbarContext } from "@/contexts/ToolbarContext"
-import { cn } from "@/lib/utils"
+import { useContext } from "react"
 import {
   ArrowLeftIcon,
   CalendarIcon,
   CheckboxIcon,
   ChevronLeftIcon,
 } from "@radix-ui/react-icons"
-import { useContext } from "react"
+
 import Avatar from "../avatar"
 import Button from "../button"
 import ThemeSwitch from "../theme-switcher"
 import ToggleButton from "../toggle-button"
+import { SessionContext } from "@/contexts/SessionContext"
+import { SidebarContext } from "@/contexts/SidebarContext"
+import { ToolbarContext } from "@/contexts/ToolbarContext"
+import { cn } from "@/lib/utils"
 
-const Toolbar = () => {
+type ToolbarProps = {
+  openProfileDialogue: () => void
+}
+
+const Toolbar = ({ openProfileDialogue }: ToolbarProps) => {
   const { mainView, toggleMainView, left, setLeft, right, setRight } =
     useContext(SidebarContext)
   const { month, nextWeek, prevWeek, resetToday } = useContext(ToolbarContext)
-  const { signOut } = useContext(SessionContext)
   return (
     <div className={cn("px-4 h-full grow flex justify-between items-center")}>
       <ArrowLeftIcon
@@ -68,7 +72,6 @@ const Toolbar = () => {
           />
         </span>
         <span className="flex items-center h-full py-2">
-          <ThemeSwitch />
           <Button className="mr-4" rootClassName="h-full">
             Filter
           </Button>
@@ -83,7 +86,7 @@ const Toolbar = () => {
               { label: "Tasks", value: "TASKS", icon: CheckboxIcon },
             ]}
           />
-          <Avatar onClick={signOut} />
+          <Avatar onClick={openProfileDialogue} />
         </span>
       </div>
       <ArrowLeftIcon

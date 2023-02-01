@@ -1,21 +1,37 @@
 "use client"
 
-import { cn } from "@/lib/utils"
-import { useContext } from "react"
-import { SidebarContext } from "@/contexts/SidebarContext"
-import Toolbar from "@/components/appbar/toolbar"
-import TasksToolbar from "@/components/appbar/tasks-toolbar"
-import { ToolbarContext } from "@/contexts/ToolbarContext"
-import SidebarLeft from "@/components/sidebar-left"
-import SidebarRight from "@/components/sidebar-right"
+import { useCallback, useContext, useState } from "react"
+
 import CalendarView from "@/components/calendar-view"
 import TasksView from "@/components/tasks-view"
+import { SidebarContext } from "@/contexts/SidebarContext"
+import SidebarLeft from "@/components/sidebar-left"
+import Toolbar from "@/components/appbar/toolbar"
+import TasksToolbar from "@/components/appbar/tasks-toolbar"
+import { cn } from "@/lib/utils"
+import SidebarRight from "@/components/sidebar-right"
+import Dialog from "@/components/dialog"
+import ProfileDialogContent from "@/components/dialog/profile-dialog-content"
 
 export default function Home() {
   const { mainView, left, right, sidebarLeftWidth, setSidebarLeftWidth } =
     useContext(SidebarContext)
+  const [profileDialogueOpen, setProfileDialogueOpen] = useState(false)
+
+  const toggleProfileDialogue = useCallback(() => {
+    setProfileDialogueOpen(!profileDialogueOpen)
+  }, [profileDialogueOpen])
+
   return (
     <div className="flex flex-row h-screen">
+      <Dialog
+        className="p-0"
+        open={profileDialogueOpen}
+        toggle={toggleProfileDialogue}
+        dismissOnEscapeKey={true}
+      >
+        <ProfileDialogContent />
+      </Dialog>
       <SidebarLeft
         left={left}
         sidebarWidth={sidebarLeftWidth}
@@ -28,7 +44,7 @@ export default function Home() {
             "dark:bg-neutral-900 dark:border-neutral-600"
           )}
         >
-          <Toolbar />
+          <Toolbar openProfileDialogue={() => setProfileDialogueOpen(true)} />
           <TasksToolbar right={right} mainView={mainView} />
         </div>
         <span className="flex flex-row h-full">
@@ -41,8 +57,9 @@ export default function Home() {
                 : "dark:bg-neutral-900 bg-slate-50"
             )}
           >
-            {mainView === "CALENDAR" && <CalendarView />}
-            {mainView === "TASKS" && (
+            {mainView === "CALENDAR" ? (
+              <CalendarView />
+            ) : (
               <TasksView sidebarLeftWidth={left ? sidebarLeftWidth : 1} />
             )}
           </main>
