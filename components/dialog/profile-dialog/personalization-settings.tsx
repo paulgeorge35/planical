@@ -1,19 +1,32 @@
 import Button from "@/components/button"
 import Select from "@/components/select"
 import Separator from "@/components/separator"
+import { ToolbarContext } from "@/contexts/ToolbarContext"
 import { useMounted } from "@/hooks/use-mounted"
 import { cn } from "@/lib/utils"
 import { useTheme } from "next-themes"
+import { useContext } from "react"
+import { DayOfWeekNumber } from "types"
 
 type PersonalizationSettingsProps = {}
 
 const PersonalizationSettings = ({}: PersonalizationSettingsProps) => {
   const { theme, setTheme } = useTheme()
+  const { firstDayOfWeek, setFirstDayOfWeek } = useContext(ToolbarContext)
   const mounted = useMounted()
   const themes = [
     { label: "Use system preferences", value: "system" },
     { label: "Light mode", value: "light" },
     { label: "Dark mode", value: "dark" },
+  ]
+  const days = [
+    { label: "Sunday", value: "0" },
+    { label: "Monday", value: "1" },
+    { label: "Tuesday", value: "2" },
+    { label: "Wednesday", value: "3" },
+    { label: "Thursday", value: "4" },
+    { label: "Friday", value: "5" },
+    { label: "Saturday", value: "6" },
   ]
 
   return (
@@ -29,7 +42,7 @@ const PersonalizationSettings = ({}: PersonalizationSettingsProps) => {
           Personalization Settings
         </h1>
       </div>
-      <div className={cn("p-6 w-full flex flex-col")}>
+      <div className={cn("p-6 pb-0 w-full flex flex-col")}>
         <fieldset className="mt-0 group flex flex-col space-y-2">
           <label
             className={cn(
@@ -40,52 +53,17 @@ const PersonalizationSettings = ({}: PersonalizationSettingsProps) => {
           >
             Appearance
           </label>
-          {/* <select
-            className={cn(
-              "px-3 py-2 rounded-lg font-satoshi font-medium text-md max-w-[50%] border-[1px] appearance-none",
-              "after:content-['^'] after:self-end after:w-3 after:h-3 after:bg-neutral-900",
-              "bg-transparent text-neutral-900 shadow-none",
-              "hover:border-neutral-900",
-              "dark:bg-neutral-800 dark:text-white dark:border-neutral-700  after:bg-white",
-              "dark:hover:border-neutral-500"
-            )}
-            value={theme}
-            onChange={(e) => mounted && setTheme(e.target.value)}
-          >
-            <option value="system">Use system preferences</option>
-            <option value="light">Light mode</option>
-            <option value="dark">Dark mode</option>
-          </select> */}
           <Select
             value={theme || ""}
             onChange={(value) => mounted && setTheme(value)}
-            options={[
-              { label: "Use system preferences", value: "system" },
-              { label: "Light mode", value: "light" },
-              { label: "Dark mode", value: "dark" },
-            ]}
+            options={themes}
           />
-
-          {/* <input
-            className={cn(
-              "px-3 py-2 rounded-lg font-satoshi font-medium text-md max-w-[50%] border-[1px]",
-              "bg-transparent text-neutral-900",
-              "hover:border-neutral-900",
-              "dark:bg-neutral-800 dark:text-white dark:border-neutral-700",
-              "dark:hover:border-neutral-500"
-            )}
-            type="select"
-            id="theme"
-            value={theme}
-            onChange={(e) => mounted && setTheme(e.target.value)}
-          >
-            <option value="system">System</option>
-            <option value="dark">Dark</option>
-            <option value="light">Light</option>
-          </input> */}
         </fieldset>
-        <Separator className="m-0 p-0 w-full h-[1px] bg-neutral-300 dark:bg-neutral-700" />
-        {/* <fieldset className="flex flex-col">
+        <Separator rootClassName="py-4" />
+        {/* <Separator className="m-0 p-0 w-full h-[1px] bg-neutral-300 dark:bg-neutral-700" /> */}
+      </div>
+      <div className={cn("p-6 pb-0 w-full flex flex-col")}>
+        <fieldset className="mt-0 group flex flex-col space-y-2">
           <label
             className={cn(
               "text-xs uppercase font-semibold",
@@ -93,51 +71,23 @@ const PersonalizationSettings = ({}: PersonalizationSettingsProps) => {
               "dark:text-neutral-500"
             )}
           >
-            Email
+            Calendar settings
           </label>
-          <p
-            className={cn(
-              "py-2 font-satoshi text-md max-w-[50%]",
-              "bg-transparent disabled:text-neutral-900",
-              "dark:text-neutral-300"
-            )}
-            id="name"
-          >
-            {email}
-          </p>
+          <span className="flex space-x-2 items-center">
+            <p className="text-sm">Start week on</p>
+            <Select
+              size="sm"
+              condensed
+              value={firstDayOfWeek.toString()}
+              onChange={(value) =>
+                mounted && setFirstDayOfWeek(parseInt(value) as DayOfWeekNumber)
+              }
+              options={days}
+            />
+          </span>
         </fieldset>
-        <Button
-          className={cn(
-            "text-xs ml-0 py-2",
-            "border-neutral-200 text-neutral-600",
-            "hover:border-purple-600 hover:text-purple-600 hover:bg-purple-50",
-            "dark:border-neutral-700 dark:text-neutral-400",
-            "dark:hover:text-purple-600 dark:hover:border-purple-600 dark:hover:bg-transparent"
-          )}
-        >
-          Change Email
-        </Button>
-        <Separator className="m-0 p-0 w-full h-[1px] bg-neutral-300 dark:bg-neutral-700" />
-        <label
-          className={cn(
-            "text-xs uppercase font-semibold",
-            "text-neutral-400",
-            "dark:text-neutral-500"
-          )}
-        >
-          Password
-        </label>
-        <Button
-          className={cn(
-            "text-xs ml-0 py-2 mt-2",
-            "border-neutral-200 text-neutral-600",
-            "hover:border-purple-600 hover:text-purple-600 hover:bg-purple-50",
-            "dark:border-neutral-700 dark:text-neutral-400",
-            "dark:hover:text-purple-600 dark:hover:border-purple-600 dark:hover:bg-transparent"
-          )}
-        >
-          Change Password
-        </Button> */}
+        {/* <Separator className="m-0 p-0 w-full h-[1px] bg-neutral-300 dark:bg-neutral-700" /> */}
+        <Separator rootClassName="py-4" />
       </div>
     </div>
   )

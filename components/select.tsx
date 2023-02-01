@@ -13,14 +13,24 @@ interface SelectProps {
     value: string
     label: string
   }[]
+  size?: "sm" | "md"
+  condensed?: boolean
 }
 
-const Select = ({ value, onChange, options }: SelectProps) => {
+const Select = ({
+  value,
+  onChange,
+  options,
+  size = "md",
+  condensed = false,
+}: SelectProps) => {
   return (
     <RadixSelect.Root onValueChange={onChange} value={value}>
       <RadixSelect.Trigger
         className={cn(
-          "overflow-hidden px-2 py-2 rounded-lg font-satoshi font-medium text-md max-w-[50%] border-[1px] inline-flex items-center justify-center",
+          "overflow-hidden px-2 py-2 rounded-lg font-satoshi font-medium w-full text-md max-w-[50%] border-[1px] inline-flex items-center justify-center",
+          size === "sm" && "text-sm px-1 py-0 rounded-sm",
+          condensed && "w-max px-2",
           "text-neutral-900",
           "hover:border-neutral-900",
           "dark:bg-neutral-800 dark:text-white dark:border-neutral-700",
