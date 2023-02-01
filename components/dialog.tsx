@@ -28,14 +28,14 @@ const Dialog = ({
           "fixed inset-0 animate-in bg-black opacity-30",
           "dark:opacity-70"
         )}
-        onClick={() => dismissOnClickOutside && toggle()}
+        onClick={(e) => dismissOnClickOutside && toggle()}
       />
       <RadixDialog.Content
         onKeyDown={(event) =>
           dismissOnEscapeKey && event.key === "Escape" && toggle()
         }
         className={cn(
-          "rounded-lg overflow-hidden shadow-md fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]  w-[90vw] max-w-[850px] max-h-[85vh] p-6 animate-in focus:outline-none",
+          "rounded-lg overflow-hidden shadow-md fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] w-[90vw] max-w-[850px] max-h-[85vh] p-6 animate-in focus:outline-none",
           "bg-white",
           "dark:bg-neutral-900",
           className

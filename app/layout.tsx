@@ -48,14 +48,6 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  const { mainView, left, right, sidebarLeftWidth, setSidebarLeftWidth } =
-    useContext(SidebarContext)
-  const [profileDialogueOpen, setProfileDialogueOpen] = useState(false)
-
-  const toggleProfileDialogue = useCallback(() => {
-    setProfileDialogueOpen(!profileDialogueOpen)
-  }, [profileDialogueOpen])
-
   return (
     <html
       lang="en"
@@ -70,51 +62,7 @@ export default function RootLayout({
         <AnalyticsWrapper />
       </head>
       <body>
-        <Providers>
-          <Dialog
-            className="p-0"
-            open={profileDialogueOpen}
-            toggle={toggleProfileDialogue}
-            dismissOnClickOutside={true}
-            dismissOnEscapeKey={true}
-          >
-            <ProfileDialogContent />
-          </Dialog>
-          <div className="flex flex-row h-screen">
-            <SidebarLeft
-              left={left}
-              sidebarWidth={sidebarLeftWidth}
-              setSidebarWidth={setSidebarLeftWidth}
-            />
-            <span className="flex flex-col">
-              <div
-                className={cn(
-                  "flex h-12 bg-white border-b-[0.5px] border-neutral-200",
-                  "dark:bg-neutral-900 dark:border-neutral-600"
-                )}
-              >
-                <Toolbar
-                  openProfileDialogue={() => setProfileDialogueOpen(true)}
-                />
-                <TasksToolbar right={right} mainView={mainView} />
-              </div>
-              <span className="flex flex-row h-full">
-                <main
-                  className={cn(
-                    "p-0 flex flex-1 flex-col justify-center items-center h-full",
-                    "dark:bg-neutral-800",
-                    mainView === "CALENDAR"
-                      ? "dark:bg-neutral-800 bg-white"
-                      : "dark:bg-neutral-900 bg-slate-50"
-                  )}
-                >
-                  {children}
-                </main>
-                <SidebarRight right={right} mainView={mainView} />
-              </span>
-            </span>
-          </div>
-        </Providers>
+        <Providers>{children}</Providers>
       </body>
     </html>
   )
