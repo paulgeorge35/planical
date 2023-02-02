@@ -27,7 +27,7 @@ const Help = ({}: HelpProps) => {
             Changelog
           </label>
           <a
-            href="https://dailyplanner1337.canny.io"
+            href="https://planical.canny.io"
             className={cn(
               "py-2 font-satoshi text-md max-w-[50%] flex items-center cursor-pointer transition-colors duration-200 ease-in-out",
               "text-purple-500 hover:text-purple-700",
