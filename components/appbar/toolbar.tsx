@@ -8,9 +8,7 @@ import {
 
 import Avatar from "../avatar"
 import Button from "../button"
-import ThemeSwitch from "../theme-switcher"
 import ToggleButton from "../toggle-button"
-import { SessionContext } from "@/contexts/SessionContext"
 import { SidebarContext } from "@/contexts/SidebarContext"
 import { ToolbarContext } from "@/contexts/ToolbarContext"
 import { cn } from "@/lib/utils"
@@ -37,40 +35,52 @@ const Toolbar = ({ openProfileDialogue }: ToolbarProps) => {
         )}
       />
       <div className="px-4 grow flex items-center justify-between h-full">
-        <span className="flex items-center h-full py-2">
-          <h1
-            className={cn(
-              "text-lg font-satoshi font-medium",
-              "text-neutral-800",
-              "dark:text-neutral-200"
-            )}
-          >
-            {month}
-          </h1>
-          <Button onClick={resetToday} rootClassName="h-full">
-            Today
-          </Button>
-          <ChevronLeftIcon
-            onClick={(_) => prevWeek()}
-            className={cn(
-              "origin-center h-4 w-4 transition-transform ml-4",
-              "text-neutral-400",
-              "hover:text-neutral-900 hover:cursor-pointer",
-              "dark:text-neutral-600",
-              "dark:hover:text-neutral-300"
-            )}
-          />
-          <ChevronLeftIcon
-            onClick={(_) => nextWeek()}
-            className={cn(
-              "origin-center h-4 w-4 transition-transform ml-2 rotate-180",
-              "text-neutral-400",
-              "hover:text-neutral-900 hover:cursor-pointer",
-              "dark:text-neutral-600",
-              "dark:hover:text-neutral-300"
-            )}
-          />
-        </span>
+        {mainView === "CALENDAR" ? (
+          <span className="flex items-center h-full py-2">
+            <h1
+              className={cn(
+                "text-lg font-satoshi font-medium",
+                "text-neutral-800",
+                "dark:text-neutral-200"
+              )}
+            >
+              {month}
+            </h1>
+            <Button onClick={resetToday} rootClassName="h-full">
+              Today
+            </Button>
+            <ChevronLeftIcon
+              onClick={(_) => prevWeek()}
+              className={cn(
+                "origin-center h-4 w-4 transition-transform ml-4",
+                "text-neutral-400",
+                "hover:text-neutral-900 hover:cursor-pointer",
+                "dark:text-neutral-600",
+                "dark:hover:text-neutral-300"
+              )}
+            />
+            <ChevronLeftIcon
+              onClick={(_) => nextWeek()}
+              className={cn(
+                "origin-center h-4 w-4 transition-transform ml-2 rotate-180",
+                "text-neutral-400",
+                "hover:text-neutral-900 hover:cursor-pointer",
+                "dark:text-neutral-600",
+                "dark:hover:text-neutral-300"
+              )}
+            />
+          </span>
+        ) : (
+          <span className="flex items-center h-full py-2">
+            <Button
+              onClick={resetToday}
+              rootClassName="h-full"
+              className="ml-0"
+            >
+              Today
+            </Button>
+          </span>
+        )}
         <span className="flex items-center h-full py-2">
           <Button className="mr-4" rootClassName="h-full">
             Filter
