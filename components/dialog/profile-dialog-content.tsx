@@ -55,7 +55,7 @@ const ProfileDialogContent = ({}: ProfileDialogContentProps) => {
                   setActiveTab("help")
                   break
                 case "feedback":
-                  window.open("https://dailyplanner1337.canny.io/give-feedback")
+                  window.open("https://planical.canny.io/give-feedback")
                   break
                 default:
                   break
