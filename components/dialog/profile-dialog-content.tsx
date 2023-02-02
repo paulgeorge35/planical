@@ -2,8 +2,11 @@ import { cn, ProfileDialogTabSections } from "@/lib/utils"
 import { useState } from "react"
 import Avatar from "../avatar"
 import AccountSettings from "./profile-dialog/account-settings"
+import Help from "./profile-dialog/help"
+import LabelsSettings from "./profile-dialog/labels-settings"
 import PersonalizationSettings from "./profile-dialog/personalization-settings"
 import ProfileDialogTabs from "./profile-dialog/profile-dialog-tabs"
+import SubscriptionSettings from "./profile-dialog/subscription-settings"
 
 type ProfileDialogContentProps = {}
 
@@ -46,7 +49,18 @@ const ProfileDialogContent = ({}: ProfileDialogContentProps) => {
             ) => setActiveTab(tab)}
             additionalActions={(
               tab: (typeof ProfileDialogTabSections)[number]["tabs"][number]["value"]
-            ) => {}}
+            ) => {
+              switch (tab) {
+                case "help":
+                  setActiveTab("help")
+                  break
+                case "feedback":
+                  window.open("https://planical.canny.io/give-feedback")
+                  break
+                default:
+                  break
+              }
+            }}
           />
         </span>
       </div>
@@ -57,6 +71,9 @@ const ProfileDialogContent = ({}: ProfileDialogContentProps) => {
         />
       )}
       {activeTab === "personalization-settings" && <PersonalizationSettings />}
+      {activeTab === "labels-settings" && <LabelsSettings />}
+      {activeTab === "subscription-settings" && <SubscriptionSettings />}
+      {activeTab === "help" && <Help />}
     </span>
   )
 }

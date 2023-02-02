@@ -1,26 +1,42 @@
 "use client"
 
-import { useCallback, useContext, useState } from "react"
+import { useCallback, useContext, useEffect, useState } from "react"
 
 import CalendarView from "@/components/calendar-view"
-import TasksView from "@/components/tasks-view"
-import { SidebarContext } from "@/contexts/SidebarContext"
-import SidebarLeft from "@/components/sidebar-left"
-import Toolbar from "@/components/appbar/toolbar"
-import TasksToolbar from "@/components/appbar/tasks-toolbar"
-import { cn } from "@/lib/utils"
-import SidebarRight from "@/components/sidebar-right"
 import Dialog from "@/components/dialog"
 import ProfileDialogContent from "@/components/dialog/profile-dialog-content"
+import SidebarLeft from "@/components/sidebar-left"
+import SidebarRight from "@/components/sidebar-right"
+import TasksToolbar from "@/components/appbar/tasks-toolbar"
+import TasksView from "@/components/tasks-view"
+import Toolbar from "@/components/appbar/toolbar"
+import WelcomeDialogContent from "@/components/dialog/welcome-dialog-content"
+
+import { SidebarContext } from "@/contexts/SidebarContext"
+
+import { useMounted } from "@/hooks/use-mounted"
+
+import { cn } from "@/lib/utils"
 
 export default function Home() {
+  const mounted = useMounted()
   const { mainView, left, right, sidebarLeftWidth, setSidebarLeftWidth } =
     useContext(SidebarContext)
   const [profileDialogueOpen, setProfileDialogueOpen] = useState(false)
+  const [newAccountDialogOpen, setNewAccountDialogOpen] = useState(false)
+  const [newAccount, _] = useState(false)
 
   const toggleProfileDialogue = useCallback(() => {
     setProfileDialogueOpen(!profileDialogueOpen)
   }, [profileDialogueOpen])
+
+  useEffect(() => {
+    setInterval(() => {
+      if (mounted && newAccount) {
+        setNewAccountDialogOpen(true)
+      }
+    }, 200)
+  }, [mounted, newAccount])
 
   return (
     <div className="flex flex-row h-screen">
@@ -31,6 +47,14 @@ export default function Home() {
         dismissOnEscapeKey={true}
       >
         <ProfileDialogContent />
+      </Dialog>
+      <Dialog
+        className={cn("p-6 py-8 max-w-[600px]")}
+        open={newAccountDialogOpen}
+        toggle={() => setNewAccountDialogOpen(false)}
+        closeButton={false}
+      >
+        <WelcomeDialogContent onClose={() => setNewAccountDialogOpen(false)} />
       </Dialog>
       <SidebarLeft
         left={left}

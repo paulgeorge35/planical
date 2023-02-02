@@ -56,7 +56,7 @@ const SubtaskSection = ({
 }: SubtaskSectionProps) => {
   return extended ? (
     <span>
-      <Separator />
+      <Separator className="my-2" />
       <span className={cn("flex flex-col space-y-0", className)}>
         {subtasks.map((subtask, index) => (
           <Subtask key={index} subtask={subtask} />

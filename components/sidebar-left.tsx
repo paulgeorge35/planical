@@ -138,12 +138,11 @@ const SidebarLeft = ({
       >
         <h1
           className={cn(
-            "text-2xl font-sans transition-all",
+            "w-full text-center text-2xl font-satoshi font-bold italic text-neutral-900 dark:text-white transition-all",
             `${left ? "block" : "hidden"}`
           )}
         >
-          <span className="text-primary">Daily</span>
-          <span className="text-secondary font-bold">Planner</span>
+          planical
         </h1>
       </span>
       <div

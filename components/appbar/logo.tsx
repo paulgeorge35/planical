@@ -22,8 +22,7 @@ const Logo = ({
           `${left ? "block" : "hidden"}`
         )}
       >
-        <span className="text-primary">Daily</span>
-        <span className="text-secondary font-bold">Planner</span>
+        <span className="text-neutral-900 dark:text-white">planical</span>
       </h1>
     </div>
   )
