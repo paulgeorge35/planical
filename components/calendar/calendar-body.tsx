@@ -213,7 +213,7 @@ const CalendarBody = ({ weekToView }: { weekToView?: Date[] }) => {
         ))}
       </tr>
       <tr className="w-full p-0 flex grow">
-        <td className="w-full p-0 h-[calc(100vh-110.1px)]">
+        <td className="w-full p-0 h-[calc(100vh-118.1px)]">
           <div className="h-full overflow-y-scroll">
             <table className="w-full">
               <tbody className="w-full">
@@ -229,7 +229,11 @@ const CalendarBody = ({ weekToView }: { weekToView?: Date[] }) => {
                       key={index}
                       hour={index}
                       isCurrentHour={
-                        index === today.getHours() && isWeekToView()
+                        index === today.getHours() &&
+                        (weekToView || false) &&
+                        ((weekToView.length > 1 && isWeekToView()) ||
+                          (weekToView.length === 1 &&
+                            compareDates(weekToView[0], today)))
                       }
                       hourProgress={hourProgress}
                     />
