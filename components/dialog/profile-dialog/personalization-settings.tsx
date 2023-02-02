@@ -1,4 +1,3 @@
-import Button from "@/components/button"
 import Select from "@/components/select"
 import Separator from "@/components/separator"
 import { ToolbarContext } from "@/contexts/ToolbarContext"
@@ -60,7 +59,6 @@ const PersonalizationSettings = ({}: PersonalizationSettingsProps) => {
           />
         </fieldset>
         <Separator rootClassName="py-4" />
-        {/* <Separator className="m-0 p-0 w-full h-[1px] bg-neutral-300 dark:bg-neutral-700" /> */}
       </div>
       <div className={cn("p-6 pb-0 w-full flex flex-col")}>
         <fieldset className="mt-0 group flex flex-col space-y-2">
@@ -86,7 +84,6 @@ const PersonalizationSettings = ({}: PersonalizationSettingsProps) => {
             />
           </span>
         </fieldset>
-        {/* <Separator className="m-0 p-0 w-full h-[1px] bg-neutral-300 dark:bg-neutral-700" /> */}
         <Separator rootClassName="py-4" />
       </div>
     </div>

@@ -2,8 +2,10 @@ import { cn, ProfileDialogTabSections } from "@/lib/utils"
 import { useState } from "react"
 import Avatar from "../avatar"
 import AccountSettings from "./profile-dialog/account-settings"
+import LabelsSettings from "./profile-dialog/labels-settings"
 import PersonalizationSettings from "./profile-dialog/personalization-settings"
 import ProfileDialogTabs from "./profile-dialog/profile-dialog-tabs"
+import SubscriptionSettings from "./profile-dialog/subscription-settings"
 
 type ProfileDialogContentProps = {}
 
@@ -57,6 +59,8 @@ const ProfileDialogContent = ({}: ProfileDialogContentProps) => {
         />
       )}
       {activeTab === "personalization-settings" && <PersonalizationSettings />}
+      {activeTab === "labels-settings" && <LabelsSettings />}
+      {activeTab === "subscription-settings" && <SubscriptionSettings />}
     </span>
   )
 }

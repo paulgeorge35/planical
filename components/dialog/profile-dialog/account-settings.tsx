@@ -46,7 +46,7 @@ const AccountSettings = ({ fullName, email }: AccountSettingsProps) => {
             Remove
           </Button>
         </div>
-        <Separator className="m-0 p-0 w-full h-[1px] bg-neutral-300 dark:bg-neutral-700" />
+        <Separator rootClassName="py-4" />
         <fieldset className="mt-0 group flex flex-col space-y-2">
           <label
             className={cn(
@@ -71,7 +71,7 @@ const AccountSettings = ({ fullName, email }: AccountSettingsProps) => {
             defaultValue={fullName}
           />
         </fieldset>
-        <Separator className="m-0 p-0 w-full h-[1px] bg-neutral-300 dark:bg-neutral-700" />
+        <Separator rootClassName="py-4" />
         <fieldset className="flex flex-col">
           <label
             className={cn(
@@ -104,7 +104,7 @@ const AccountSettings = ({ fullName, email }: AccountSettingsProps) => {
         >
           Change Email
         </Button>
-        <Separator className="m-0 p-0 w-full h-[1px] bg-neutral-300 dark:bg-neutral-700" />
+        <Separator rootClassName="py-4" />
         <label
           className={cn(
             "text-xs uppercase font-semibold",
