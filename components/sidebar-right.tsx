@@ -19,7 +19,7 @@ const SidebarRight = ({
       className={cn(
         "p-3 border-l-[0.5px] w-[300px] min-h-full bg-slate-50 border-neutral-200 overflow-hidden",
         "dark:bg-neutral-900 dark:border-neutral-600",
-        right ? "p-3 w-[300px]" : "p-0 w-0",
+        right ? "block" : "hidden",
         mainView === "CALENDAR"
           ? "dark:bg-neutral-900 bg-slate-50"
           : "dark:bg-neutral-800 bg-white absolute right-0 min-h-[calc(100vh-48px)] p-0"
