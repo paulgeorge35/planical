@@ -14,7 +14,7 @@ const TasksToolbar = ({ right, mainView }: TasksToolbarProps) => {
   return (
     <div
       className={cn(
-        "flex justify-between items-center h-full border-l-[0.5px] w-[300px] transition-all border-neutral-200",
+        "flex overflow-hidden justify-between items-center h-full border-l-[0.5px] w-[300px] transition-all border-neutral-200",
         "dark:border-neutral-600",
         right ? "w-[300px] px-4" : "w-0 p-0",
         mainView === "CALENDAR" ? "dark:bg-neutral-900" : "dark:bg-neutral-800"
