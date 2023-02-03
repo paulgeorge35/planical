@@ -52,7 +52,7 @@ export type SidebarContextType = {
   sidebarLeftWidth: number
   setSidebarLeftWidth: (value: number) => void
   mainView: "CALENDAR" | "TASKS"
-  toggleMainView: (_: "CALENDAR" | "TASKS") => void
+  toggleMainView: (_?: "CALENDAR" | "TASKS") => void
 }
 
 export type DayOfWeekNumber = 0 | 1 | 2 | 3 | 4 | 5 | 6

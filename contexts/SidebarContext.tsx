@@ -1,5 +1,6 @@
 import { useLocalStorage } from "@/hooks/use-local-storage"
-import { createContext } from "react"
+import useMediaQuery from "@/hooks/use-media-query"
+import { createContext, useEffect } from "react"
 import { SidebarContextType } from "types"
 
 export const SidebarContext = createContext({
@@ -31,6 +32,11 @@ export const SidebarProvider = ({
     300
   )
   const [mainView, setMainView] = useLocalStorage("mainView", "CALENDAR")
+  const isPhone = useMediaQuery("(max-width: 639px)")
+
+  useEffect(() => {
+    if (isPhone) setMainView("CALENDAR")
+  }, [isPhone])
 
   const value = {
     left: isOpenLeftSidebar,
@@ -41,7 +47,7 @@ export const SidebarProvider = ({
     setSidebarLeftWidth: (value: number) =>
       setSidebarLeftWidth(value > 500 ? 500 : value < 250 ? 250 : value),
     mainView: mainView as "CALENDAR" | "TASKS",
-    toggleMainView: (_: "CALENDAR" | "TASKS") =>
+    toggleMainView: (_?: "CALENDAR" | "TASKS") =>
       setMainView(mainView === "CALENDAR" ? "TASKS" : "CALENDAR"),
   }
   return (

@@ -1,8 +1,10 @@
 import { cn } from "@/lib/utils"
-import React from "react"
+import React, { useContext } from "react"
 import { TaskType } from "types"
 import NewTaskButton from "./new-task-button"
 import Task from "./task"
+import { SidebarContext } from "@/contexts/SidebarContext"
+import useMediaQuery from "@/hooks/use-media-query"
 
 const SidebarLeft = ({
   left,
@@ -13,6 +15,8 @@ const SidebarLeft = ({
   sidebarWidth: number
   setSidebarWidth: (value: number) => void
 }) => {
+  const isPhone = useMediaQuery("(max-width: 639px)")
+  const { mainView } = useContext(SidebarContext)
   const sidebarRef = React.useRef<HTMLInputElement>(null)
   const [isResizing, setIsResizing] = React.useState(false)
 
@@ -122,8 +126,11 @@ const SidebarLeft = ({
       className={cn(
         "relative border-r-[0.5px] min-h-full bg-slate-50 transition-all border-neutral-200 grow",
         "dark:bg-neutral-900 dark:border-neutral-600",
-        !left && "w-0 p-0 overflow-hidden",
-        isResizing && "border-red-500 dark:border-red-500 transition-none"
+        !left && !isPhone && "w-0 p-0 overflow-hidden",
+        isResizing && "border-red-500 dark:border-red-500 transition-none",
+        mainView === "TASKS"
+          ? "phone:block phone:h-screen phone:w-screen"
+          : "phone:hidden"
       )}
       style={{ width: `${left ? sidebarWidth : 0}px` }}
     >
@@ -132,7 +139,8 @@ const SidebarLeft = ({
           "h-12 flex items-center transition-all border-b-[0.5px] border-neutral-200",
           "dark:border-neutral-600",
           left ? "p-4" : "w-0",
-          isResizing && "transition-none"
+          isResizing && "transition-none",
+          isPhone && "hidden"
         )}
         style={{ width: `${left ? sidebarWidth : 0}px` }}
       >
