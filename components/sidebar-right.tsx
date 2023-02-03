@@ -5,6 +5,7 @@ import { useContext } from "react"
 import CalendarBody from "./calendar/calendar-body"
 import CalendarHeader from "./calendar/calendar-header"
 import NewTaskButton from "./new-task-button"
+import { ChevronLeftIcon } from "@radix-ui/react-icons"
 
 const SidebarRight = ({
   right,
@@ -13,7 +14,7 @@ const SidebarRight = ({
   right: boolean
   mainView: "CALENDAR" | "TASKS"
 }) => {
-  const { today, dateToView } = useContext(ToolbarContext)
+  const { today, dateToView, prevDay, nextDay } = useContext(ToolbarContext)
   return (
     <div
       className={cn(
@@ -22,21 +23,51 @@ const SidebarRight = ({
         right ? "block" : "hidden",
         mainView === "CALENDAR"
           ? "dark:bg-neutral-900 bg-slate-50"
-          : "dark:bg-neutral-800 bg-white absolute right-0 min-h-[calc(100vh-48px)] p-0"
+          : "dark:bg-neutral-800 bg-white absolute right-0 min-h-[calc(100vh-48px)] p-0 phone:hidden",
+        "phone:!w-screen phone:!h-screen"
       )}
     >
       {mainView === "CALENDAR" && (
-        <span className="flex items-center pb-3">
-          <h1 className="text-xl font-satoshi font-semibold">
-            {format(dateToView, "EEE")}
-            <span className="text-neutral-500">
-              {" "}
-              {format(dateToView, "MMM dd")}
-            </span>
-          </h1>
-          {compareDates(today, dateToView) && (
-            <p className="pl-2 text-xs text-primary">Today</p>
+        <span
+          className={cn(
+            "flex items-center pb-3",
+            "phone:justify-between phone:px-4"
           )}
+        >
+          <ChevronLeftIcon
+            onClick={prevDay}
+            className={cn(
+              "hidden origin-center h-8 w-8 transition-transform",
+              "text-neutral-400",
+              "hover:text-neutral-900 hover:cursor-pointer",
+              "dark:text-neutral-600",
+              "dark:hover:text-neutral-300",
+              "phone:!block"
+            )}
+          />
+          <span className={cn("flex items-center")}>
+            <h1 className="text-xl font-satoshi font-semibold">
+              {format(dateToView, "EEE")}
+              <span className="text-neutral-500">
+                {" "}
+                {format(dateToView, "MMM dd")}
+              </span>
+            </h1>
+            {compareDates(today, dateToView) && (
+              <p className="pl-2 text-xs text-primary">Today</p>
+            )}
+          </span>
+          <ChevronLeftIcon
+            onClick={nextDay}
+            className={cn(
+              "hidden origin-center h-8 w-8 transition-transform rotate-180",
+              "text-neutral-400",
+              "hover:text-neutral-900 hover:cursor-pointer",
+              "dark:text-neutral-600",
+              "dark:hover:text-neutral-300",
+              "phone:!block"
+            )}
+          />
         </span>
       )}
       {mainView === "CALENDAR" ? (

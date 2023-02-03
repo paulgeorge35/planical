@@ -17,9 +17,12 @@ import { SidebarContext } from "@/contexts/SidebarContext"
 import { useMounted } from "@/hooks/use-mounted"
 
 import { cn } from "@/lib/utils"
+import MobileNav from "@/components/mobile-nav"
+import useMediaQuery from "@/hooks/use-media-query"
 
 export default function Home() {
   const mounted = useMounted()
+  const isPhone = useMediaQuery("(max-width: 639px)")
   const { mainView, left, right, sidebarLeftWidth, setSidebarLeftWidth } =
     useContext(SidebarContext)
   const [profileDialogueOpen, setProfileDialogueOpen] = useState(false)
@@ -40,6 +43,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-row h-screen">
+      <MobileNav />
       <Dialog
         className="p-0"
         open={profileDialogueOpen}
@@ -65,7 +69,8 @@ export default function Home() {
         <div
           className={cn(
             "flex h-12 bg-white border-b-[0.5px] border-neutral-200",
-            "dark:bg-neutral-900 dark:border-neutral-600"
+            "dark:bg-neutral-900 dark:border-neutral-600",
+            "phone:hidden"
           )}
         >
           <Toolbar openProfileDialogue={() => setProfileDialogueOpen(true)} />
@@ -78,7 +83,8 @@ export default function Home() {
               "dark:bg-neutral-800",
               mainView === "CALENDAR"
                 ? "dark:bg-neutral-800 bg-white"
-                : "dark:bg-neutral-900 bg-slate-50"
+                : "dark:bg-neutral-900 bg-slate-50",
+              "phone:hidden"
             )}
           >
             {mainView === "CALENDAR" ? (
@@ -87,7 +93,9 @@ export default function Home() {
               <TasksView sidebarLeftWidth={left ? sidebarLeftWidth : 1} />
             )}
           </main>
+          {/* {(!isPhone || mainView === "CALENDAR") && ( */}
           <SidebarRight right={right} mainView={mainView} />
+          {/* )} */}
         </span>
       </span>
     </div>
