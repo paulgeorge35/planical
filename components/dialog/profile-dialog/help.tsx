@@ -1,9 +1,13 @@
+import Separator from "@/components/separator"
+import { SessionContext } from "@/contexts/SessionContext"
 import { cn } from "@/lib/utils"
 import { ArrowRightIcon } from "@radix-ui/react-icons"
+import { useContext } from "react"
 
 type HelpProps = {}
 
 const Help = ({}: HelpProps) => {
+  const { session } = useContext(SessionContext)
   return (
     <div className="flex flex-col h-full grow ">
       <div
@@ -39,6 +43,7 @@ const Help = ({}: HelpProps) => {
           </a>
         </fieldset>
       </div>
+      <Separator rootClassName="py-4" />
       <div className={cn("p-6 pb-0 w-full flex flex-col")}>
         <fieldset className="flex flex-col">
           <label
@@ -62,6 +67,30 @@ const Help = ({}: HelpProps) => {
           </a>
         </fieldset>
       </div>
+      <Separator rootClassName="py-4" />
+      <div className={cn("p-6 pb-0 w-full flex flex-col")}>
+        <fieldset className="flex flex-col">
+          <label
+            className={cn(
+              "text-xs uppercase font-semibold",
+              "text-neutral-400",
+              "dark:text-neutral-500"
+            )}
+          >
+            User ID (For support)
+          </label>
+          <a
+            className={cn(
+              "py-2 font-satoshi text-md max-w-full flex items-center",
+              "text-neutral-900",
+              "dark:text-neutral-200"
+            )}
+          >
+            {session?.id}
+          </a>
+        </fieldset>
+      </div>
+      <Separator rootClassName="py-4" />
       <div className={cn("p-6 pb-0 w-full flex flex-col")}>
         <fieldset className="flex flex-col">
           <label
