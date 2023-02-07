@@ -37,7 +37,12 @@ const CalendarHeader = ({ weekToView }: { weekToView: Date[] }) => {
     >
       <tr className="w-full inline-flex overflow-y-scroll py-1">
         <th>
-          <div className="flex items-center w-max justify-center">
+          <div
+            className={cn(
+              "flex items-center w-max justify-center",
+              weekToView.length === 1 && "hidden"
+            )}
+          >
             <h1 className="text-xs text-neutral-500 font-light p-1 opacity-0 select-none">
               All day
             </h1>

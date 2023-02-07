@@ -58,6 +58,13 @@ module.exports = {
                 },
             }
         },
+        screens: {
+            'desktop': { 'max': '1535px' },
+            'laptop': { 'max': '1279px' },
+            'tablet': { 'max': '1023px' },
+            'phablet': { 'max': '767px' },
+            'phone': { 'max': '639px' },
+        }
     },
     plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
 }

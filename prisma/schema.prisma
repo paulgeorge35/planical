@@ -19,40 +19,63 @@ model User {
 }
 
 model Task {
-    id        Int       @id @default(autoincrement())
-    title     String
-    notes     String
-    recurrent Boolean
-    dump      Boolean
-    done      Boolean
-    estimate  Int
-    actual    Int
-    userId    String
-    user      User      @relation(fields: [userId], references: [id])
-    labelId   Int?
-    label     Label?    @relation(fields: [labelId], references: [id])
-    subtasks  Subtask[]
-    createdAt DateTime  @default(now())
-    updatedAt DateTime
+    id          Int          @id @default(autoincrement())
+    title       String
+    notes       String?
+    recurrent   Boolean      @default(false)
+    dump        Boolean      @default(true)
+    done        Boolean      @default(false)
+    archived    Boolean      @default(false)
+    estimate    Int?
+    actual      Int?
+    userId      String
+    user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+    labelId     Int?
+    label       Label?       @relation(fields: [labelId], references: [id], onDelete: SetNull)
+    subtasks    Subtask[]
+    recurrences Recurrence[]
+    createdAt   DateTime     @default(now())
+    updatedAt   DateTime     @updatedAt
 }
 
 model Subtask {
     id        Int      @id @default(autoincrement())
     title     String
-    done      Boolean
+    done      Boolean  @default(false)
     taskId    Int
-    task      Task     @relation(fields: [taskId], references: [id])
+    task      Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
     createdAt DateTime @default(now())
-    updatedAt DateTime
+    updatedAt DateTime @updatedAt
 }
 
 model Label {
     id        Int      @id @default(autoincrement())
-    name      String
-    color     String
+    name      String   @default("New Label")
+    color     String   @default("#000000")
     userId    String
-    user      User     @relation(fields: [userId], references: [id])
+    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
     tasks     Task[]
     createdAt DateTime @default(now())
-    updatedAt DateTime
+    updatedAt DateTime @updatedAt
+}
+
+model Recurrence {
+    id        Int            @id @default(autoincrement())
+    type      RecurrenceType @default(WEEKLY)
+    start     DateTime       @default(now())
+    end       DateTime?
+    taskId    Int
+    Task      Task           @relation(fields: [taskId], references: [id], onDelete: Cascade)
+    createdAt DateTime       @default(now())
+    updatedAt DateTime       @updatedAt
+}
+
+enum RecurrenceType {
+    DAILY
+    DAILY_WEEKDAYS
+    WEEKLY
+    BIWEEKLY
+    MONTHLY
+    BIMONTHLY
+    YEARLY
 }
