@@ -156,7 +156,7 @@ async function getLabels() {
       headers: {
         "Content-Type": "application/json",
       },
-      cache: "no-store",
+      cache: "default",
     })
   ).json()
   return res
@@ -216,7 +216,7 @@ const LabelsSettings = ({}: LabelsSettingsProps) => {
         headers: {
           "Content-Type": "application/json",
         },
-        cache: "no-store",
+        cache: "force-cache",
         body: JSON.stringify({
           ...data,
         }),
