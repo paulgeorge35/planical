@@ -21,7 +21,7 @@ const TaskDay = ({ day }: TaskDayProps) => {
           <p className="pl-2 text-xs text-primary">Today</p>
         )}
       </span>
-      <NewTaskButton className="mb-2" tasks={[]} />
+      <NewTaskButton className="mb-2" tasks={[]} destination={day} />
     </span>
   )
 }

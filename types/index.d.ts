@@ -88,7 +88,7 @@ export type LabelType = {
 export type LabelNoIDType = Omit<LabelType, "id">
 
 export type TaskType = {
-  id: string
+  id: number
   title: string
   notes: string
   recurrent: boolean
@@ -106,7 +106,7 @@ export type TaskType = {
 export type TaskNoIDType = Omit<TaskType, "id">
 
 export type SubtaskType = {
-  id: string
+  id: number
   title: string
   done: boolean
   taskId: string

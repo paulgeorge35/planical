@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils"
+import { Subtask } from "@prisma/client"
 import {
   DotsVerticalIcon,
   DragHandleDots2Icon,
@@ -12,11 +13,11 @@ import Separator from "../separator"
 
 type SubtaskSectionProps = {
   extended: boolean
-  subtasks: SubtaskType[]
+  subtasks: Subtask[]
   className?: string
 }
 
-const Subtask = ({ subtask }: { subtask: SubtaskType }) => {
+const Subtask = ({ subtask }: { subtask: Subtask }) => {
   const [title, setTitle] = useState(subtask.title)
   return (
     <span className="flex w-full flex-row flex-wrap items-start pl-5">

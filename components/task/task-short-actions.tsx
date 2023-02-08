@@ -1,10 +1,24 @@
 import { cn } from "@/lib/utils"
+import { Label, Subtask, Task } from "@prisma/client"
 import { Component1Icon, LoopIcon } from "@radix-ui/react-icons"
-import { TaskType } from "types"
+import { PickAndFlatten, TaskType } from "types"
 import LabelColorBubble from "./label-color-bubble"
 
 type TaskShortActionsProps = {
-  data: TaskType
+  data:
+    | PickAndFlatten<Task & { subtasks: Subtask[]; label: Label }>
+    | PickAndFlatten<
+        Omit<Task, "id" | "createdAt" | "updatedAt" | "userId"> & {
+          subtasks: Subtask[]
+          label: Label
+        }
+      >
+    | PickAndFlatten<
+        Omit<Task, "id" | "createdAt" | "updatedAt" | "userId"> & {
+          subtasks?: Subtask[]
+          label?: Label
+        }
+      >
   toggleExtended: () => void
   extended: boolean
   className?: string
@@ -67,7 +81,7 @@ const TaskShortActions = ({
         <Component1Icon
           className={cn("flex h-3 w-3 items-center justify-center")}
         />
-        {subtasks.length !== 0 && (
+        {subtasks && subtasks.length !== 0 && (
           <span className="pl-1 font-satoshi text-[0.65rem]">{`${
             subtasks.filter((s) => s.done).length
           } / ${subtasks.length}`}</span>

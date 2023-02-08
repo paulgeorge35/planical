@@ -1,8 +1,8 @@
 import { cn, formatTime } from "@/lib/utils"
 
 type TimePreviewProps = {
-  estimate?: number
-  actual?: number
+  estimate: number | null
+  actual: number | null
   className?: string
 }
 

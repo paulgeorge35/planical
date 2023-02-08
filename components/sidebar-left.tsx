@@ -1,10 +1,12 @@
 import { cn } from "@/lib/utils"
 import React, { useContext } from "react"
-import { TaskType } from "types"
 import NewTaskButton from "./new-task-button"
-import Task from "./task"
+import TaskComponent from "./task"
 import { SidebarContext } from "@/contexts/SidebarContextProvider"
 import useMediaQuery from "@/hooks/use-media-query"
+import NewTaskForm from "./new-task-form"
+import { Label, Subtask, Task } from "@prisma/client"
+import { PickAndFlatten } from "types"
 
 const SidebarLeft = ({
   left,
@@ -19,6 +21,11 @@ const SidebarLeft = ({
   const { mainView } = useContext(SidebarContext)
   const sidebarRef = React.useRef<HTMLInputElement>(null)
   const [isResizing, setIsResizing] = React.useState(false)
+  const [isAdding, setIsAdding] = React.useState(false)
+  const [newTask, setNewTask] =
+    React.useState<
+      PickAndFlatten<Omit<Task, "id" | "createdAt" | "updatedAt" | "userId">>
+    >()
 
   const startResizing = React.useCallback(() => {
     setIsResizing(true)
@@ -49,75 +56,9 @@ const SidebarLeft = ({
     }
   }, [resize, stopResizing])
 
-  const MockTasks: TaskType[] = [
-    {
-      id: "1",
-      title: "Task 1",
-      notes: "This is a note",
-      recurrent: false,
-      dump: false,
-      done: false,
-      estimate: 0,
-      actual: 15,
-      userId: "1",
-      label: {
-        id: "1",
-        name: "Label 1",
-        color: "#FF0000",
-      },
-      subtasks: [
-        {
-          id: "1",
-          title: "Subtask 1 which is longer",
-          done: false,
-          taskId: "1",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          id: "2",
-          title: "Subtask 2",
-          done: true,
-          taskId: "1",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-      ],
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: "2",
-      title: "Task 2",
-      notes: "This is a note",
-      recurrent: false,
-      dump: false,
-      done: false,
-      estimate: 145,
-      actual: 250,
-      userId: "1",
-      subtasks: [
-        {
-          id: "1",
-          title: "Subtask 1",
-          done: false,
-          taskId: "1",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          id: "2",
-          title: "Subtask 2",
-          done: true,
-          taskId: "1",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-      ],
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-  ]
+  const MockTasks: PickAndFlatten<
+    Task & { subtasks: Subtask[]; label: Label }
+  >[] = []
 
   return (
     <div
@@ -171,9 +112,44 @@ const SidebarLeft = ({
         🧠 Brain Dump
       </h1>
       <div className="flex flex-col space-y-2 p-3 pt-0">
-        <NewTaskButton className="mb-2" tasks={MockTasks} />
+        <NewTaskButton
+          className="mb-2"
+          tasks={MockTasks}
+          toggle={() => {
+            setIsAdding(true)
+            setNewTask({
+              title: "",
+              notes: "",
+              recurrent: false,
+              estimate: 0,
+              actual: 0,
+              date: null,
+              dump: true,
+              done: false,
+              archived: false,
+              labelId: null,
+            })
+          }}
+        />
+        {/* {isAdding && typeof newTask !== undefined && (
+            )} */}
+        <NewTaskForm
+          data={{
+            title: "",
+            notes: "",
+            recurrent: false,
+            estimate: 0,
+            actual: 0,
+            date: null,
+            dump: true,
+            done: false,
+            archived: false,
+            labelId: null,
+          }}
+        />
+        {isAdding && "ADDING"}
         {MockTasks.map((task, index) => (
-          <Task key={index} data={task} />
+          <TaskComponent key={index} data={task} />
         ))}
       </div>
     </div>

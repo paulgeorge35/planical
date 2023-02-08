@@ -12,15 +12,15 @@ import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs"
 const getParamsSchema = z.number()
 const postBodySchema = z.object({
   title: z.string(),
-  notes: z.string().nullable(),
-  recurrent: z.boolean(),
-  done: z.boolean(),
-  dump: z.boolean(),
-  date: z.date().nullable(),
-  archived: z.boolean(),
-  estimate: z.number().nullable(),
-  actual: z.number().nullable(),
-  labelId: z.number().nullable(),
+  notes: z.string().nullable().default(null),
+  recurrent: z.boolean().default(false),
+  done: z.boolean().default(false),
+  dump: z.boolean().default(false),
+  date: z.date().nullable().default(null),
+  archived: z.boolean().default(false),
+  estimate: z.number().nullable().default(null),
+  actual: z.number().nullable().default(null),
+  labelId: z.number().nullable().default(null),
 })
 const patchBodySchema = z.object({
   id: z.number(),
