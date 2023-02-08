@@ -359,11 +359,7 @@ const LabelsSettings = ({}: LabelsSettingsProps) => {
         )}
 
         {isFetching ? (
-          <div
-            className={cn(
-              "flex flex-grow flex-col items-center justify-center"
-            )}
-          >
+          <div className={cn("flex grow flex-col items-center justify-center")}>
             <span className={cn("text-sm text-neutral-600")}>
               Loading labels...
             </span>
