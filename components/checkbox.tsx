@@ -21,16 +21,16 @@ const Checkbox = ({
   <div className={cn("flex items-center", rootClassName)}>
     <RadixCheckbox.Root
       className={cn(
-        "w-4 h-4 rounded-md flex items-center justify-center border",
+        "flex h-4 w-4 items-center justify-center rounded-md border",
         "border-neutral-300",
-        checked ? "bg-green-600 border-green-600" : "bg-transparent",
+        checked ? "border-green-600 bg-green-600" : "bg-transparent",
         className
       )}
       checked={checked}
       onCheckedChange={onChange}
     >
       <RadixCheckbox.Indicator
-        className={cn("text-white w-4 h-4 flex items-center justify-center")}
+        className={cn("flex h-4 w-4 items-center justify-center text-white")}
       >
         {checked === "indeterminate" && <DividerHorizontalIcon />}
         {checked === true && <CheckIcon />}

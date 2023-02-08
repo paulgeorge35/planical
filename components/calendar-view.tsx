@@ -6,9 +6,9 @@ import CalendarHeader from "./calendar/calendar-header"
 const CalendarView = () => {
   const { weekToView } = useContext(ToolbarContext)
   return (
-    <div className="w-full h-full">
+    <div className="h-full w-full">
       {weekToView.length === 7 && (
-        <table className="w-full h-full flex flex-col justify-start">
+        <table className="flex h-full w-full flex-col justify-start">
           <CalendarHeader weekToView={weekToView} />
           <CalendarBody weekToView={weekToView} />
         </table>

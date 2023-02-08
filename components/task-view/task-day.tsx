@@ -12,8 +12,8 @@ const TaskDay = ({ day }: TaskDayProps) => {
   const { today } = useContext(ToolbarContext)
   return (
     <span className="p-2">
-      <span className="flex items-center w-[16vw] pb-2">
-        <h1 className="text-xl font-satoshi font-semibold">
+      <span className="flex w-[16vw] items-center pb-2">
+        <h1 className="font-satoshi text-xl font-semibold">
           {format(day, "EEE")}
           <span className="text-neutral-500"> {format(day, "MMM dd")}</span>
         </h1>

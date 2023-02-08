@@ -19,16 +19,16 @@ const ProfileDialogContent = ({}: ProfileDialogContentProps) => {
     <span className="flex flex-row">
       <div
         className={cn(
-          "p-4 border-r-[1px] w-[300px] ",
-          "bg-neutral-50 border-neutral-300",
-          "dark:bg-neutral-800 dark:border-neutral-700"
+          "w-[300px] border-r-[1px] p-4 ",
+          "border-neutral-300 bg-neutral-50",
+          "dark:border-neutral-700 dark:bg-neutral-800"
         )}
       >
         <span className={cn("flex flex-col")}>
-          <span className="flex space-x-2 h-10 px-3">
-            <Avatar className="hover:p-0 cursor-auto h-full" />
-            <span className="flex flex-col h-full justify-center">
-              <h1 className={cn("font-satoshi font-medium text-sm")}>
+          <span className="flex h-10 space-x-2 px-3">
+            <Avatar className="h-full cursor-auto hover:p-0" />
+            <span className="flex h-full flex-col justify-center">
+              <h1 className={cn("font-satoshi text-sm font-medium")}>
                 Paul George Tibulca
               </h1>
               <p

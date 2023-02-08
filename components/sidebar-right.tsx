@@ -18,13 +18,13 @@ const SidebarRight = ({
   return (
     <div
       className={cn(
-        "p-3 border-l-[0.5px] w-[300px] min-h-full bg-slate-50 border-neutral-200 overflow-hidden",
-        "dark:bg-neutral-900 dark:border-neutral-600",
+        "min-h-full w-[300px] overflow-hidden border-l-[0.5px] border-neutral-200 bg-slate-50 p-3",
+        "dark:border-neutral-600 dark:bg-neutral-900",
         right ? "block" : "hidden",
         mainView === "CALENDAR"
-          ? "dark:bg-neutral-900 bg-slate-50"
-          : "dark:bg-neutral-800 bg-white absolute right-0 min-h-[calc(100vh-48px)] p-0 phone:hidden",
-        "phone:!w-screen phone:!h-screen"
+          ? "bg-slate-50 dark:bg-neutral-900"
+          : "absolute right-0 min-h-[calc(100vh-48px)] bg-white p-0 dark:bg-neutral-800 phone:hidden",
+        "phone:!h-screen phone:!w-screen"
       )}
     >
       {mainView === "CALENDAR" && (
@@ -37,16 +37,16 @@ const SidebarRight = ({
           <ChevronLeftIcon
             onClick={prevDay}
             className={cn(
-              "hidden origin-center h-8 w-8 transition-transform",
+              "hidden h-8 w-8 origin-center transition-transform",
               "text-neutral-400",
-              "hover:text-neutral-900 hover:cursor-pointer",
+              "hover:cursor-pointer hover:text-neutral-900",
               "dark:text-neutral-600",
               "dark:hover:text-neutral-300",
               "phone:!block"
             )}
           />
           <span className={cn("flex items-center")}>
-            <h1 className="text-xl font-satoshi font-semibold">
+            <h1 className="font-satoshi text-xl font-semibold">
               {format(dateToView, "EEE")}
               <span className="text-neutral-500">
                 {" "}
@@ -60,9 +60,9 @@ const SidebarRight = ({
           <ChevronLeftIcon
             onClick={nextDay}
             className={cn(
-              "hidden origin-center h-8 w-8 transition-transform rotate-180",
+              "hidden h-8 w-8 origin-center rotate-180 transition-transform",
               "text-neutral-400",
-              "hover:text-neutral-900 hover:cursor-pointer",
+              "hover:cursor-pointer hover:text-neutral-900",
               "dark:text-neutral-600",
               "dark:hover:text-neutral-300",
               "phone:!block"
@@ -77,7 +77,7 @@ const SidebarRight = ({
       ) : (
         <span className="w-full">
           {dateToView && (
-            <table className="w-full flex flex-col justify-start">
+            <table className="flex w-full flex-col justify-start">
               <CalendarHeader weekToView={[dateToView]} />
               <CalendarBody weekToView={[dateToView]} />
             </table>

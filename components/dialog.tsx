@@ -29,7 +29,7 @@ const Dialog = ({
     <RadixDialog.Portal>
       <RadixDialog.Overlay
         className={cn(
-          "fixed inset-0 animate-in bg-black opacity-30",
+          "fixed inset-0 bg-black opacity-30 animate-in",
           "dark:opacity-70"
         )}
         onClick={(e) => dismissOnClickOutside && toggle()}
@@ -39,7 +39,7 @@ const Dialog = ({
           dismissOnEscapeKey && event.key === "Escape" && toggle()
         }
         className={cn(
-          "rounded-lg overflow-hidden shadow-md fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] w-[90vw] max-w-[850px] max-h-[85vh] p-6 animate-in focus:outline-none",
+          "fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[850px] translate-x-[-50%] translate-y-[-50%] overflow-hidden rounded-lg p-6 shadow-md animate-in focus:outline-none",
           "bg-white",
           "dark:bg-neutral-900",
           className
@@ -49,7 +49,7 @@ const Dialog = ({
         {closeButton && (
           <button
             className={cn(
-              "rounded-full h-6 w-6 inline-flex items-center justify-center absolute top-4 right-4 focus:shadow-md",
+              "absolute top-4 right-4 inline-flex h-6 w-6 items-center justify-center rounded-full focus:shadow-md",
               "bg-neutral-100",
               "hover:bg-neutral-200",
               "dark:bg-neutral-600",

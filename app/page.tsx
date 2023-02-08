@@ -42,7 +42,7 @@ export default function Home() {
   }, [mounted, newAccount])
 
   return (
-    <div className="flex flex-row h-screen">
+    <div className="flex h-screen flex-row">
       <MobileNav />
       <Dialog
         className="p-0"
@@ -53,7 +53,7 @@ export default function Home() {
         <ProfileDialogContent />
       </Dialog>
       <Dialog
-        className={cn("p-6 py-8 max-w-[600px]")}
+        className={cn("max-w-[600px] p-6 py-8")}
         open={newAccountDialogOpen}
         toggle={() => setNewAccountDialogOpen(false)}
         closeButton={false}
@@ -68,22 +68,22 @@ export default function Home() {
       <span className="flex flex-col">
         <div
           className={cn(
-            "flex h-12 bg-white border-b-[0.5px] border-neutral-200",
-            "dark:bg-neutral-900 dark:border-neutral-600",
+            "flex h-12 border-b-[0.5px] border-neutral-200 bg-white",
+            "dark:border-neutral-600 dark:bg-neutral-900",
             "phone:hidden"
           )}
         >
           <Toolbar openProfileDialogue={() => setProfileDialogueOpen(true)} />
           <TasksToolbar right={right} mainView={mainView} />
         </div>
-        <span className="flex flex-row h-full">
+        <span className="flex h-full flex-row">
           <main
             className={cn(
-              "p-0 flex flex-1 flex-col justify-center items-center h-full",
+              "flex h-full flex-1 flex-col items-center justify-center p-0",
               "dark:bg-neutral-800",
               mainView === "CALENDAR"
-                ? "dark:bg-neutral-800 bg-white"
-                : "dark:bg-neutral-900 bg-slate-50",
+                ? "bg-white dark:bg-neutral-800"
+                : "bg-slate-50 dark:bg-neutral-900",
               "phone:hidden"
             )}
           >

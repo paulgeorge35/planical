@@ -13,15 +13,15 @@ const MobileNav = ({}: MobileNavProps) => {
   return (
     <div
       className={cn(
-        "absolute bottom-0 left-0 w-screen h-[60px] flex items-center justify-around z-50 shadow-lg border-t-[1px]",
-        "bg-white border-neutral-300",
-        "dark:bg-neutral-900 dark:border-neutral-500",
+        "absolute bottom-0 left-0 z-50 flex h-[60px] w-screen items-center justify-around border-t-[1px] shadow-lg",
+        "border-neutral-300 bg-white",
+        "dark:border-neutral-500 dark:bg-neutral-900",
         !isPhone && "hidden"
       )}
     >
       <Button
         className={cn(
-          "p-2 border-0 bg-transparent rounded-lg",
+          "rounded-lg border-0 bg-transparent p-2",
           "hover:bg-neutral-200",
           "dark:hover:bg-neutral-600"
         )}
@@ -31,7 +31,7 @@ const MobileNav = ({}: MobileNavProps) => {
       </Button>
       <Button
         className={cn(
-          "p-2 border-0 bg-transparent rounded-lg",
+          "rounded-lg border-0 bg-transparent p-2",
           "hover:bg-neutral-200",
           "dark:hover:bg-neutral-600"
         )}
@@ -41,7 +41,7 @@ const MobileNav = ({}: MobileNavProps) => {
       </Button>
       <Button
         className={cn(
-          "p-2 border-0 bg-transparent rounded-lg",
+          "rounded-lg border-0 bg-transparent p-2",
           "hover:bg-neutral-200",
           "dark:hover:bg-neutral-600"
         )}

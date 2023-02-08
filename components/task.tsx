@@ -17,17 +17,17 @@ const Task = ({ data, className }: TaskProps) => {
   return (
     <span
       className={cn(
-        "group border w-full rounded-xl p-3 flex flex-col cursor-pointer",
-        "bg-white text-neutral-800 border-neutral-200",
+        "group flex w-full cursor-pointer flex-col rounded-xl border p-3",
+        "border-neutral-200 bg-white text-neutral-800",
         "hover:border-blue-200 hover:shadow-md",
-        "dark:bg-neutral-800 dark:text-white dark:border-neutral-800",
+        "dark:border-neutral-800 dark:bg-neutral-800 dark:text-white",
         "dark:hover:border-neutral-600",
         className
       )}
     >
       <span className="flex flex-row items-center">
         <Checkbox checked={checked} onChange={() => setChecked(!checked)} />
-        <p className={cn("text-xs grow px-2")}>{data.title}</p>
+        <p className={cn("grow px-2 text-xs")}>{data.title}</p>
         <TimePreview actual={data.actual} estimate={data.estimate} />
       </span>
       <TaskShortActions

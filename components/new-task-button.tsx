@@ -22,22 +22,22 @@ const NewTaskButton = ({
   return (
     <Button
       className={cn(
-        "m-0 w-full px-2 py-2 rounded-xl h-12",
+        "m-0 h-12 w-full rounded-xl px-2 py-2",
         "bg-white text-neutral-400",
-        "hover:bg-white hover:text-neutral-400 hover:border-blue-200 hover:shadow-md",
-        "dark:bg-neutral-800 dark:text-neutral-500 dark:border-neutral-800",
-        "dark:hover:bg-neutral-800 dark:hover:text-neutral-500 dark:hover:border-neutral-600",
+        "hover:border-blue-200 hover:bg-white hover:text-neutral-400 hover:shadow-md",
+        "dark:border-neutral-800 dark:bg-neutral-800 dark:text-neutral-500",
+        "dark:hover:border-neutral-600 dark:hover:bg-neutral-800 dark:hover:text-neutral-500",
         className
       )}
       icon={PlusCircledIcon}
     >
-      <span className="w-full flex justify-between items-center">
+      <span className="flex w-full items-center justify-between">
         <p>Add a task</p>
         {sumByKey(tasks, "actual") > 0 && sumByKey(tasks, "estimate") > 0 && (
           <p
             unselectable="on"
             className={cn(
-              "flex font-satoshi p-1 px-2 rounded-md text-[0.65rem] h-full",
+              "flex h-full rounded-md p-1 px-2 font-satoshi text-[0.65rem]",
               "bg-neutral-100 text-neutral-600",
               "hover:bg-neutral-500 hover:text-white",
               "dark:bg-neutral-600 dark:text-white",

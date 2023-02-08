@@ -10,7 +10,7 @@ const Logo = ({
   return (
     <div
       className={cn(
-        "h-full border-r-[0.5px] flex min-w-[250px] max-w-[500px] items-center transition-all border-neutral-200",
+        "flex h-full min-w-[250px] max-w-[500px] items-center border-r-[0.5px] border-neutral-200 transition-all",
         "dark:border-neutral-600",
         left ? `p-4 w-[${"300"}px]` : "w-0 min-w-0 p-0 "
       )}
@@ -18,7 +18,7 @@ const Logo = ({
     >
       <h1
         className={cn(
-          "text-2xl font-sans transition-all",
+          "font-sans text-2xl transition-all",
           `${left ? "block" : "hidden"}`
         )}
       >

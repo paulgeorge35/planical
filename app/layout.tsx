@@ -48,7 +48,7 @@ export default function RootLayout({
         roboto.variable,
         poppins.variable,
         satoshi.variable,
-        "font-sans antialiased max-h-screen light"
+        "light max-h-screen font-sans antialiased"
       )}
     >
       <head>

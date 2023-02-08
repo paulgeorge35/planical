@@ -44,7 +44,7 @@ const CalendarHour = ({
   return (
     <td
       className={cn(
-        "w-full border-neutral-300 relative",
+        "relative w-full border-neutral-300",
         "dark:border-neutral-600",
         !isFirst && "border-l-[0.5px]"
       )}
@@ -52,7 +52,7 @@ const CalendarHour = ({
       {isToday && (
         <div
           style={{ top: `${hourProgress - 1}px` }}
-          className={cn("absolute w-full left-0 h-[1px] bg-red-500 top-[-1px]")}
+          className={cn("absolute left-0 top-[-1px] h-[1px] w-full bg-red-500")}
         />
       )}
       <div ref={isToday ? currentHourRef : null} className="flex flex-col">
@@ -90,7 +90,7 @@ const CalendarHourHead = ({
   return (
     <td
       className={cn(
-        "border-neutral-300 border-r-[0.5px] relative",
+        "relative border-r-[0.5px] border-neutral-300",
         "dark:border-neutral-600"
       )}
     >
@@ -101,14 +101,14 @@ const CalendarHourHead = ({
           className={cn("absolute left-[-6px] top-[-8px]")}
         />
       )}
-      <div className="flex flex-col w-[50px]">
+      <div className="flex w-[50px] flex-col">
         {Array.from({ length: timeSlots }, (_, index) => {
           return (
-            <div key={index} className="flex justify-end w-full h-2">
+            <div key={index} className="flex h-2 w-full justify-end">
               {index === 0 && (
                 <b
                   className={cn(
-                    "text-[0.65rem] text-neutral-500 font-light p-1",
+                    "p-1 text-[0.65rem] font-light text-neutral-500",
                     "dark:text-neutral-400"
                   )}
                 >
@@ -142,7 +142,7 @@ const CalendarTimeSlot = ({
     end: cleanDate(date).setMinutes(minute + 60 / timeSlots),
   })
   return (
-    <div className="w-full h-2 relative overflow-visible">
+    <div className="relative h-2 w-full overflow-visible">
       {/* <Task minutes={10} /> */}
     </div>
   )
@@ -171,26 +171,26 @@ const CalendarBody = ({ weekToView }: { weekToView?: Date[] }) => {
   return (
     <tbody
       className={cn(
-        "w-full border-neutral-300 border-b-[0.5px] flex flex-col grow",
+        "flex w-full grow flex-col border-b-[0.5px] border-neutral-300",
         "dark:border-neutral-600"
       )}
     >
       <tr
         className={cn(
-          "w-full inline-flex border-b-[0.5px] border-neutral-300 overflow-y-scroll",
+          "inline-flex w-full overflow-y-scroll border-b-[0.5px] border-neutral-300",
           "dark:border-neutral-600"
         )}
       >
         <td
           className={cn(
-            "border-neutral-300 border-r-[0.5px] ",
+            "border-r-[0.5px] border-neutral-300 ",
             "dark:border-neutral-600"
           )}
         >
-          <div className="flex items-center w-[50px] justify-center">
+          <div className="flex w-[50px] items-center justify-center">
             <b
               className={cn(
-                "text-[0.65rem] text-neutral-500 font-light p-1",
+                "p-1 text-[0.65rem] font-light text-neutral-500",
                 "dark:text-neutral-400"
               )}
             >
@@ -203,7 +203,7 @@ const CalendarBody = ({ weekToView }: { weekToView?: Date[] }) => {
             key={index}
             data-date={format(date, "EEE MMM dd yyyy")}
             className={cn(
-              "border-neutral-300 w-full",
+              "w-full border-neutral-300",
               "dark:border-neutral-600",
               index !== 0 && "border-l-[0.5px]"
             )}
@@ -212,8 +212,8 @@ const CalendarBody = ({ weekToView }: { weekToView?: Date[] }) => {
           </td>
         ))}
       </tr>
-      <tr className="w-full p-0 flex grow">
-        <td className="w-full p-0 h-[calc(100vh-118.1px)]">
+      <tr className="flex w-full grow p-0">
+        <td className="h-[calc(100vh-118.1px)] w-full p-0">
           <div className="h-full overflow-y-scroll">
             <table className="w-full">
               <tbody className="w-full">
@@ -221,7 +221,7 @@ const CalendarBody = ({ weekToView }: { weekToView?: Date[] }) => {
                   <tr
                     key={index}
                     className={cn(
-                      "w-full inline-flex border-b-[0.5px] border-neutral-300",
+                      "inline-flex w-full border-b-[0.5px] border-neutral-300",
                       "dark:border-neutral-600"
                     )}
                   >

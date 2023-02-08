@@ -12,12 +12,12 @@ const LabelColorBubble = ({
   return (
     <span
       className={cn(
-        "flex justify-center items-center aspect-square",
+        "flex aspect-square items-center justify-center",
         rootClassName
       )}
     >
       <div
-        className={cn("rounded-full w-2 h-2", className)}
+        className={cn("h-2 w-2 rounded-full", className)}
         style={{ backgroundColor: color }}
       />
     </span>

@@ -38,24 +38,24 @@ const Label = ({
   return (
     <div
       className={cn(
-        "px-4 py-2 rounded-lg font-satoshi font-medium w-full text-md border-[1px] flex flex-row items-center justify-between",
+        "text-md flex w-full flex-row items-center justify-between rounded-lg border-[1px] px-4 py-2 font-satoshi font-medium",
         "text-neutral-900",
-        "dark:bg-neutral-800 dark:text-white dark:border-neutral-700"
+        "dark:border-neutral-700 dark:bg-neutral-800 dark:text-white"
       )}
     >
       <div
-        className={cn("flex flex-row items-stretch space-x-2 grow max-w-[50%]")}
+        className={cn("flex max-w-[50%] grow flex-row items-stretch space-x-2")}
       >
         <a
           className={cn(
-            "rounded-lg flex items-center justify-center relative",
+            "relative flex items-center justify-center rounded-lg",
             editing && "cursor-pointer"
           )}
           onClick={() => editing && setShowColorPicker(!showColorPicker)}
         >
           <LabelColorBubble
             color={editing && editedLabel ? editedLabel.color : color}
-            className={cn("w-4 h-4")}
+            className={cn("h-4 w-4")}
             rootClassName={cn(
               editing &&
                 "p-2 border-[1px] border-neutral dark:border-neutral-700 rounded-lg z-10"
@@ -63,13 +63,13 @@ const Label = ({
           />
           <span
             className={cn(
-              "absolute bottom-full left-0 translate-y-[150%] z-50 transition-all duration-200 ease-in-out bg-white dark:bg-neutral-900",
+              "absolute bottom-full left-0 z-50 translate-y-[150%] bg-white transition-all duration-200 ease-in-out dark:bg-neutral-900",
               showColorPicker ? "flex" : "hidden"
             )}
           >
             <GithubPicker
               //TODO: - replace this color picker with a custom one
-              className={cn("z-50 shadow-md w-full")}
+              className={cn("z-50 w-full shadow-md")}
               triangle={"hide"}
               color={editing && editedLabel ? editedLabel.color : color}
               onChangeComplete={(color) => onLabelColorChange(color.hex)}
@@ -88,11 +88,11 @@ const Label = ({
         <input
           type={"text"}
           className={cn(
-            "text-sm flex items-center grow bg-transparent",
+            "flex grow items-center bg-transparent text-sm",
             "text-neutral-900",
             "dark:text-neutral-300",
             editing &&
-              "p-2 py-1 border-[1px] border-neutral dark:border-neutral-700 rounded-lg"
+              "border-neutral rounded-lg border-[1px] p-2 py-1 dark:border-neutral-700"
           )}
           disabled={!editing}
           value={editing && editedLabel ? editedLabel.name : name}
@@ -103,13 +103,13 @@ const Label = ({
       {!editing ? (
         <div className={cn("flex flex-row items-center")}>
           <Button
-            className={cn("p-1 mx-1 border-0", "", "dark:hover:bg-neutral-700")}
+            className={cn("mx-1 border-0 p-1", "", "dark:hover:bg-neutral-700")}
             icon={Pencil1Icon}
             disabled={disabled}
             onClick={toggleEdit}
           ></Button>
           <Button
-            className={cn("p-1 mx-1 border-0", "", "dark:hover:bg-neutral-700")}
+            className={cn("mx-1 border-0 p-1", "", "dark:hover:bg-neutral-700")}
             disabled={disabled}
             icon={TrashIcon}
           ></Button>
@@ -118,11 +118,11 @@ const Label = ({
         <div className={cn("flex flex-row items-center")}>
           <Button
             className={cn(
-              "text-xs py-2",
+              "py-2 text-xs",
               "border-neutral-200 text-neutral-600",
-              "hover:border-purple-600 hover:text-purple-600 hover:bg-purple-50",
+              "hover:border-purple-600 hover:bg-purple-50 hover:text-purple-600",
               "dark:border-neutral-700 dark:text-neutral-400",
-              "dark:hover:text-purple-600 dark:hover:border-purple-600 dark:hover:bg-transparent"
+              "dark:hover:border-purple-600 dark:hover:bg-transparent dark:hover:text-purple-600"
             )}
             onClick={toggleEdit}
           >
@@ -130,7 +130,7 @@ const Label = ({
           </Button>
           <Button
             className={cn(
-              "text-xs py-2 border-0",
+              "border-0 py-2 text-xs",
               "bg-purple-500 text-white",
               "dark:bg-purple-500 dark:text-white",
               "hover:bg-purple-600",
@@ -199,29 +199,29 @@ const LabelsSettings = ({}: LabelsSettingsProps) => {
   }, [])
 
   return (
-    <div className="flex flex-col h-full grow ">
+    <div className="flex h-full grow flex-col ">
       <div
         className={cn(
-          "p-4 w-full border-b-[1px]",
+          "w-full border-b-[1px] p-4",
           "border-neutral-300",
           "dark:border-neutral-700"
         )}
       >
         <h1 className={cn("font-sans font-medium")}>Labels</h1>
       </div>
-      <div className={cn("p-6 pb-0 w-full flex flex-col space-y-4")}>
+      <div className={cn("flex w-full flex-col space-y-4 p-6 pb-0")}>
         {typeof newLabel === "undefined" ? (
           <span className={cn("flex items-center justify-between")}>
             <span
               className={cn(
-                "relative overflow-hidden p-2 pl-8 rounded-lg font-satoshi font-medium w-full max-w-[50%] text-md border-[1px] flex flex-row items-center justify-between",
+                "text-md relative flex w-full max-w-[50%] flex-row items-center justify-between overflow-hidden rounded-lg border-[1px] p-2 pl-8 font-satoshi font-medium",
                 "text-neutral-900",
-                "dark:bg-neutral-800 dark:text-white dark:border-neutral-700"
+                "dark:border-neutral-700 dark:bg-neutral-800 dark:text-white"
               )}
             >
               <input
                 className={cn(
-                  "text-sm flex items-center grow bg-transparent",
+                  "flex grow items-center bg-transparent text-sm",
                   "text-neutral-900",
                   "dark:text-neutral-300"
                 )}
@@ -233,11 +233,11 @@ const LabelsSettings = ({}: LabelsSettingsProps) => {
             </span>
             <Button
               className={cn(
-                "text-xs py-2",
+                "py-2 text-xs",
                 "border-neutral-200 text-neutral-600",
-                "hover:border-purple-600 hover:text-purple-600 hover:bg-purple-50",
+                "hover:border-purple-600 hover:bg-purple-50 hover:text-purple-600",
                 "dark:border-neutral-700 dark:text-neutral-400",
-                "dark:hover:text-purple-600 dark:hover:border-purple-600 dark:hover:bg-transparent"
+                "dark:hover:border-purple-600 dark:hover:bg-transparent dark:hover:text-purple-600"
               )}
               onClick={() => {
                 setEditing([

@@ -124,10 +124,10 @@ const SidebarLeft = ({
       ref={sidebarRef}
       onMouseDown={(e) => e.preventDefault()}
       className={cn(
-        "relative border-r-[0.5px] min-h-full bg-slate-50 transition-all border-neutral-200 grow",
-        "dark:bg-neutral-900 dark:border-neutral-600",
-        !left && !isPhone && "w-0 p-0 overflow-hidden",
-        isResizing && "border-red-500 dark:border-red-500 transition-none",
+        "relative min-h-full grow border-r-[0.5px] border-neutral-200 bg-slate-50 transition-all",
+        "dark:border-neutral-600 dark:bg-neutral-900",
+        !left && !isPhone && "w-0 overflow-hidden p-0",
+        isResizing && "border-red-500 transition-none dark:border-red-500",
         mainView === "TASKS"
           ? "phone:block phone:h-screen phone:w-screen"
           : "phone:hidden"
@@ -136,7 +136,7 @@ const SidebarLeft = ({
     >
       <span
         className={cn(
-          "h-12 flex items-center transition-all border-b-[0.5px] border-neutral-200",
+          "flex h-12 items-center border-b-[0.5px] border-neutral-200 transition-all",
           "dark:border-neutral-600",
           left ? "p-4" : "w-0",
           isResizing && "transition-none",
@@ -146,7 +146,7 @@ const SidebarLeft = ({
       >
         <h1
           className={cn(
-            "w-full text-center text-2xl font-satoshi font-bold italic text-neutral-900 dark:text-white transition-all",
+            "w-full text-center font-satoshi text-2xl font-bold italic text-neutral-900 transition-all dark:text-white",
             `${left ? "block" : "hidden"}`
           )}
         >
@@ -163,14 +163,14 @@ const SidebarLeft = ({
       />
       <h1
         className={cn(
-          "p-3 pb-0 text-xl font-satoshi font-semibold mb-3",
+          "mb-3 p-3 pb-0 font-satoshi text-xl font-semibold",
           "text-black",
           "dark:text-white"
         )}
       >
         🧠 Brain Dump
       </h1>
-      <div className="p-3 pt-0 flex flex-col space-y-2">
+      <div className="flex flex-col space-y-2 p-3 pt-0">
         <NewTaskButton className="mb-2" tasks={MockTasks} />
         {MockTasks.map((task, index) => (
           <Task key={index} data={task} />

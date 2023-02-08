@@ -19,10 +19,10 @@ type SubtaskSectionProps = {
 const Subtask = ({ subtask }: { subtask: SubtaskType }) => {
   const [title, setTitle] = useState(subtask.title)
   return (
-    <span className="flex flex-row items-start pl-5 flex-wrap w-full">
+    <span className="flex w-full flex-row flex-wrap items-start pl-5">
       <DragHandleDots2Icon
         className={cn(
-          "w-4 h-4 cursor-grab flex justify-center items-center mr-2"
+          "mr-2 flex h-4 w-4 cursor-grab items-center justify-center"
         )}
       />
       <Checkbox
@@ -31,7 +31,7 @@ const Subtask = ({ subtask }: { subtask: SubtaskType }) => {
       />
       <textarea
         className={cn(
-          "text-xs ml-2 bg-transparent break-words resize-none outline-none p-0 flex-auto max-w-[calc(100%-4rem)] overflow-y-hidden"
+          "ml-2 max-w-[calc(100%-4rem)] flex-auto resize-none overflow-y-hidden break-words bg-transparent p-0 text-xs outline-none"
         )}
         defaultValue={title}
         onChange={(e) => setTitle(e.target.value)}
@@ -39,7 +39,7 @@ const Subtask = ({ subtask }: { subtask: SubtaskType }) => {
       />
       <DotsVerticalIcon
         className={cn(
-          "w-4 h-4 cursor-pointer flex justify-center items-center",
+          "flex h-4 w-4 cursor-pointer items-center justify-center",
           "hover:text-neutral-800",
           "dark:hover:text-white",
           "text-neutral-400"
@@ -63,7 +63,7 @@ const SubtaskSection = ({
         ))}
         <Button
           icon={PlusIcon}
-          className="p-0 ml-5 border-0 bg-transparent hover:text-blue-500 dark:hover:text-blue-500"
+          className="ml-5 border-0 bg-transparent p-0 hover:text-blue-500 dark:hover:text-blue-500"
         >
           Add subtask
         </Button>

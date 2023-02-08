@@ -28,12 +28,12 @@ const Select = ({
     <RadixSelect.Root onValueChange={onChange} value={value}>
       <RadixSelect.Trigger
         className={cn(
-          "overflow-hidden px-2 py-2 rounded-lg font-satoshi font-medium w-full text-md max-w-[50%] border-[1px] inline-flex items-center justify-center",
-          size === "sm" && "text-sm px-1 py-0 rounded-sm",
+          "text-md inline-flex w-full max-w-[50%] items-center justify-center overflow-hidden rounded-lg border-[1px] px-2 py-2 font-satoshi font-medium",
+          size === "sm" && "rounded-sm px-1 py-0 text-sm",
           condensed && "w-max px-2",
           "text-neutral-900",
           "hover:border-neutral-900",
-          "dark:bg-neutral-800 dark:text-white dark:border-neutral-700",
+          "dark:border-neutral-700 dark:bg-neutral-800 dark:text-white",
           "dark:hover:border-neutral-500"
         )}
       >
@@ -50,14 +50,14 @@ const Select = ({
           position="popper"
           sideOffset={5}
           className={cn(
-            "rounded border-[1px] shadow-md w-full px-4",
-            "bg-white border-neutral-900",
-            "dark:bg-neutral-900 border-neutral-500"
+            "w-full rounded border-[1px] px-4 shadow-md",
+            "border-neutral-900 bg-white",
+            "border-neutral-500 dark:bg-neutral-900"
           )}
         >
           <RadixSelect.ScrollUpButton
             className={cn(
-              "flex items-center justify-center h-6 cursor-default",
+              "flex h-6 cursor-default items-center justify-center",
               "bg-white text-purple-500"
             )}
           >
@@ -89,7 +89,7 @@ const SelectItem = ({ children, className, value }: SelectItemProps) => {
   return (
     <RadixSelect.Item
       className={cn(
-        "text-sm flex items-center justify-between px-5 py-2 relative select-none cursor-pointer",
+        "relative flex cursor-pointer select-none items-center justify-between px-5 py-2 text-sm",
         "hover:bg-neutral-100",
         "dark:hover:bg-neutral-600",
         className
@@ -97,7 +97,7 @@ const SelectItem = ({ children, className, value }: SelectItemProps) => {
       value={value}
     >
       <RadixSelect.ItemText>{children}</RadixSelect.ItemText>
-      <RadixSelect.ItemIndicator className="absolute inline-flex justify-center items-center left-0 w-4">
+      <RadixSelect.ItemIndicator className="absolute left-0 inline-flex w-4 items-center justify-center">
         <CheckIcon />
       </RadixSelect.ItemIndicator>
     </RadixSelect.Item>
