@@ -1,9 +1,8 @@
 import Button from "@/components/button"
 import Separator from "@/components/separator"
-import { SessionContext } from "@/contexts/SessionContext"
 import { cn, ProfileDialogTabSections } from "@/lib/utils"
 import { ExitIcon } from "@radix-ui/react-icons"
-import { useContext } from "react"
+import { useSupabaseClient } from "@supabase/auth-helpers-react"
 
 type ProfileDialogTabProps =
   (typeof ProfileDialogTabSections)[number]["tabs"][number] & {
@@ -101,7 +100,10 @@ const ProfileDialogTabs = ({
   toggleActiveTab,
   additionalActions,
 }: ProfileDialogTabsProps) => {
-  const { signOut } = useContext(SessionContext)
+  const supabase = useSupabaseClient()
+  const signOut = async () => {
+    await supabase.auth.signOut()
+  }
   return (
     <div className={cn("flex h-full grow flex-col", className)}>
       {sections.map((section, index) => (

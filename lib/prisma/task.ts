@@ -1,4 +1,6 @@
 import { Label, Recurrence, Subtask, Task } from "@prisma/client"
+import { NextkitError } from "nextkit"
+import { PickAndFlatten } from "types"
 import { prisma } from "../db"
 
 /* -------------------------------------------------------------------------- */
@@ -7,7 +9,7 @@ import { prisma } from "../db"
 
 export const getTaskById = async (id: number) => {
   try {
-    return await prisma.task.findUnique({
+    const task = await prisma.task.findUnique({
       where: {
         id,
       },
@@ -17,16 +19,23 @@ export const getTaskById = async (id: number) => {
         recurrences: true,
       },
     })
+    return { task }
   } catch (error) {
     return { error }
   }
 }
 
-export const getTasksByUserId = async (userId: string) => {
+export const getTasksByUserId = async (
+  authId: string,
+  archived: boolean = false,
+  done: boolean = false
+) => {
   try {
-    return await prisma.task.findMany({
+    const tasks = await prisma.task.findMany({
       where: {
-        userId,
+        userId: authId,
+        archived,
+        done,
       },
       include: {
         label: true,
@@ -34,12 +43,17 @@ export const getTasksByUserId = async (userId: string) => {
         recurrences: true,
       },
     })
+    return {
+      tasks,
+    }
   } catch (error) {
     return { error }
   }
 }
 
-export const createTask = async (task: Omit<Task, "id">) => {
+export const createTask = async (
+  task: Omit<Task, "id" | "createdAt" | "updatedAt">
+) => {
   try {
     const taskCreated = await prisma.task.create({
       data: task,
@@ -52,8 +66,19 @@ export const createTask = async (task: Omit<Task, "id">) => {
   }
 }
 
-export const updateTask = async (task: Task) => {
+export const updateTask = async (
+  task: PickAndFlatten<Omit<Task, "createdAt" | "updatedAt">>,
+  authId: string
+) => {
   try {
+    const taskToUpdate = await prisma.task.findUnique({
+      where: {
+        id: task.id,
+      },
+    })
+    if (taskToUpdate?.userId !== authId)
+      throw new NextkitError(405, "You can only update your own tasks.")
+
     const taskUpdated = await prisma.task.update({
       where: {
         id: task.id,
@@ -68,8 +93,15 @@ export const updateTask = async (task: Task) => {
   }
 }
 
-export const deleteTask = async (id: number) => {
+export const deleteTask = async (id: number, authId: string) => {
   try {
+    const taskToDelete = await prisma.task.findUnique({
+      where: {
+        id: id,
+      },
+    })
+    if (taskToDelete?.userId !== authId)
+      throw new NextkitError(405, "You can only delete your own tasks.")
     await prisma.task.delete({
       where: {
         id,
@@ -89,11 +121,12 @@ export const deleteTask = async (id: number) => {
 
 export const getLabelById = async (id: number) => {
   try {
-    return await prisma.label.findUnique({
+    const label = await prisma.label.findUnique({
       where: {
         id,
       },
     })
+    return { label }
   } catch (error) {
     return { error }
   }
@@ -101,20 +134,25 @@ export const getLabelById = async (id: number) => {
 
 export const getLabelsByUserId = async (userId: string) => {
   try {
-    return await prisma.label.findMany({
+    const labels = await prisma.label.findMany({
       where: {
         userId,
       },
     })
+    return { labels }
   } catch (error) {
     return { error }
   }
 }
 
-export const createLabel = async (label: Omit<Label, "id">) => {
+export const createLabel = async (
+  label: PickAndFlatten<Omit<Label, "id" | "createdAt" | "updatedAt">>
+) => {
   try {
     const labelCreated = await prisma.label.create({
-      data: label,
+      data: {
+        ...label,
+      },
     })
     return {
       label: labelCreated,
@@ -124,8 +162,18 @@ export const createLabel = async (label: Omit<Label, "id">) => {
   }
 }
 
-export const updateLabel = async (label: Label) => {
+export const updateLabel = async (
+  label: PickAndFlatten<Omit<Label, "createdAt" | "updatedAt">>,
+  authId: string
+) => {
   try {
+    const labelToUpdate = await prisma.label.findUnique({
+      where: {
+        id: label.id,
+      },
+    })
+    if (labelToUpdate?.userId !== authId)
+      throw new NextkitError(405, "You can only update your own labels.")
     const labelUpdated = await prisma.label.update({
       where: {
         id: label.id,
@@ -140,8 +188,15 @@ export const updateLabel = async (label: Label) => {
   }
 }
 
-export const deleteLabel = async (id: number) => {
+export const deleteLabel = async (id: number, authId: string) => {
   try {
+    const labelToDelete = await prisma.label.findUnique({
+      where: {
+        id,
+      },
+    })
+    if (labelToDelete?.userId !== authId)
+      throw new NextkitError(405, "You can only delete your own labels.")
     await prisma.label.delete({
       where: {
         id,

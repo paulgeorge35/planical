@@ -1,5 +1,5 @@
-import { SidebarProvider } from "@/contexts/SidebarContext"
-import { ToolbarProvider } from "@/contexts/ToolbarContext"
+import { SidebarContextProvider } from "@/contexts/SidebarContextProvider"
+import { ToolbarContextProvider } from "@/contexts/ToolbarContextProvider"
 import { ThemeProvider } from "next-themes"
 import {
   createBrowserSupabaseClient,
@@ -21,8 +21,8 @@ export function Providers({
       supabaseClient={supabase}
       initialSession={initialSession}
     >
-      <ToolbarProvider>
-        <SidebarProvider>
+      <ToolbarContextProvider>
+        <SidebarContextProvider>
           <ThemeProvider
             attribute="class"
             storageKey="theme"
@@ -30,8 +30,8 @@ export function Providers({
           >
             {children}
           </ThemeProvider>
-        </SidebarProvider>
-      </ToolbarProvider>
+        </SidebarContextProvider>
+      </ToolbarContextProvider>
     </SessionContextProvider>
   )
 }

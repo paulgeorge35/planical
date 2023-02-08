@@ -17,6 +17,10 @@ export default function Home() {
     })
   }, [])
 
+  useEffect(() => {
+    if (session) router.push("/")
+  }, [session])
+
   return (
     <div className="p-0">
       <main

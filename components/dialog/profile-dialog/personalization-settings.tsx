@@ -1,6 +1,6 @@
 import Select from "@/components/select"
 import Separator from "@/components/separator"
-import { ToolbarContext } from "@/contexts/ToolbarContext"
+import { ToolbarContext } from "@/contexts/ToolbarContextProvider"
 import { useMounted } from "@/hooks/use-mounted"
 import { cn } from "@/lib/utils"
 import { useTheme } from "next-themes"

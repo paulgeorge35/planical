@@ -3,7 +3,7 @@ import { CalendarIcon, Component1Icon, GearIcon } from "@radix-ui/react-icons"
 import Button from "./button"
 import useMediaQuery from "@/hooks/use-media-query"
 import { useContext } from "react"
-import { SidebarContext } from "@/contexts/SidebarContext"
+import { SidebarContext } from "@/contexts/SidebarContextProvider"
 
 type MobileNavProps = {}
 

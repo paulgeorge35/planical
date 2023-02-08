@@ -3,7 +3,7 @@ import React, { useContext } from "react"
 import { TaskType } from "types"
 import NewTaskButton from "./new-task-button"
 import Task from "./task"
-import { SidebarContext } from "@/contexts/SidebarContext"
+import { SidebarContext } from "@/contexts/SidebarContextProvider"
 import useMediaQuery from "@/hooks/use-media-query"
 
 const SidebarLeft = ({

@@ -2,6 +2,15 @@ import { Profile } from "@prisma/client"
 import { PickAndFlatten } from "types"
 import { prisma } from "../db"
 
+export const getAllUsers = async () => {
+  try {
+    const users = await prisma.profile.findMany()
+    return { users }
+  } catch (error) {
+    return { error }
+  }
+}
+
 export const getUserById = async (id: string) => {
   try {
     const user = await prisma.profile.findUnique({

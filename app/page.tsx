@@ -12,17 +12,21 @@ import TasksView from "@/components/tasks-view"
 import Toolbar from "@/components/appbar/toolbar"
 import WelcomeDialogContent from "@/components/dialog/welcome-dialog-content"
 
-import { SidebarContext } from "@/contexts/SidebarContext"
+import { SidebarContext } from "@/contexts/SidebarContextProvider"
 
 import { useMounted } from "@/hooks/use-mounted"
 
 import { cn } from "@/lib/utils"
 import MobileNav from "@/components/mobile-nav"
-import useMediaQuery from "@/hooks/use-media-query"
+import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react"
+import { useRouter } from "next/navigation"
 
 export default function Home() {
   const mounted = useMounted()
-  const isPhone = useMediaQuery("(max-width: 639px)")
+  const router = useRouter()
+  const supabase = useSupabaseClient()
+  const session = useSession()
+
   const { mainView, left, right, sidebarLeftWidth, setSidebarLeftWidth } =
     useContext(SidebarContext)
   const [profileDialogueOpen, setProfileDialogueOpen] = useState(false)
@@ -32,6 +36,20 @@ export default function Home() {
   const toggleProfileDialogue = useCallback(() => {
     setProfileDialogueOpen(!profileDialogueOpen)
   }, [profileDialogueOpen])
+
+  useEffect(() => {
+    supabase.auth.onAuthStateChange((event, session) => {
+      if (event === "SIGNED_OUT" && !session) {
+        router.push("/login")
+      }
+    })
+  }, [])
+
+  useEffect(() => {
+    if (mounted && !session) {
+      router.push("/login")
+    }
+  }, [session, mounted])
 
   useEffect(() => {
     setInterval(() => {

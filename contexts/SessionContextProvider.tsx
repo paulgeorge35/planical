@@ -8,7 +8,7 @@ export const SessionContext = createContext({
   signOut: () => null,
 } as SessionContextType)
 
-export const SessionProvider = ({
+export const SessionContextProvider = ({
   children,
 }: {
   children: React.ReactNode

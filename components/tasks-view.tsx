@@ -1,4 +1,4 @@
-import { ToolbarContext } from "@/contexts/ToolbarContext"
+import { ToolbarContext } from "@/contexts/ToolbarContextProvider"
 import { useContext } from "react"
 import TaskDay from "./task-view/task-day"
 

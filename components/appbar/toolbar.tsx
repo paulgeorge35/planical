@@ -9,8 +9,8 @@ import {
 import Avatar from "../avatar"
 import Button from "../button"
 import ToggleButton from "../toggle-button"
-import { SidebarContext } from "@/contexts/SidebarContext"
-import { ToolbarContext } from "@/contexts/ToolbarContext"
+import { SidebarContext } from "@/contexts/SidebarContextProvider"
+import { ToolbarContext } from "@/contexts/ToolbarContextProvider"
 import { cn } from "@/lib/utils"
 
 type ToolbarProps = {
