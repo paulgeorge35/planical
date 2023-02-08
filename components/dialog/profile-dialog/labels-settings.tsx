@@ -7,19 +7,20 @@ import {
   TrashIcon,
 } from "@radix-ui/react-icons"
 import { useCallback, useEffect, useState } from "react"
-import { LabelNoIDType, LabelType } from "types"
+import { LabelNoIDType, PickAndFlatten } from "types"
 import { GithubPicker } from "react-color"
-import { useTheme } from "next-themes"
+import { Label } from "@prisma/client"
 
 interface LabelProps extends LabelNoIDType {
-  id?: string
+  id?: number
   disabled: boolean
   editing: boolean
-  editedLabel?: LabelType
+  editedLabel?: Label
   toggleEdit: () => void
   onLabelChange: (value: string) => void
   onLabelColorChange: (value: string) => void
   onLabelDelete?: () => void
+  onLabelSave: () => void
 }
 
 const Label = ({
@@ -32,6 +33,7 @@ const Label = ({
   onLabelChange,
   onLabelColorChange,
   onLabelDelete,
+  onLabelSave,
 }: LabelProps) => {
   const [showColorPicker, setShowColorPicker] = useState(false)
   return (
@@ -111,6 +113,7 @@ const Label = ({
             className={cn("mx-1 border-0 p-1", "", "dark:hover:bg-neutral-700")}
             disabled={disabled}
             icon={TrashIcon}
+            onClick={onLabelDelete}
           ></Button>
         </div>
       ) : (
@@ -135,7 +138,7 @@ const Label = ({
               "hover:bg-purple-600",
               "dark:hover:bg-purple-600"
             )}
-            onClick={toggleEdit}
+            onClick={onLabelSave}
           >
             Save
           </Button>
@@ -145,39 +148,108 @@ const Label = ({
   )
 }
 
+async function getLabels() {
+  const res = await (
+    await fetch("/api/labels/labels", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      cache: "no-store",
+    })
+  ).json()
+  return res
+}
+
 type LabelsSettingsProps = {}
 
 const LabelsSettings = ({}: LabelsSettingsProps) => {
-  const labels = [
-    {
-      id: "1",
-      name: "Label 1",
-      color: "#fff000",
-    },
-    {
-      id: "2",
-      name: "Label 2",
-      color: "#fff000",
-    },
-  ]
+  const [labels, setLabels] = useState<Label[]>()
   const [search, setSearch] = useState<string>("")
   const [editing, setEditing] = useState<boolean[]>([])
-  const [newLabel, setNewLabel] = useState<LabelNoIDType>()
-  const [editedLabel, setEditedLabel] = useState<LabelType>()
+  const [newLabel, setNewLabel] =
+    useState<
+      PickAndFlatten<Omit<Label, "id" | "createdAt" | "userId" | "updatedAt">>
+    >()
+  const [editedLabel, setEditedLabel] = useState<Label>()
+
+  const fetchData = async () => {
+    const { labels } = await getLabels()
+    setLabels(labels)
+  }
+
+  useEffect(() => {
+    fetchData()
+  }, [])
+
+  const createLabel = async (
+    data: PickAndFlatten<
+      Omit<Label, "id" | "createdAt" | "updatedAt" | "userId">
+    >
+  ) => {
+    const res = await (
+      await fetch("/api/labels/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        cache: "no-store",
+        body: JSON.stringify({
+          name: data.name,
+          color: data.color,
+        }),
+      })
+    ).json()
+    fetchData()
+    return res
+  }
+
+  const updateLabel = async (data?: Label) => {
+    if (!data) return
+    const res = await (
+      await fetch("/api/labels/update", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        cache: "no-store",
+        body: JSON.stringify({
+          ...data,
+        }),
+      })
+    ).json()
+    fetchData()
+    return res
+  }
+
+  const deleteLabel = async (id: number) => {
+    const res = await (
+      await fetch(`/api/labels/delete?id=${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        cache: "no-store",
+      })
+    ).json()
+    fetchData()
+    return res
+  }
 
   const toggleEdit = useCallback(
-    (index: number, value: boolean, label: LabelType) => {
+    (index: number, value: boolean, label: Label) => {
       if (!value) setEditedLabel(label)
-      setEditing(
-        [...Array.from({ length: labels.length }, () => false)].map((_, i) =>
-          index === i ? !value : false
+      if (labels)
+        setEditing(
+          [...Array.from({ length: labels.length }, () => false)].map((_, i) =>
+            index === i ? !value : false
+          )
         )
-      )
     },
     [labels]
   )
 
-  const updateLabelNew = useCallback(
+  const updateLabelNewFields = useCallback(
     (field: "color" | "name", value: string) => {
       if (typeof newLabel === "undefined") return
       setNewLabel({ ...newLabel, [field]: value })
@@ -185,7 +257,7 @@ const LabelsSettings = ({}: LabelsSettingsProps) => {
     [newLabel]
   )
 
-  const updateLabel = useCallback(
+  const updateLabelFields = useCallback(
     (field: "color" | "name", value: string) => {
       if (typeof editedLabel === "undefined") return
       setEditedLabel({ ...editedLabel, [field]: value })
@@ -194,10 +266,10 @@ const LabelsSettings = ({}: LabelsSettingsProps) => {
   )
 
   useEffect(() => {
-    setEditing(Array.from({ length: labels.length }, () => false))
-  }, [labels.length])
+    if (labels) setEditing(Array.from({ length: labels.length }, () => false))
+  }, [labels])
 
-  return (
+  return Array.isArray(labels) ? (
     <div className="flex h-full grow flex-col ">
       <div
         className={cn(
@@ -265,8 +337,17 @@ const LabelsSettings = ({}: LabelsSettingsProps) => {
                 )
               )
             }}
-            onLabelChange={(name) => updateLabelNew("name", name)}
-            onLabelColorChange={(color) => updateLabelNew("color", color)}
+            onLabelChange={(name) => updateLabelNewFields("name", name)}
+            onLabelColorChange={(color) => updateLabelNewFields("color", color)}
+            onLabelSave={async () => {
+              await createLabel(newLabel)
+              setNewLabel(undefined)
+              setEditing(
+                [...Array.from({ length: labels.length }, () => false)].splice(
+                  -1
+                )
+              )
+            }}
           />
         )}
         {labels
@@ -287,13 +368,18 @@ const LabelsSettings = ({}: LabelsSettingsProps) => {
                 typeof newLabel !== "undefined"
               }
               toggleEdit={() => toggleEdit(index, editing[index], label)}
-              onLabelChange={(name) => updateLabel("name", name)}
-              onLabelColorChange={(color) => updateLabel("color", color)}
+              onLabelChange={(name) => updateLabelFields("name", name)}
+              onLabelColorChange={(color) => updateLabelFields("color", color)}
+              onLabelSave={async () => {
+                await updateLabel(editedLabel)
+                toggleEdit(index, editing[index], label)
+              }}
+              onLabelDelete={() => deleteLabel(label.id)}
             />
           ))}
       </div>
     </div>
-  )
+  ) : null
 }
 
 export default LabelsSettings

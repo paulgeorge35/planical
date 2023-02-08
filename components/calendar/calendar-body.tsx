@@ -1,4 +1,4 @@
-import { ToolbarContext } from "@/contexts/ToolbarContext"
+import { ToolbarContext } from "@/contexts/ToolbarContextProvider"
 import { cn, compareDates } from "@/lib/utils"
 import { TriangleRightIcon } from "@radix-ui/react-icons"
 import { format } from "date-fns"

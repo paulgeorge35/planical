@@ -2,7 +2,6 @@
 
 import { Poppins, Roboto } from "@next/font/google"
 import localFont from "@next/font/local"
-import { Session } from "@supabase/auth-helpers-nextjs"
 
 import { AnalyticsWrapper } from "@/components/analytics"
 import { Providers } from "@/lib/providers"

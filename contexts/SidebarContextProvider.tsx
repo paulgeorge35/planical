@@ -14,7 +14,7 @@ export const SidebarContext = createContext({
   toggleMainView: (_: "CALENDAR" | "TASKS") => null,
 } as SidebarContextType)
 
-export const SidebarProvider = ({
+export const SidebarContextProvider = ({
   children,
 }: {
   children: React.ReactNode

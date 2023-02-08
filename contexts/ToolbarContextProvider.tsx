@@ -27,7 +27,7 @@ export const ToolbarContext = createContext({
   isWeekToView: () => false,
 } as ToolbarContextType)
 
-export const ToolbarProvider = ({
+export const ToolbarContextProvider = ({
   children,
 }: {
   children: React.ReactNode

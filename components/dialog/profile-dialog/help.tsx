@@ -1,5 +1,5 @@
 import Separator from "@/components/separator"
-import { SessionContext } from "@/contexts/SessionContext"
+import { SessionContext } from "@/contexts/SessionContextProvider"
 import { cn } from "@/lib/utils"
 import { ArrowRightIcon } from "@radix-ui/react-icons"
 import { useContext } from "react"

@@ -1,17 +1,26 @@
-import { deleteUser, getUserById, updateUser } from "@/lib/prisma/user"
+import {
+  createLabel,
+  updateLabel,
+  deleteLabel,
+  getLabelById,
+} from "@/lib/prisma/task"
 import type { NextApiRequest, NextApiResponse } from "next"
 import { z } from "zod"
 import { NextkitError } from "nextkit"
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs"
 
+const getParamsSchema = z.number()
 const postBodySchema = z.object({
-  email: z.string().email(),
-  username: z.string().nullable(),
-  full_name: z.string().nullable(),
-  avatar_url: z.string().nullable(),
-  createdAt: z.date(),
-  updatedAt: z.date(),
+  name: z.string(),
+  color: z.string(),
 })
+const patchBodySchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  color: z.string(),
+  userId: z.string(),
+})
+const deleteParamsSchema = z.number()
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const supabaseServerClient = createServerSupabaseClient({
@@ -28,9 +37,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   if (req.method === "GET") {
     try {
-      const { user, error } = await getUserById(session.user.id)
+      const labelId = getParamsSchema.parse(req.query.id)
+      const { label, error } = await getLabelById(labelId)
       if (error) throw new NextkitError(400, JSON.stringify(error))
-      return res.status(200).json({ user })
+      return res.status(200).json({ label })
     } catch (error) {
       if (error instanceof z.ZodError) {
         return res.status(422).json(error.issues)
@@ -42,9 +52,27 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === "POST") {
     try {
       const data = postBodySchema.parse(req.body)
-      const { user, error } = await updateUser(session.user.id, data)
+      const { label, error } = await createLabel({
+        ...data,
+        userId: session.user.id,
+      })
       if (error) throw new NextkitError(400, JSON.stringify(error))
-      return res.status(200).json({ user })
+
+      return res.status(200).json({ label })
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(422).json(error.issues)
+      }
+      return res.status(500).json({ error })
+    }
+  }
+
+  if (req.method === "PATCH") {
+    try {
+      const data = patchBodySchema.parse(req.body)
+      const { label, error } = await updateLabel(data, session.user.id)
+      if (error) throw new NextkitError(400, JSON.stringify(error))
+      return res.status(200).json({ label })
     } catch (error) {
       if (error instanceof z.ZodError) {
         return res.status(422).json(error.issues)
@@ -55,7 +83,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   if (req.method === "DELETE") {
     try {
-      const { id, error } = await deleteUser(session.user.id)
+      const labelId = deleteParamsSchema.parse(parseInt(req.query.id as string))
+      const { id, error } = await deleteLabel(labelId, session.user.id)
       if (error) throw new NextkitError(400, JSON.stringify(error))
       return res.status(200).json({ id })
     } catch (error) {

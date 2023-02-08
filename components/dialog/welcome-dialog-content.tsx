@@ -12,7 +12,7 @@ import Separator from "../separator"
 import supabase from "@/lib/supabase"
 import { cn } from "@/lib/utils"
 import rocket from "../../assets/images/rocket.svg"
-import { SessionContext } from "@/contexts/SessionContext"
+import { SessionContext } from "@/contexts/SessionContextProvider"
 
 type WelcomeDialogContentProps = {
   onClose: () => void
