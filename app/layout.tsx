@@ -36,9 +36,10 @@ const satoshi = localFont({
   variable: "--font-satoshi",
 })
 
-export default function RootLayout(props: {
+export default function RootLayout({
+  children,
+}: {
   children: React.ReactNode
-  initialSession: Session
 }) {
   return (
     <html
@@ -54,9 +55,7 @@ export default function RootLayout(props: {
         <AnalyticsWrapper />
       </head>
       <body>
-        <Providers initialSession={props.initialSession}>
-          {props.children}
-        </Providers>
+        <Providers>{children}</Providers>
       </body>
     </html>
   )

@@ -13,7 +13,7 @@ export function Providers({
   initialSession,
 }: {
   children: React.ReactNode
-  initialSession: Session
+  initialSession?: Session
 }) {
   const [supabase] = useState(() => createBrowserSupabaseClient({}))
   return (
