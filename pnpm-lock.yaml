@@ -11,6 +11,8 @@ specifiers:
   '@radix-ui/react-select': ^1.2.0
   '@radix-ui/react-separator': ^1.0.1
   '@radix-ui/react-toolbar': ^1.0.1
+  '@supabase/auth-helpers-nextjs': ^0.5.4
+  '@supabase/auth-helpers-react': ^0.3.1
   '@supabase/auth-ui-react': ^0.2.2
   '@supabase/supabase-js': ^2.0.4
   '@tailwindcss/typography': ^0.5.8
@@ -35,6 +37,7 @@ specifiers:
   next: 13.1.1
   next-contentlayer: ^0.2.9
   next-themes: ^0.2.1
+  nextkit: ^3.4.3
   postcss: ^8.4.21
   prettier: ^2.7.1
   prisma: ^4.5.0
@@ -60,6 +63,8 @@ dependencies:
   '@radix-ui/react-select': 1.2.0_yyloj25vv7zmuk3uh3z5jonzqq
   '@radix-ui/react-separator': 1.0.1_biqbaboplfbrettd7655fr4n2y
   '@radix-ui/react-toolbar': 1.0.1_biqbaboplfbrettd7655fr4n2y
+  '@supabase/auth-helpers-nextjs': 0.5.4_qtvf6mjfeick7xf5purdyuznsu
+  '@supabase/auth-helpers-react': 0.3.1_qtvf6mjfeick7xf5purdyuznsu
   '@supabase/auth-ui-react': 0.2.6_biqbaboplfbrettd7655fr4n2y
   '@supabase/supabase-js': 2.2.3_encoding@0.1.13
   '@vercel/analytics': 0.1.8_react@18.2.0
@@ -67,6 +72,7 @@ dependencies:
   encoding: 0.1.13
   next: 13.1.1_biqbaboplfbrettd7655fr4n2y
   next-themes: 0.2.1_q76c2b4vyoegvsbrcwkfvimnai
+  nextkit: 3.4.3_next@13.1.1
   react: 18.2.0
   react-color: 2.19.3_react@18.2.0
   react-dom: 18.2.0_react@18.2.0
@@ -1254,6 +1260,31 @@ packages:
       react: '>= 16.3.0'
     dependencies:
       react: 18.2.0
+    dev: false
+
+  /@supabase/auth-helpers-nextjs/0.5.4_qtvf6mjfeick7xf5purdyuznsu:
+    resolution: {integrity: sha512-Xm3BMDOYPbNyuh8UXDRgBDc3JkeM5S2PfuC1jFJ73CCay4YiH1YxTz06Cvtp+vLH432qdjnqH+49ehVvUehPnQ==}
+    peerDependencies:
+      '@supabase/supabase-js': ^2.0.4
+    dependencies:
+      '@supabase/auth-helpers-shared': 0.2.4_qtvf6mjfeick7xf5purdyuznsu
+      '@supabase/supabase-js': 2.2.3_encoding@0.1.13
+    dev: false
+
+  /@supabase/auth-helpers-react/0.3.1_qtvf6mjfeick7xf5purdyuznsu:
+    resolution: {integrity: sha512-g3SFv08Dz9FapNif/ZY1b7qKGlMJDyTLSayHBz3kb3FuYxg7aLWgQtydDhm5AGbc0XtvpIBuhGTIOVevwpdosA==}
+    peerDependencies:
+      '@supabase/supabase-js': ^2.0.4
+    dependencies:
+      '@supabase/supabase-js': 2.2.3_encoding@0.1.13
+    dev: false
+
+  /@supabase/auth-helpers-shared/0.2.4_qtvf6mjfeick7xf5purdyuznsu:
+    resolution: {integrity: sha512-c+hi3N6DhjPTzjXGOokre4gmMZOqt0f1ORrwZwi2s07pk3cbkmn77DwwVtlYMNi3oZNYRQqAfxJu83UzpJrrmg==}
+    peerDependencies:
+      '@supabase/supabase-js': ^2.0.4
+    dependencies:
+      '@supabase/supabase-js': 2.2.3_encoding@0.1.13
     dev: false
 
   /@supabase/auth-ui-react/0.2.6_biqbaboplfbrettd7655fr4n2y:
@@ -4184,6 +4215,14 @@ packages:
     transitivePeerDependencies:
       - '@babel/core'
       - babel-plugin-macros
+
+  /nextkit/3.4.3_next@13.1.1:
+    resolution: {integrity: sha512-p7WKSXYXb4oC9EG26fQjaC2b6OROkaDRI9Mg8s0XGsXAxKKHU1h9bnoTLkunY8mH3YtPL53C2hxAwhxfDmTPog==}
+    peerDependencies:
+      next: '*'
+    dependencies:
+      next: 13.1.1_biqbaboplfbrettd7655fr4n2y
+    dev: false
 
   /no-case/3.0.4:
     resolution: {integrity: sha512-fgAN3jGAh+RoxUGZHTSOLJIqUc2wmoBwGR4tbpNAKmmovFoWq0OdRkb0VkldReO2a2iBT/OEulG9XSUc10r3zg==}

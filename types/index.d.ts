@@ -1,5 +1,9 @@
 import internal from "stream"
 
+export type PickAndFlatten<T> = {
+  [K in keyof T]: T[K]
+} & {}
+
 export interface UserSession {
   id: string
   aud: string

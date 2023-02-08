@@ -1,13 +1,15 @@
 "use client"
 
 import { Auth, ThemeSupa } from "@supabase/auth-ui-react"
-import supabase from "@/lib/supabase"
 import { cn } from "@/lib/utils"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
+import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react"
 
 export default function Home() {
   const router = useRouter()
+  const session = useSession()
+  const supabase = useSupabaseClient()
 
   useEffect(() => {
     supabase.auth.onAuthStateChange((event, session) => {
