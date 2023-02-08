@@ -51,8 +51,8 @@ const WelcomeDialogContent = ({ onClose }: WelcomeDialogContentProps) => {
         Welcome to <span className="font-satoshi font-bold ">Planical</span>!
       </h1>
       <p className="mt-2 max-w-[60%] text-center text-sm text-neutral-400">
-        We're glad to have you here. Let's get started by setting up your
-        profile.
+        We&apos;re glad to have you here. Let&apos;s get started by setting up
+        your profile.
       </p>
       <Button
         className={cn(
@@ -73,7 +73,7 @@ const WelcomeDialogContent = ({ onClose }: WelcomeDialogContentProps) => {
         <span className="flex w-full items-center justify-between">
           <label
             className={cn(
-              "ml-0 flex cursor-pointer rounded border-[1px] py-2 px-2 text-xs",
+              "ml-0 flex cursor-pointer rounded border-[1px] p-2 text-xs",
               "border-neutral-200 text-neutral-600",
               "hover:border-purple-600 hover:bg-purple-50 hover:text-purple-600",
               "dark:border-neutral-700 dark:text-neutral-400",
@@ -88,7 +88,7 @@ const WelcomeDialogContent = ({ onClose }: WelcomeDialogContentProps) => {
           <Button
             disabled={avatarUrl === null}
             className={cn(
-              "ml-0 py-2 px-2 text-xs",
+              "ml-0 p-2 text-xs",
               "border-neutral-200 text-neutral-600",
               "hover:border-purple-600 hover:bg-purple-50 hover:text-purple-600",
               "dark:border-neutral-700 dark:text-neutral-400",

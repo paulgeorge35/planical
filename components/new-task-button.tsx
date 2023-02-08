@@ -22,7 +22,7 @@ const NewTaskButton = ({
   return (
     <Button
       className={cn(
-        "m-0 h-12 w-full rounded-xl px-2 py-2",
+        "m-0 h-12 w-full rounded-xl p-2",
         "bg-white text-neutral-400",
         "hover:border-blue-200 hover:bg-white hover:text-neutral-400 hover:shadow-md",
         "dark:border-neutral-800 dark:bg-neutral-800 dark:text-neutral-500",

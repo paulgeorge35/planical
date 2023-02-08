@@ -28,7 +28,7 @@ const Select = ({
     <RadixSelect.Root onValueChange={onChange} value={value}>
       <RadixSelect.Trigger
         className={cn(
-          "text-md inline-flex w-full max-w-[50%] items-center justify-center overflow-hidden rounded-lg border-[1px] px-2 py-2 font-satoshi font-medium",
+          "text-md inline-flex w-full max-w-[50%] items-center justify-center overflow-hidden rounded-lg border-[1px] p-2 font-satoshi font-medium",
           size === "sm" && "rounded-sm px-1 py-0 text-sm",
           condensed && "w-max px-2",
           "text-neutral-900",
@@ -52,7 +52,7 @@ const Select = ({
           className={cn(
             "w-full rounded border-[1px] px-4 shadow-md",
             "border-neutral-900 bg-white",
-            "border-neutral-500 dark:bg-neutral-900"
+            "dark:border-neutral-500 dark:bg-neutral-900"
           )}
         >
           <RadixSelect.ScrollUpButton

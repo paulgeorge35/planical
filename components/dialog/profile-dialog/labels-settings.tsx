@@ -34,7 +34,6 @@ const Label = ({
   onLabelDelete,
 }: LabelProps) => {
   const [showColorPicker, setShowColorPicker] = useState(false)
-  const { theme } = useTheme()
   return (
     <div
       className={cn(
@@ -58,7 +57,7 @@ const Label = ({
             className={cn("h-4 w-4")}
             rootClassName={cn(
               editing &&
-                "p-2 border-[1px] border-neutral dark:border-neutral-700 rounded-lg z-10"
+                "z-10 rounded-lg border-[1px] border-neutral-200 p-2 dark:border-neutral-700"
             )}
           />
           <span
@@ -92,7 +91,7 @@ const Label = ({
             "text-neutral-900",
             "dark:text-neutral-300",
             editing &&
-              "border-neutral rounded-lg border-[1px] p-2 py-1 dark:border-neutral-700"
+              "rounded-lg border-[1px] border-neutral-200 p-2 py-1 dark:border-neutral-700"
           )}
           disabled={!editing}
           value={editing && editedLabel ? editedLabel.name : name}
@@ -196,7 +195,7 @@ const LabelsSettings = ({}: LabelsSettingsProps) => {
 
   useEffect(() => {
     setEditing(Array.from({ length: labels.length }, () => false))
-  }, [])
+  }, [labels.length])
 
   return (
     <div className="flex h-full grow flex-col ">

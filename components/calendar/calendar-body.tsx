@@ -167,7 +167,7 @@ const CalendarBody = ({ weekToView }: { weekToView?: Date[] }) => {
     return () => {
       clearInterval(interval)
     }
-  }, [])
+  }, [timeDiff])
   return (
     <tbody
       className={cn(

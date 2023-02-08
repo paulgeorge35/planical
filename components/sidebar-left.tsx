@@ -37,7 +37,7 @@ const SidebarLeft = ({
         )
       }
     },
-    [isResizing]
+    [isResizing, setSidebarWidth]
   )
 
   React.useEffect(() => {

@@ -10,5 +10,8 @@
     "tailwindcss": {
       "callees": ["cn"]
     }
+  },
+  "rules": {
+    "tailwindcss/no-custom-classname": "off"
   }
 }

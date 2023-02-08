@@ -12,7 +12,8 @@ const Logo = ({
       className={cn(
         "flex h-full min-w-[250px] max-w-[500px] items-center border-r-[0.5px] border-neutral-200 transition-all",
         "dark:border-neutral-600",
-        left ? `p-4 w-[${"300"}px]` : "w-0 min-w-0 p-0 "
+        // eslint-disable-line tailwindcss/classnames-order
+        left ? `p-4` : "w-0 min-w-0 p-0 "
       )}
       style={{ width: `${left ? sidebarWidth : 0}px` }}
     >

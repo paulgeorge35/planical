@@ -38,7 +38,7 @@ const Help = ({}: HelpProps) => {
               "dark:text-purple-500 dark:hover:text-purple-700"
             )}
           >
-            What's new & What's upcoming{" "}
+            What&apos;s new & What&apos;s upcoming{" "}
             <ArrowRightIcon className="ml-2 h-5 w-5" />
           </a>
         </fieldset>
