@@ -29,10 +29,10 @@ const PersonalizationSettings = ({}: PersonalizationSettingsProps) => {
   ]
 
   return (
-    <div className="flex flex-col h-full grow ">
+    <div className="flex h-full grow flex-col ">
       <div
         className={cn(
-          "p-4 w-full border-b-[1px]",
+          "w-full border-b-[1px] p-4",
           "border-neutral-300",
           "dark:border-neutral-700"
         )}
@@ -41,11 +41,11 @@ const PersonalizationSettings = ({}: PersonalizationSettingsProps) => {
           Personalization Settings
         </h1>
       </div>
-      <div className={cn("p-6 pb-0 w-full flex flex-col")}>
-        <fieldset className="mt-0 group flex flex-col space-y-2">
+      <div className={cn("flex w-full flex-col p-6 pb-0")}>
+        <fieldset className="group mt-0 flex flex-col space-y-2">
           <label
             className={cn(
-              "text-xs uppercase font-semibold",
+              "text-xs font-semibold uppercase",
               "text-neutral-400",
               "dark:text-neutral-500"
             )}
@@ -60,18 +60,18 @@ const PersonalizationSettings = ({}: PersonalizationSettingsProps) => {
         </fieldset>
         <Separator rootClassName="py-4" />
       </div>
-      <div className={cn("p-6 pb-0 w-full flex flex-col")}>
-        <fieldset className="mt-0 group flex flex-col space-y-2">
+      <div className={cn("flex w-full flex-col p-6 pb-0")}>
+        <fieldset className="group mt-0 flex flex-col space-y-2">
           <label
             className={cn(
-              "text-xs uppercase font-semibold",
+              "text-xs font-semibold uppercase",
               "text-neutral-400",
               "dark:text-neutral-500"
             )}
           >
             Calendar settings
           </label>
-          <span className="flex space-x-2 items-center">
+          <span className="flex items-center space-x-2">
             <p className="text-sm">Start week on</p>
             <Select
               size="sm"

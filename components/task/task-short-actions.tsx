@@ -19,7 +19,7 @@ const TaskShortActions = ({
   return (
     <span
       className={cn(
-        "pl-6 flex flex-row items-center space-x-2",
+        "flex flex-row items-center space-x-2 pl-6",
         "text-neutral-600",
         "dark:text-neutral-400",
         className
@@ -51,7 +51,7 @@ const TaskShortActions = ({
       {!recurrent && (
         <LoopIcon
           className={cn(
-            "hidden w-3 h-3 group-hover:block",
+            "hidden h-3 w-3 group-hover:block",
             "hover:text-blue-500"
           )}
         />
@@ -65,7 +65,7 @@ const TaskShortActions = ({
         )}
       >
         <Component1Icon
-          className={cn("flex justify-center items-center w-3 h-3")}
+          className={cn("flex h-3 w-3 items-center justify-center")}
         />
         {subtasks.length !== 0 && (
           <span className="pl-1 font-satoshi text-[0.65rem]">{`${

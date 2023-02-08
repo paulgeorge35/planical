@@ -20,7 +20,7 @@ const ProfileDialogTab = ({
   return (
     <Button
       className={cn(
-        "m-0 w-full border-0 bg-transparent mt-1",
+        "m-0 mt-1 w-full border-0 bg-transparent",
         "text-neutral-900",
         "dark:text-neutral-100",
         "hover:bg-neutral-200",
@@ -30,7 +30,7 @@ const ProfileDialogTab = ({
       icon={icon}
       onClick={toggleActiveTab}
     >
-      <h1 className="font-semibold py-1 px-2">{label}</h1>
+      <h1 className="py-1 px-2 font-semibold">{label}</h1>
     </Button>
   )
 }
@@ -59,7 +59,7 @@ const ProfileDialogSection = ({
       {title && (
         <h1
           className={cn(
-            "px-3 pt-3 text-xs uppercase font-semibold",
+            "px-3 pt-3 text-xs font-semibold uppercase",
             "text-neutral-500",
             "dark:text-neutral-600"
           )}
@@ -103,7 +103,7 @@ const ProfileDialogTabs = ({
 }: ProfileDialogTabsProps) => {
   const { signOut } = useContext(SessionContext)
   return (
-    <div className={cn("flex flex-col h-full grow", className)}>
+    <div className={cn("flex h-full grow flex-col", className)}>
       {sections.map((section, index) => (
         <ProfileDialogSection
           key={index}
@@ -113,10 +113,10 @@ const ProfileDialogTabs = ({
           additionalActions={additionalActions}
         />
       ))}
-      <span className="flex flex-col grow">
+      <span className="flex grow flex-col">
         <Button
           className={cn(
-            "group m-0 w-full border-0 bg-transparent mt-1 !text-purple-500",
+            "group m-0 mt-1 w-full border-0 bg-transparent !text-purple-500",
             "hover:!text-neutral-900",
             "dark:hover:!text-neutral-100"
           )}
@@ -125,7 +125,7 @@ const ProfileDialogTabs = ({
         >
           <h1
             className={cn(
-              "font-semibold py-1 px-2 text-purple-500",
+              "py-1 px-2 font-semibold text-purple-500",
               "group-hover:text-neutral-900",
               "dark:group-hover:text-neutral-100"
             )}

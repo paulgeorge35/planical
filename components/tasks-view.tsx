@@ -14,7 +14,7 @@ const TasksView = ({ sidebarLeftWidth }: TaskViewProps) => {
         maxWidth: `calc(100vw - ${Math.max(250, sidebarLeftWidth)}px)`,
         minWidth: `calc(100vw - ${Math.min(500, sidebarLeftWidth)}px)`,
       }}
-      className="w-full h-full overflow-x-scroll flex justify-start flex-row space-x-2"
+      className="flex h-full w-full flex-row justify-start space-x-2 overflow-x-scroll"
     >
       {weekFromNow.map((day, index) => (
         <TaskDay key={index} day={day} />

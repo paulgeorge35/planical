@@ -47,39 +47,39 @@ const WelcomeDialogContent = ({ onClose }: WelcomeDialogContentProps) => {
   return page === 0 ? (
     <span className="flex flex-col items-center space-y-8">
       <Image alt="Welcome" width={200} height={200} src={rocket} />
-      <h1 className="font-satoshi font-medium text-2xl mt-4">
-        Welcome to <span className="font-bold font-satoshi ">Planical</span>!
+      <h1 className="mt-4 font-satoshi text-2xl font-medium">
+        Welcome to <span className="font-satoshi font-bold ">Planical</span>!
       </h1>
-      <p className="text-sm text-neutral-400 mt-2 max-w-[60%] text-center">
-        We're glad to have you here. Let's get started by setting up your
-        profile.
+      <p className="mt-2 max-w-[60%] text-center text-sm text-neutral-400">
+        We&apos;re glad to have you here. Let&apos;s get started by setting up
+        your profile.
       </p>
       <Button
         className={cn(
-          "m-0 border-0 px-4 py-2 text-lg font-bold bg-purple-600 rounded-full shadow-2xl text-white hover:bg-purple-700"
+          "m-0 rounded-full border-0 bg-purple-600 px-4 py-2 text-lg font-bold text-white shadow-2xl hover:bg-purple-700"
         )}
         onClick={() => setPage(1)}
       >
-        Set up your profile <ChevronRightIcon className="ml-2 w-6 h-6" />
+        Set up your profile <ChevronRightIcon className="ml-2 h-6 w-6" />
       </Button>
     </span>
   ) : (
     <span className="flex flex-col items-center justify-center space-y-8">
-      <span className="flex flex-col items-center space-y-8 rounded-md border-dashed p-4 w-[50%] border-[1px] border-neutral-400 dark:border-neutral-700">
+      <span className="flex w-[50%] flex-col items-center space-y-8 rounded-md border-[1px] border-dashed border-neutral-400 p-4 dark:border-neutral-700">
         <Avatar
-          className="w-32 h-32"
+          className="h-32 w-32"
           avatarUrl={avatarUrl ? avatarUrl : undefined}
         />
-        <span className="flex items-center justify-between w-full">
+        <span className="flex w-full items-center justify-between">
           <label
             className={cn(
-              "text-xs ml-0 py-2 px-2 border-[1px] rounded cursor-pointer flex",
+              "ml-0 flex cursor-pointer rounded border-[1px] p-2 text-xs",
               "border-neutral-200 text-neutral-600",
-              "hover:border-purple-600 hover:text-purple-600 hover:bg-purple-50",
+              "hover:border-purple-600 hover:bg-purple-50 hover:text-purple-600",
               "dark:border-neutral-700 dark:text-neutral-400",
-              "dark:hover:text-purple-600 dark:hover:border-purple-600 dark:hover:bg-transparent",
+              "dark:hover:border-purple-600 dark:hover:bg-transparent dark:hover:text-purple-600",
               loading &&
-                "cursor-not-allowed !text-opacity-20 pointer-events-none"
+                "pointer-events-none cursor-not-allowed !text-opacity-20"
             )}
           >
             <UploadIcon className="mr-2" /> Upload
@@ -88,11 +88,11 @@ const WelcomeDialogContent = ({ onClose }: WelcomeDialogContentProps) => {
           <Button
             disabled={avatarUrl === null}
             className={cn(
-              "text-xs ml-0 py-2 px-2",
+              "ml-0 p-2 text-xs",
               "border-neutral-200 text-neutral-600",
-              "hover:border-purple-600 hover:text-purple-600 hover:bg-purple-50",
+              "hover:border-purple-600 hover:bg-purple-50 hover:text-purple-600",
               "dark:border-neutral-700 dark:text-neutral-400",
-              "dark:hover:text-purple-600 dark:hover:border-purple-600 dark:hover:bg-transparent"
+              "dark:hover:border-purple-600 dark:hover:bg-transparent dark:hover:text-purple-600"
             )}
             onClick={() => setAvatarUrl(null)}
           >
@@ -104,21 +104,21 @@ const WelcomeDialogContent = ({ onClose }: WelcomeDialogContentProps) => {
           type={"text"}
           placeholder={"Full name"}
           className={cn(
-            "px-3 py-2 rounded-lg font-satoshi font-medium text-md w-full border-[1px]",
+            "text-md w-full rounded-lg border-[1px] px-3 py-2 font-satoshi font-medium",
             "bg-transparent text-neutral-900",
             "hover:border-neutral-900",
-            "dark:bg-neutral-800 dark:text-white dark:border-neutral-700",
+            "dark:border-neutral-700 dark:bg-neutral-800 dark:text-white",
             "dark:hover:border-neutral-500"
           )}
         />
       </span>
       <Button
         className={cn(
-          "m-0 w-full border-0 px-4 py-2 text-lg font-bold bg-purple-600 rounded-full shadow-2xl text-white hover:bg-purple-700"
+          "m-0 w-full rounded-full border-0 bg-purple-600 px-4 py-2 text-lg font-bold text-white shadow-2xl hover:bg-purple-700"
         )}
         onClick={() => setPage(1)}
       >
-        Get started <CheckIcon className="ml-2 w-6 h-6" />
+        Get started <CheckIcon className="ml-2 h-6 w-6" />
       </Button>
     </span>
   )

@@ -9,21 +9,21 @@ type HelpProps = {}
 const Help = ({}: HelpProps) => {
   const { session } = useContext(SessionContext)
   return (
-    <div className="flex flex-col h-full grow ">
+    <div className="flex h-full grow flex-col ">
       <div
         className={cn(
-          "p-4 w-full border-b-[1px]",
+          "w-full border-b-[1px] p-4",
           "border-neutral-300",
           "dark:border-neutral-700"
         )}
       >
         <h1 className={cn("font-sans font-medium")}>Help & Support</h1>
       </div>
-      <div className={cn("p-6 pb-0 w-full flex flex-col")}>
+      <div className={cn("flex w-full flex-col p-6 pb-0")}>
         <fieldset className="flex flex-col">
           <label
             className={cn(
-              "text-xs uppercase font-semibold",
+              "text-xs font-semibold uppercase",
               "text-neutral-400",
               "dark:text-neutral-500"
             )}
@@ -33,22 +33,22 @@ const Help = ({}: HelpProps) => {
           <a
             href="https://planical.canny.io"
             className={cn(
-              "py-2 font-satoshi text-md max-w-[50%] flex items-center cursor-pointer transition-colors duration-200 ease-in-out",
+              "text-md flex max-w-[50%] cursor-pointer items-center py-2 font-satoshi transition-colors duration-200 ease-in-out",
               "text-purple-500 hover:text-purple-700",
               "dark:text-purple-500 dark:hover:text-purple-700"
             )}
           >
-            What's new & What's upcoming{" "}
-            <ArrowRightIcon className="ml-2 w-5 h-5" />
+            What&apos;s new & What&apos;s upcoming{" "}
+            <ArrowRightIcon className="ml-2 h-5 w-5" />
           </a>
         </fieldset>
       </div>
       <Separator rootClassName="py-4" />
-      <div className={cn("p-6 pb-0 w-full flex flex-col")}>
+      <div className={cn("flex w-full flex-col p-6 pb-0")}>
         <fieldset className="flex flex-col">
           <label
             className={cn(
-              "text-xs uppercase font-semibold",
+              "text-xs font-semibold uppercase",
               "text-neutral-400",
               "dark:text-neutral-500"
             )}
@@ -58,21 +58,21 @@ const Help = ({}: HelpProps) => {
           <a
             href="mailto:paultibulca@gmail.com"
             className={cn(
-              "py-2 font-satoshi text-md max-w-[50%] flex items-center cursor-pointer transition-colors duration-200 ease-in-out",
+              "text-md flex max-w-[50%] cursor-pointer items-center py-2 font-satoshi transition-colors duration-200 ease-in-out",
               "text-purple-500 hover:text-purple-700",
               "dark:text-purple-500 dark:hover:text-purple-700"
             )}
           >
-            paultibulca@gmail.com <ArrowRightIcon className="ml-2 w-5 h-5" />
+            paultibulca@gmail.com <ArrowRightIcon className="ml-2 h-5 w-5" />
           </a>
         </fieldset>
       </div>
       <Separator rootClassName="py-4" />
-      <div className={cn("p-6 pb-0 w-full flex flex-col")}>
+      <div className={cn("flex w-full flex-col p-6 pb-0")}>
         <fieldset className="flex flex-col">
           <label
             className={cn(
-              "text-xs uppercase font-semibold",
+              "text-xs font-semibold uppercase",
               "text-neutral-400",
               "dark:text-neutral-500"
             )}
@@ -81,7 +81,7 @@ const Help = ({}: HelpProps) => {
           </label>
           <a
             className={cn(
-              "py-2 font-satoshi text-md max-w-full flex items-center",
+              "text-md flex max-w-full items-center py-2 font-satoshi",
               "text-neutral-900",
               "dark:text-neutral-200"
             )}
@@ -91,11 +91,11 @@ const Help = ({}: HelpProps) => {
         </fieldset>
       </div>
       <Separator rootClassName="py-4" />
-      <div className={cn("p-6 pb-0 w-full flex flex-col")}>
+      <div className={cn("flex w-full flex-col p-6 pb-0")}>
         <fieldset className="flex flex-col">
           <label
             className={cn(
-              "text-xs uppercase font-semibold",
+              "text-xs font-semibold uppercase",
               "text-neutral-400",
               "dark:text-neutral-500"
             )}
@@ -104,7 +104,7 @@ const Help = ({}: HelpProps) => {
           </label>
           <a
             className={cn(
-              "py-2 font-satoshi text-md max-w-[50%] flex items-center",
+              "text-md flex max-w-[50%] items-center py-2 font-satoshi",
               "text-neutral-900",
               "dark:text-neutral-200"
             )}

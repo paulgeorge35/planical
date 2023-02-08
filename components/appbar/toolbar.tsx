@@ -22,24 +22,24 @@ const Toolbar = ({ openProfileDialogue }: ToolbarProps) => {
     useContext(SidebarContext)
   const { month, nextWeek, prevWeek, resetToday } = useContext(ToolbarContext)
   return (
-    <div className={cn("px-4 h-full grow flex justify-between items-center")}>
+    <div className={cn("flex h-full grow items-center justify-between px-4")}>
       <ArrowLeftIcon
         onClick={(_) => setLeft(!left)}
         className={cn(
-          "origin-center h-5 w-5 transition-transform",
+          "h-5 w-5 origin-center transition-transform",
           "text-neutral-400",
-          "hover:text-neutral-900 hover:cursor-pointer",
+          "hover:cursor-pointer hover:text-neutral-900",
           "dark:text-neutral-600",
           "dark:hover:text-neutral-300",
           `${left ? "" : " rotate-180"}`
         )}
       />
-      <div className="px-4 grow flex items-center justify-between h-full">
+      <div className="flex h-full grow items-center justify-between px-4">
         {mainView === "CALENDAR" ? (
-          <span className="flex items-center h-full py-2">
+          <span className="flex h-full items-center py-2">
             <h1
               className={cn(
-                "text-lg font-satoshi font-medium",
+                "font-satoshi text-lg font-medium",
                 "text-neutral-800",
                 "dark:text-neutral-200"
               )}
@@ -52,9 +52,9 @@ const Toolbar = ({ openProfileDialogue }: ToolbarProps) => {
             <ChevronLeftIcon
               onClick={(_) => prevWeek()}
               className={cn(
-                "origin-center h-4 w-4 transition-transform ml-4",
+                "ml-4 h-4 w-4 origin-center transition-transform",
                 "text-neutral-400",
-                "hover:text-neutral-900 hover:cursor-pointer",
+                "hover:cursor-pointer hover:text-neutral-900",
                 "dark:text-neutral-600",
                 "dark:hover:text-neutral-300"
               )}
@@ -62,16 +62,16 @@ const Toolbar = ({ openProfileDialogue }: ToolbarProps) => {
             <ChevronLeftIcon
               onClick={(_) => nextWeek()}
               className={cn(
-                "origin-center h-4 w-4 transition-transform ml-2 rotate-180",
+                "ml-2 h-4 w-4 origin-center rotate-180 transition-transform",
                 "text-neutral-400",
-                "hover:text-neutral-900 hover:cursor-pointer",
+                "hover:cursor-pointer hover:text-neutral-900",
                 "dark:text-neutral-600",
                 "dark:hover:text-neutral-300"
               )}
             />
           </span>
         ) : (
-          <span className="flex items-center h-full py-2">
+          <span className="flex h-full items-center py-2">
             <Button
               onClick={resetToday}
               rootClassName="h-full"
@@ -81,7 +81,7 @@ const Toolbar = ({ openProfileDialogue }: ToolbarProps) => {
             </Button>
           </span>
         )}
-        <span className="flex items-center h-full py-2">
+        <span className="flex h-full items-center py-2">
           <Button className="mr-4" rootClassName="h-full">
             Filter
           </Button>
@@ -102,9 +102,9 @@ const Toolbar = ({ openProfileDialogue }: ToolbarProps) => {
       <ArrowLeftIcon
         onClick={(_) => setRight(!right)}
         className={cn(
-          "origin-center h-5 w-5 transition-transform",
+          "h-5 w-5 origin-center transition-transform",
           "text-neutral-400",
-          "hover:text-neutral-900 hover:cursor-pointer",
+          "hover:cursor-pointer hover:text-neutral-900",
           "dark:text-neutral-600",
           "dark:hover:text-neutral-300",
           `${right ? "rotate-180" : ""}`

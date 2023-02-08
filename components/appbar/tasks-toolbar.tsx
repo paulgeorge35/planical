@@ -14,7 +14,7 @@ const TasksToolbar = ({ right, mainView }: TasksToolbarProps) => {
   return (
     <div
       className={cn(
-        "flex overflow-hidden justify-between items-center h-full border-l-[0.5px] w-[300px] transition-all border-neutral-200",
+        "flex h-full w-[300px] items-center justify-between overflow-hidden border-l-[0.5px] border-neutral-200 transition-all",
         "dark:border-neutral-600",
         right ? "w-[300px] px-4" : "w-0 p-0",
         mainView === "CALENDAR" ? "dark:bg-neutral-900" : "dark:bg-neutral-800"
@@ -29,13 +29,13 @@ const TasksToolbar = ({ right, mainView }: TasksToolbarProps) => {
           <h1>🕓 Timebox</h1>
         </span>
       )}
-      <span className="flex items-center h-full py-2">
+      <span className="flex h-full items-center py-2">
         <ChevronLeftIcon
           onClick={prevDay}
           className={cn(
-            "origin-center h-4 w-4 transition-transform",
+            "h-4 w-4 origin-center transition-transform",
             "text-neutral-400",
-            "hover:text-neutral-900 hover:cursor-pointer",
+            "hover:cursor-pointer hover:text-neutral-900",
             "dark:text-neutral-600",
             "dark:hover:text-neutral-300"
           )}
@@ -46,9 +46,9 @@ const TasksToolbar = ({ right, mainView }: TasksToolbarProps) => {
         <ChevronLeftIcon
           onClick={nextDay}
           className={cn(
-            "origin-center h-4 w-4 transition-transform rotate-180",
+            "h-4 w-4 origin-center rotate-180 transition-transform",
             "text-neutral-400",
-            "hover:text-neutral-900 hover:cursor-pointer",
+            "hover:cursor-pointer hover:text-neutral-900",
             "dark:text-neutral-600",
             "dark:hover:text-neutral-300"
           )}

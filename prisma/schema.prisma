@@ -7,15 +7,16 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model User {
-    id        String   @id @default(uuid())
-    authId    String   @unique
-    email     String   @unique
-    name      String
-    tasks     Task[]
-    labels    Label[]
-    createdAt DateTime @default(now())
-    updatedAt DateTime
+model Profile {
+    id         String   @id(map: "profile_pkey") @db.Uuid
+    username   String?  @unique(map: "profile_username_key")
+    email      String   @unique
+    full_name  String?
+    avatar_url String?
+    labels     Label[]
+    tasks      Task[]
+    createdAt  DateTime @default(now())
+    updatedAt  DateTime @updatedAt
 }
 
 model Task {
@@ -23,17 +24,17 @@ model Task {
     title       String
     notes       String?
     recurrent   Boolean      @default(false)
+    estimate    Int?
+    actual      Int?
     dump        Boolean      @default(true)
     done        Boolean      @default(false)
     archived    Boolean      @default(false)
-    estimate    Int?
-    actual      Int?
-    userId      String
-    user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-    labelId     Int?
-    label       Label?       @relation(fields: [labelId], references: [id], onDelete: SetNull)
-    subtasks    Subtask[]
     recurrences Recurrence[]
+    subtasks    Subtask[]
+    labelId     Int?
+    label       Label?       @relation(fields: [labelId], references: [id])
+    userId      String?      @db.Uuid
+    user        Profile?     @relation(fields: [userId], references: [id])
     createdAt   DateTime     @default(now())
     updatedAt   DateTime     @updatedAt
 }
@@ -52,9 +53,9 @@ model Label {
     id        Int      @id @default(autoincrement())
     name      String   @default("New Label")
     color     String   @default("#000000")
-    userId    String
-    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
     tasks     Task[]
+    userId    String?  @db.Uuid
+    user      Profile? @relation(fields: [userId], references: [id])
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 }
@@ -65,7 +66,7 @@ model Recurrence {
     start     DateTime       @default(now())
     end       DateTime?
     taskId    Int
-    Task      Task           @relation(fields: [taskId], references: [id], onDelete: Cascade)
+    task      Task           @relation(fields: [taskId], references: [id], onDelete: Cascade)
     createdAt DateTime       @default(now())
     updatedAt DateTime       @updatedAt
 }

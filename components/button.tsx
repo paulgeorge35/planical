@@ -27,12 +27,12 @@ const Button = ({
         onClick={onClick}
         disabled={disabled}
         className={cn(
-          "ml-4 px-3 py-1 border rounded text-xs h-full flex flex-row items-center",
+          "ml-4 flex h-full flex-row items-center rounded border px-3 py-1 text-xs",
           "border-neutral-200 text-neutral-600",
           "hover:border-neutral-900 hover:text-neutral-900",
           "dark:border-neutral-600 dark:text-neutral-300",
           "dark:hover:text-white",
-          disabled && "cursor-not-allowed !text-opacity-20 pointer-events-none",
+          disabled && "pointer-events-none cursor-not-allowed !text-opacity-20",
           className
         )}
       >

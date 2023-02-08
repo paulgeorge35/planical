@@ -1,21 +1,14 @@
 "use client"
 
-import { useCallback, useContext, useState } from "react"
 import { Poppins, Roboto } from "@next/font/google"
 import localFont from "@next/font/local"
+import { Session } from "@supabase/auth-helpers-nextjs"
 
 import { AnalyticsWrapper } from "@/components/analytics"
-import TasksToolbar from "@/components/appbar/tasks-toolbar"
-import SidebarLeft from "@/components/sidebar-left"
-import SidebarRight from "@/components/sidebar-right"
-import Toolbar from "@/components/appbar/toolbar"
-import { SidebarContext } from "@/contexts/SidebarContext"
 import { Providers } from "@/lib/providers"
 import { cn } from "@/lib/utils"
 
 import "../styles/globals.css"
-import Dialog from "@/components/dialog"
-import ProfileDialogContent from "@/components/dialog/profile-dialog-content"
 
 const roboto = Roboto({
   weight: ["400", "700"],
@@ -55,7 +48,7 @@ export default function RootLayout({
         roboto.variable,
         poppins.variable,
         satoshi.variable,
-        "font-sans antialiased max-h-screen light"
+        "light max-h-screen font-sans antialiased"
       )}
     >
       <head>

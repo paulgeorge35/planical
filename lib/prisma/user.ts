@@ -1,9 +1,10 @@
-import { User } from "@prisma/client"
+import { Profile } from "@prisma/client"
+import { PickAndFlatten } from "types"
 import { prisma } from "../db"
 
 export const getUserById = async (id: string) => {
   try {
-    const user = await prisma.user.findUnique({
+    const user = await prisma.profile.findUnique({
       where: {
         id,
       },
@@ -14,13 +15,34 @@ export const getUserById = async (id: string) => {
   }
 }
 
-export const createUser = async (user: Omit<User, "id">) => {
+export const updateUser = async (
+  id: string,
+  user: PickAndFlatten<Omit<Profile, "id" | "createdAt" | "updatedAt">>
+) => {
   try {
-    const userCreated = await prisma.user.create({
+    const userUpdated = await prisma.profile.update({
+      where: {
+        id,
+      },
       data: user,
     })
     return {
-      user: userCreated,
+      user: userUpdated,
+    }
+  } catch (error) {
+    return { error }
+  }
+}
+
+export const deleteUser = async (id: string) => {
+  try {
+    await prisma.profile.delete({
+      where: {
+        id,
+      },
+    })
+    return {
+      id,
     }
   } catch (error) {
     return { error }

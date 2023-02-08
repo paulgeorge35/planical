@@ -10,47 +10,47 @@ type AccountSettingsProps = {
 
 const AccountSettings = ({ fullName, email }: AccountSettingsProps) => {
   return (
-    <div className="flex flex-col h-full grow ">
+    <div className="flex h-full grow flex-col ">
       <div
         className={cn(
-          "p-4 w-full border-b-[1px]",
+          "w-full border-b-[1px] p-4",
           "border-neutral-300",
           "dark:border-neutral-700"
         )}
       >
         <h1 className={cn("font-sans font-medium")}>Account Settings</h1>
       </div>
-      <div className={cn("p-6 w-full flex flex-col")}>
-        <Avatar className="h-20 w-20 hover:p-0 cursor-auto" />
-        <div className="flex mt-3">
+      <div className={cn("flex w-full flex-col p-6")}>
+        <Avatar className="h-20 w-20 cursor-auto hover:p-0" />
+        <div className="mt-3 flex">
           <Button
             className={cn(
-              "text-xs ml-0 py-2",
+              "ml-0 py-2 text-xs",
               "border-neutral-200 text-neutral-600",
-              "hover:border-purple-600 hover:text-purple-600 hover:bg-purple-50",
+              "hover:border-purple-600 hover:bg-purple-50 hover:text-purple-600",
               "dark:border-neutral-700 dark:text-neutral-400",
-              "dark:hover:text-purple-600 dark:hover:border-purple-600 dark:hover:bg-transparent"
+              "dark:hover:border-purple-600 dark:hover:bg-transparent dark:hover:text-purple-600"
             )}
           >
             Upload photo
           </Button>
           <Button
             className={cn(
-              "text-xs py-2",
+              "py-2 text-xs",
               "border-neutral-200 text-neutral-600",
-              "hover:border-purple-600 hover:text-purple-600 hover:bg-purple-50",
+              "hover:border-purple-600 hover:bg-purple-50 hover:text-purple-600",
               "dark:border-neutral-700 dark:text-neutral-400",
-              "dark:hover:text-purple-600 dark:hover:border-purple-600 dark:hover:bg-transparent"
+              "dark:hover:border-purple-600 dark:hover:bg-transparent dark:hover:text-purple-600"
             )}
           >
             Remove
           </Button>
         </div>
         <Separator rootClassName="py-4" />
-        <fieldset className="mt-0 group flex flex-col space-y-2">
+        <fieldset className="group mt-0 flex flex-col space-y-2">
           <label
             className={cn(
-              "text-xs uppercase font-semibold",
+              "text-xs font-semibold uppercase",
               "text-neutral-400",
               "dark:text-neutral-500"
             )}
@@ -60,10 +60,10 @@ const AccountSettings = ({ fullName, email }: AccountSettingsProps) => {
 
           <input
             className={cn(
-              "px-3 py-2 rounded-lg font-satoshi font-medium text-md max-w-[50%] border-[1px]",
+              "text-md max-w-[50%] rounded-lg border-[1px] px-3 py-2 font-satoshi font-medium",
               "bg-transparent text-neutral-900",
               "hover:border-neutral-900",
-              "dark:bg-neutral-800 dark:text-white dark:border-neutral-700",
+              "dark:border-neutral-700 dark:bg-neutral-800 dark:text-white",
               "dark:hover:border-neutral-500"
             )}
             type="text"
@@ -75,7 +75,7 @@ const AccountSettings = ({ fullName, email }: AccountSettingsProps) => {
         <fieldset className="flex flex-col">
           <label
             className={cn(
-              "text-xs uppercase font-semibold",
+              "text-xs font-semibold uppercase",
               "text-neutral-400",
               "dark:text-neutral-500"
             )}
@@ -84,7 +84,7 @@ const AccountSettings = ({ fullName, email }: AccountSettingsProps) => {
           </label>
           <p
             className={cn(
-              "py-2 font-satoshi text-md max-w-[50%]",
+              "text-md max-w-[50%] py-2 font-satoshi",
               "bg-transparent disabled:text-neutral-900",
               "dark:text-neutral-300"
             )}
@@ -95,11 +95,11 @@ const AccountSettings = ({ fullName, email }: AccountSettingsProps) => {
         </fieldset>
         <Button
           className={cn(
-            "text-xs ml-0 py-2",
+            "ml-0 py-2 text-xs",
             "border-neutral-200 text-neutral-600",
-            "hover:border-purple-600 hover:text-purple-600 hover:bg-purple-50",
+            "hover:border-purple-600 hover:bg-purple-50 hover:text-purple-600",
             "dark:border-neutral-700 dark:text-neutral-400",
-            "dark:hover:text-purple-600 dark:hover:border-purple-600 dark:hover:bg-transparent"
+            "dark:hover:border-purple-600 dark:hover:bg-transparent dark:hover:text-purple-600"
           )}
         >
           Change Email
@@ -107,7 +107,7 @@ const AccountSettings = ({ fullName, email }: AccountSettingsProps) => {
         <Separator rootClassName="py-4" />
         <label
           className={cn(
-            "text-xs uppercase font-semibold",
+            "text-xs font-semibold uppercase",
             "text-neutral-400",
             "dark:text-neutral-500"
           )}
@@ -116,11 +116,11 @@ const AccountSettings = ({ fullName, email }: AccountSettingsProps) => {
         </label>
         <Button
           className={cn(
-            "text-xs ml-0 py-2 mt-2",
+            "ml-0 mt-2 py-2 text-xs",
             "border-neutral-200 text-neutral-600",
-            "hover:border-purple-600 hover:text-purple-600 hover:bg-purple-50",
+            "hover:border-purple-600 hover:bg-purple-50 hover:text-purple-600",
             "dark:border-neutral-700 dark:text-neutral-400",
-            "dark:hover:text-purple-600 dark:hover:border-purple-600 dark:hover:bg-transparent"
+            "dark:hover:border-purple-600 dark:hover:bg-transparent dark:hover:text-purple-600"
           )}
         >
           Change Password
