@@ -6,8 +6,9 @@ import { SidebarContext } from "@/contexts/SidebarContextProvider"
 import useMediaQuery from "@/hooks/use-media-query"
 import NewTaskForm from "./new-task-form"
 import { Label, Subtask, Task } from "@prisma/client"
-import { PickAndFlatten } from "types"
+import { PickAndFlatten, TaskNewTypeOpt } from "types"
 import { TaskContext } from "@/contexts/TaskContextProvider"
+import { Droppable } from "react-beautiful-dnd"
 
 const SidebarLeft = ({
   left,
@@ -23,10 +24,7 @@ const SidebarLeft = ({
   const sidebarRef = React.useRef<HTMLInputElement>(null)
   const [isResizing, setIsResizing] = React.useState(false)
   const [isAdding, setIsAdding] = React.useState(false)
-  const [newTask, setNewTask] =
-    React.useState<
-      PickAndFlatten<Omit<Task, "id" | "createdAt" | "updatedAt" | "userId">>
-    >()
+  const [newTask, setNewTask] = React.useState<TaskNewTypeOpt>()
   const { tasks } = useContext(TaskContext)
 
   const startResizing = React.useCallback(() => {
@@ -57,10 +55,6 @@ const SidebarLeft = ({
       window.removeEventListener("mouseup", stopResizing)
     }
   }, [resize, stopResizing])
-
-  const MockTasks: PickAndFlatten<
-    Task & { subtasks: Subtask[]; label: Label }
-  >[] = []
 
   return (
     <div
@@ -116,7 +110,7 @@ const SidebarLeft = ({
       <div className="flex flex-col space-y-2 p-3 pt-0">
         <NewTaskButton
           className="mb-2"
-          tasks={MockTasks}
+          tasks={tasks}
           toggle={() => {
             setIsAdding(true)
             setNewTask({
@@ -130,15 +124,38 @@ const SidebarLeft = ({
               done: false,
               archived: false,
               labelId: null,
+              index: "-1",
             })
           }}
         />
-        {isAdding && newTask !== undefined && <NewTaskForm data={newTask} />}
-        {tasks
-          ?.filter((task) => task.dump === true && task.archived === false)
-          .map((task, index) => (
-            <TaskComponent key={index} data={task} />
-          ))}
+        {isAdding && newTask !== undefined && (
+          <NewTaskForm
+            data={newTask}
+            setTaskData={setNewTask}
+            onBlur={() => {
+              setIsAdding(false)
+              setNewTask(undefined)
+            }}
+          />
+        )}
+        <Droppable droppableId="dump">
+          {(provided) => (
+            <div
+              ref={provided.innerRef}
+              {...provided.droppableProps}
+              className="flex flex-col space-y-2"
+            >
+              {tasks
+                ?.filter(
+                  (task) => task.dump === true && task.archived === false
+                )
+                .map((task, index) => (
+                  <TaskComponent key={index} index={index} data={task} />
+                ))}
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
       </div>
     </div>
   )

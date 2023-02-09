@@ -28,19 +28,22 @@ export const getTaskById = async (id: number) => {
 export const getTasksByUserId = async (
   authId: string,
   archived: boolean = false,
-  done: boolean = false
+  onlyUndone: boolean = false
 ) => {
   try {
     const tasks = await prisma.task.findMany({
       where: {
         userId: authId,
         archived,
-        done,
+        ...(onlyUndone && { done: false }),
       },
       include: {
         label: true,
         subtasks: true,
         recurrences: true,
+      },
+      orderBy: {
+        index: "asc",
       },
     })
     return {

@@ -7,7 +7,7 @@ type TimePreviewProps = {
 }
 
 const TimePreview = ({ estimate, actual, className }: TimePreviewProps) => {
-  return estimate || actual ? (
+  return (
     <span
       className={cn(
         "flex rounded-md p-1 px-2 font-satoshi text-[0.65rem]",
@@ -21,10 +21,10 @@ const TimePreview = ({ estimate, actual, className }: TimePreviewProps) => {
       <p>
         {actual ? formatTime(actual) : ""}
         {estimate && actual ? " / " : ""}
-        {estimate ? formatTime(estimate) : ""}
+        {estimate ? formatTime(estimate) : "0:00"}
       </p>
     </span>
-  ) : null
+  )
 }
 
 export default TimePreview

@@ -90,7 +90,7 @@ export function isWeekToView(date: Date, week: Date[]) {
 }
 
 export const formatTime = (time: number) =>
-  `${Math.floor(time / 100)}:${time % 100}`
+  `${Math.floor(time / 100)}:${time % 100 === 0 ? "00" : time % 100}`
 
 export const ProfileDialogTabSections = [
   {

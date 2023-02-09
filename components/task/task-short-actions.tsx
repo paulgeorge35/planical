@@ -1,24 +1,10 @@
-import { cn } from "@/lib/utils"
-import { Label, Subtask, Task } from "@prisma/client"
 import { Component1Icon, LoopIcon } from "@radix-ui/react-icons"
-import { PickAndFlatten, TaskType } from "types"
+import { cn } from "@/lib/utils"
+import { TaskAllFields, TaskNewTypeOpt } from "types"
 import LabelColorBubble from "./label-color-bubble"
 
 type TaskShortActionsProps = {
-  data:
-    | PickAndFlatten<Task & { subtasks: Subtask[]; label: Label }>
-    | PickAndFlatten<
-        Omit<Task, "id" | "createdAt" | "updatedAt" | "userId"> & {
-          subtasks: Subtask[]
-          label: Label
-        }
-      >
-    | PickAndFlatten<
-        Omit<Task, "id" | "createdAt" | "updatedAt" | "userId"> & {
-          subtasks?: Subtask[]
-          label?: Label
-        }
-      >
+  data: TaskAllFields | TaskNewTypeOpt
   toggleExtended: () => void
   extended: boolean
   className?: string
@@ -35,7 +21,7 @@ const TaskShortActions = ({
   return (
     <span
       className={cn(
-        "flex flex-row items-center space-x-2",
+        "flex flex-row items-center space-x-2 pt-2",
         "text-neutral-600",
         "dark:text-neutral-400",
         persistent ? "pl-2" : "pl-6",
@@ -77,9 +63,10 @@ const TaskShortActions = ({
       <a
         onClick={toggleExtended}
         className={cn(
-          "flex flex-row items-center",
+          "flex-row items-center",
           "hover:text-blue-500",
-          extended && "text-blue-500"
+          extended && "text-blue-500",
+          persistent ? "flex" : "hidden group-hover:flex"
         )}
       >
         <Component1Icon

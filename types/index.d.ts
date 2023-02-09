@@ -5,6 +5,21 @@ export type TaskAllFields = PickAndFlatten<
   Task & { subtasks: Subtask[]; label: Label }
 >
 
+export type SubtaskNewType = PickAndFlatten<
+  Omit<Subtask, "id" | "createdAt" | "updatedAt">
+>
+
+export type TaskNewTypeOpt = PickAndFlatten<
+  Omit<Task, "id" | "createdAt" | "updatedAt" | "userId"> & {
+    subtasks?: SubtaskNewType[]
+    label?: Label
+  }
+>
+
+export type LabelNewType = PickAndFlatten<
+  Omit<Label, "id" | "createdAt" | "updatedAt" | "userId">
+>
+
 export type PickAndFlatten<T> = {
   [K in keyof T]: T[K]
 } & {}
@@ -56,6 +71,14 @@ export type SessionContextType = {
 export type TaskContextType = {
   tasks: TaskAllFields[]
   setTasks: (value: TaskAllFields[]) => void
+  createTask: (data: TaskNewTypeOpt) => Promise<TaskAllFields>
+  updateTask: (data: TaskAllFields) => Promise<TaskAllFields>
+  deleteTask: (id: number) => Promise<{ id: number }>
+  labels: Label[]
+  setLabels: (value: Label[]) => void
+  createLabel: (data: LabelNewType) => Promise<Label>
+  updateLabel: (data?: Label) => Promise<Label>
+  deleteLabel: (id: number) => Promise<{ id: number }>
   isFetching: boolean
 }
 
@@ -74,6 +97,8 @@ export type DayOfWeekNumber = 0 | 1 | 2 | 3 | 4 | 5 | 6
 
 export type ToolbarContextType = {
   today: Date
+  completeTaskOnSubtasksCompletion: boolean
+  setCompleteTaskOnSubtasksCompletion: (_: boolean) => void
   firstDayOfWeek: DayOfWeekNumber
   setFirstDayOfWeek: (value: DayOfWeekNumber) => void
   dateToView: Date
@@ -126,3 +151,7 @@ export type SubtaskType = {
 }
 
 export type SubtaskNoIDType = Omit<SubtaskType, "id">
+
+export type TaskNewType = PickAndFlatten<
+  Omit<Task, "id" | "createdAt" | "updatedAt" | "userId">
+>

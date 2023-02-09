@@ -1,11 +1,16 @@
 import { ToolbarContext } from "@/contexts/ToolbarContextProvider"
 import { cn, compareDates } from "@/lib/utils"
 import { format } from "date-fns"
-import { useContext } from "react"
+import { useContext, useState } from "react"
 import CalendarBody from "./calendar/calendar-body"
 import CalendarHeader from "./calendar/calendar-header"
 import NewTaskButton from "./new-task-button"
 import { ChevronLeftIcon } from "@radix-ui/react-icons"
+import { TaskNewTypeOpt } from "types"
+import { TaskContext } from "@/contexts/TaskContextProvider"
+import NewTaskForm from "./new-task-form"
+import TaskComponent from "./task"
+import { Droppable } from "react-beautiful-dnd"
 
 const SidebarRight = ({
   right,
@@ -15,6 +20,9 @@ const SidebarRight = ({
   mainView: "CALENDAR" | "TASKS"
 }) => {
   const { today, dateToView, prevDay, nextDay } = useContext(ToolbarContext)
+  const [isAdding, setIsAdding] = useState(false)
+  const [newTask, setNewTask] = useState<TaskNewTypeOpt>()
+  const { tasks } = useContext(TaskContext)
   return (
     <div
       className={cn(
@@ -71,8 +79,58 @@ const SidebarRight = ({
         </span>
       )}
       {mainView === "CALENDAR" ? (
-        <span className="w-full">
-          <NewTaskButton className="mb-2" tasks={[]} />
+        <span className="flex w-full flex-col space-y-2">
+          <NewTaskButton
+            className="mb-2"
+            tasks={tasks.filter((task) => task.date === today)}
+            toggle={() => {
+              setIsAdding(true)
+              setNewTask({
+                title: "",
+                notes: "",
+                recurrent: false,
+                estimate: 0,
+                actual: 0,
+                date: null,
+                dump: true,
+                done: false,
+                archived: false,
+                labelId: null,
+                index: "-1",
+              })
+            }}
+          />
+          {isAdding && newTask !== undefined && (
+            <NewTaskForm
+              data={newTask}
+              setTaskData={setNewTask}
+              onBlur={() => {
+                setIsAdding(false)
+                setNewTask(undefined)
+              }}
+            />
+          )}
+          <Droppable
+            droppableId={today.toISOString().split("T")[0].replaceAll("-", "/")}
+          >
+            {(provided) => (
+              <div
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+                className="flex flex-col space-y-2"
+              >
+                {tasks
+                  ?.filter(
+                    (task) =>
+                      task.date && compareDates(new Date(task.date), today)
+                  )
+                  .map((task, index) => (
+                    <TaskComponent key={index} index={index} data={task} />
+                  ))}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
         </span>
       ) : (
         <span className="w-full">

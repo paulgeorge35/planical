@@ -1,3 +1,4 @@
+import { DragDropContext } from "react-beautiful-dnd"
 import { SidebarContextProvider } from "@/contexts/SidebarContextProvider"
 import { ToolbarContextProvider } from "@/contexts/ToolbarContextProvider"
 import { ThemeProvider } from "next-themes"
@@ -30,11 +31,15 @@ export function Providers({
               storageKey="theme"
               themes={["system", "dark", "light"]}
             >
-              {children}
+              <DroppableRoot>{children}</DroppableRoot>
             </ThemeProvider>
           </SidebarContextProvider>
         </ToolbarContextProvider>
       </TaskContextProvider>
     </SessionContextProvider>
   )
+}
+
+function DroppableRoot({ children }: { children: React.ReactNode }) {
+  return <DragDropContext onDragEnd={() => null}>{children}</DragDropContext>
 }

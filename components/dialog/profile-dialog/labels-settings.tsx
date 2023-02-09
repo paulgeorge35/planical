@@ -6,11 +6,12 @@ import {
   Pencil1Icon,
   TrashIcon,
 } from "@radix-ui/react-icons"
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useContext, useEffect, useState } from "react"
 import { LabelNoIDType, PickAndFlatten } from "types"
 import { GithubPicker } from "react-color"
 import { Label } from "@prisma/client"
 import { Spinnaker } from "@next/font/google"
+import { TaskContext } from "@/contexts/TaskContextProvider"
 
 interface LabelProps extends LabelNoIDType {
   id?: number
@@ -149,98 +150,18 @@ const Label = ({
   )
 }
 
-async function getLabels() {
-  const res = await (
-    await fetch("/api/labels/labels", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      cache: "default",
-    })
-  ).json()
-  return res
-}
-
 type LabelsSettingsProps = {}
 
 const LabelsSettings = ({}: LabelsSettingsProps) => {
-  const [labels, setLabels] = useState<Label[]>([])
   const [search, setSearch] = useState<string>("")
   const [editing, setEditing] = useState<boolean[]>([])
-  const [isFetching, setIsFetching] = useState<boolean>(false)
   const [newLabel, setNewLabel] =
     useState<
       PickAndFlatten<Omit<Label, "id" | "createdAt" | "userId" | "updatedAt">>
     >()
   const [editedLabel, setEditedLabel] = useState<Label>()
-
-  const fetchData = async () => {
-    setIsFetching(true)
-    const { labels } = await getLabels()
-    setLabels(labels)
-    setIsFetching(false)
-  }
-
-  useEffect(() => {
-    fetchData()
-  }, [])
-
-  const createLabel = async (
-    data: PickAndFlatten<
-      Omit<Label, "id" | "createdAt" | "updatedAt" | "userId">
-    >
-  ) => {
-    const res = await (
-      await fetch("/api/labels/create", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        cache: "no-store",
-        body: JSON.stringify({
-          name: data.name,
-          color: data.color,
-        }),
-      })
-    ).json()
-    if (res) setLabels([...labels, res.label])
-    return res
-  }
-
-  const updateLabel = async (data?: Label) => {
-    if (!data) return
-    const res = await (
-      await fetch("/api/labels/update", {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        cache: "force-cache",
-        body: JSON.stringify({
-          ...data,
-        }),
-      })
-    ).json()
-    if (res)
-      setLabels([...labels.filter((l) => l.id !== res.label.id), res.label])
-    return res
-  }
-
-  const deleteLabel = async (id: number) => {
-    const res = await (
-      await fetch(`/api/labels/delete?id=${id}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        cache: "no-store",
-      })
-    ).json()
-    console.log(res)
-    if (res) setLabels(labels.filter((l) => l.id !== res.id))
-    return res
-  }
+  const { labels, isFetching, createLabel, updateLabel, deleteLabel } =
+    useContext(TaskContext)
 
   const toggleEdit = useCallback(
     (index: number, value: boolean, label: Label) => {

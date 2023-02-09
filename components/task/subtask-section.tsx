@@ -6,7 +6,6 @@ import {
   PlusIcon,
 } from "@radix-ui/react-icons"
 import { useState } from "react"
-import { SubtaskType } from "types"
 import Button from "../button"
 import Checkbox from "../checkbox"
 import Separator from "../separator"
@@ -58,13 +57,13 @@ const SubtaskSection = ({
   return extended ? (
     <span>
       <Separator className="my-2" />
-      <span className={cn("flex flex-col space-y-0", className)}>
+      <span className={cn("flex flex-col space-y-0 pt-1", className)}>
         {subtasks.map((subtask, index) => (
           <Subtask key={index} subtask={subtask} />
         ))}
         <Button
           icon={PlusIcon}
-          className="ml-5 border-0 bg-transparent p-0 hover:text-blue-500 dark:hover:text-blue-500"
+          className="ml-1 border-0 bg-transparent p-0 hover:text-blue-500 dark:hover:text-blue-500"
         >
           Add subtask
         </Button>

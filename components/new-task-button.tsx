@@ -7,16 +7,10 @@ import Button from "./button"
 type NewTaskButton = {
   className?: string
   tasks: Task[]
-  destination?: Date | "dump"
   toggle?: () => void
 }
 
-const NewTaskButton = ({
-  className,
-  tasks,
-  destination = "dump",
-  toggle,
-}: NewTaskButton) => {
+const NewTaskButton = ({ className, tasks, toggle }: NewTaskButton) => {
   const sumByKey = (items: Task[], key: "actual" | "estimate") =>
     items.length === 0
       ? 0

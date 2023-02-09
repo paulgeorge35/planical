@@ -1,25 +1,26 @@
+import { TaskContext } from "@/contexts/TaskContextProvider"
 import { cn } from "@/lib/utils"
-import { Label, Subtask, Task } from "@prisma/client"
-import { useState } from "react"
-import { PickAndFlatten } from "types"
+import { useContext, useState } from "react"
+import { TaskNewTypeOpt } from "types"
 import SubtaskSection from "./task/subtask-section"
 import TaskShortActions from "./task/task-short-actions"
-import TimePreview from "./task/task-time-preview"
 
 type NewTaskFormProps = {
-  data: PickAndFlatten<
-    Omit<Task, "id" | "createdAt" | "updatedAt" | "userId"> & {
-      subtasks?: Subtask[]
-      label?: Label
-    }
-  >
+  data: TaskNewTypeOpt
+  onBlur: () => void
+  setTaskData: React.Dispatch<React.SetStateAction<TaskNewTypeOpt | undefined>>
   className?: string
 }
 
-const NewTaskForm = ({ data, className }: NewTaskFormProps) => {
+const NewTaskForm = ({
+  data,
+  setTaskData,
+  onBlur,
+  className,
+}: NewTaskFormProps) => {
   const [extended, setExtended] = useState<boolean>(false)
-  const [taskName, setTaskName] = useState<string>("")
   const [inputRef, setInputRef] = useState<HTMLLabelElement | null>(null)
+  const { createTask } = useContext(TaskContext)
   return (
     <span
       className={cn(
@@ -33,7 +34,7 @@ const NewTaskForm = ({ data, className }: NewTaskFormProps) => {
       <span className="flex w-full flex-row items-start py-2">
         <fieldset className="w-full pr-2">
           <label
-            htmlFor="name"
+            htmlFor="title"
             className="hidden"
             ref={(label) => setInputRef(label)}
           >
@@ -41,15 +42,22 @@ const NewTaskForm = ({ data, className }: NewTaskFormProps) => {
           </label>
           <input
             className={cn(
-              "w-full rounded-md border-[1.5px] border-transparent bg-transparent p-1 font-satoshi text-sm font-medium text-neutral-900 hover:border-dashed hover:border-purple-500  focus:border-dashed focus:border-purple-500",
+              "w-full rounded-md border-[1.5px] border-transparent bg-transparent p-1  font-satoshi text-sm font-medium text-neutral-900 hover:border-dashed hover:border-purple-500  focus:border-dashed focus:border-purple-500",
               "dark:text-white"
             )}
             type={"text"}
-            id="name"
-            value={taskName}
-            onChange={(e) => setTaskName(e.target.value)}
+            id="title"
+            name="title"
+            value={data.title}
+            onChange={(e) => setTaskData({ ...data, title: e.target.value })}
             onClick={() => inputRef?.click()}
-            onBlur={() => setTaskName("")}
+            onBlur={onBlur}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                createTask(data)
+                setTaskData(undefined)
+              }
+            }}
             autoFocus
           />
         </fieldset>
