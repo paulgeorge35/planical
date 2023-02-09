@@ -22,20 +22,23 @@ type TaskShortActionsProps = {
   toggleExtended: () => void
   extended: boolean
   className?: string
+  persistent?: boolean
 }
 
 const TaskShortActions = ({
   className,
   extended,
   toggleExtended,
+  persistent,
   data: { label, recurrent, subtasks },
 }: TaskShortActionsProps) => {
   return (
     <span
       className={cn(
-        "flex flex-row items-center space-x-2 pl-6",
+        "flex flex-row items-center space-x-2",
         "text-neutral-600",
         "dark:text-neutral-400",
+        persistent ? "pl-2" : "pl-6",
         className
       )}
     >
@@ -53,8 +56,8 @@ const TaskShortActions = ({
       ) : (
         <a
           className={cn(
-            "hidden flex-row items-center text-[0.65rem]",
-            "group-hover:flex",
+            "flex-row items-center text-[0.65rem]",
+            persistent ? "flex" : "hidden group-hover:flex",
             "hover:text-black",
             "dark:hover:text-white"
           )}
@@ -65,7 +68,8 @@ const TaskShortActions = ({
       {!recurrent && (
         <LoopIcon
           className={cn(
-            "hidden h-3 w-3 group-hover:block",
+            "h-3 w-3",
+            persistent ? "block" : "hidden group-hover:block",
             "hover:text-blue-500"
           )}
         />

@@ -1,4 +1,9 @@
+import { Label, Subtask, Task } from "@prisma/client"
 import internal from "stream"
+
+export type TaskAllFields = PickAndFlatten<
+  Task & { subtasks: Subtask[]; label: Label }
+>
 
 export type PickAndFlatten<T> = {
   [K in keyof T]: T[K]
@@ -46,6 +51,12 @@ export interface UserMetadata {}
 export type SessionContextType = {
   session: UserSession | null
   signOut: () => void
+}
+
+export type TaskContextType = {
+  tasks: TaskAllFields[]
+  setTasks: (value: TaskAllFields[]) => void
+  isFetching: boolean
 }
 
 export type SidebarContextType = {

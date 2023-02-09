@@ -7,6 +7,7 @@ import useMediaQuery from "@/hooks/use-media-query"
 import NewTaskForm from "./new-task-form"
 import { Label, Subtask, Task } from "@prisma/client"
 import { PickAndFlatten } from "types"
+import { TaskContext } from "@/contexts/TaskContextProvider"
 
 const SidebarLeft = ({
   left,
@@ -26,6 +27,7 @@ const SidebarLeft = ({
     React.useState<
       PickAndFlatten<Omit<Task, "id" | "createdAt" | "updatedAt" | "userId">>
     >()
+  const { tasks } = useContext(TaskContext)
 
   const startResizing = React.useCallback(() => {
     setIsResizing(true)
@@ -131,26 +133,12 @@ const SidebarLeft = ({
             })
           }}
         />
-        {/* {isAdding && typeof newTask !== undefined && (
-            )} */}
-        <NewTaskForm
-          data={{
-            title: "",
-            notes: "",
-            recurrent: false,
-            estimate: 0,
-            actual: 0,
-            date: null,
-            dump: true,
-            done: false,
-            archived: false,
-            labelId: null,
-          }}
-        />
-        {isAdding && "ADDING"}
-        {MockTasks.map((task, index) => (
-          <TaskComponent key={index} data={task} />
-        ))}
+        {isAdding && newTask !== undefined && <NewTaskForm data={newTask} />}
+        {tasks
+          ?.filter((task) => task.dump === true && task.archived === false)
+          .map((task, index) => (
+            <TaskComponent key={index} data={task} />
+          ))}
       </div>
     </div>
   )

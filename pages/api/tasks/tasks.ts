@@ -23,7 +23,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
   if (req.method === "GET") {
     try {
-      const { archived, done } = getParamsSchema.parse(req.query.id)
+      const { archived, done } = getParamsSchema.parse(req.query)
       const { tasks, error } = await getTasksByUserId(
         session.user.id,
         archived,

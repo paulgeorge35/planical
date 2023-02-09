@@ -7,6 +7,7 @@ import {
 } from "@supabase/auth-helpers-nextjs"
 import { SessionContextProvider } from "@supabase/auth-helpers-react"
 import { useState } from "react"
+import { TaskContextProvider } from "@/contexts/TaskContextProvider"
 
 export function Providers({
   children,
@@ -21,17 +22,19 @@ export function Providers({
       supabaseClient={supabase}
       initialSession={initialSession}
     >
-      <ToolbarContextProvider>
-        <SidebarContextProvider>
-          <ThemeProvider
-            attribute="class"
-            storageKey="theme"
-            themes={["system", "dark", "light"]}
-          >
-            {children}
-          </ThemeProvider>
-        </SidebarContextProvider>
-      </ToolbarContextProvider>
+      <TaskContextProvider>
+        <ToolbarContextProvider>
+          <SidebarContextProvider>
+            <ThemeProvider
+              attribute="class"
+              storageKey="theme"
+              themes={["system", "dark", "light"]}
+            >
+              {children}
+            </ThemeProvider>
+          </SidebarContextProvider>
+        </ToolbarContextProvider>
+      </TaskContextProvider>
     </SessionContextProvider>
   )
 }
