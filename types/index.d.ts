@@ -1,3 +1,4 @@
+import { createSubtask } from "./../lib/prisma/task"
 import { Label, Subtask, Task } from "@prisma/client"
 import internal from "stream"
 
@@ -14,6 +15,10 @@ export type TaskNewTypeOpt = PickAndFlatten<
     subtasks?: SubtaskNewType[]
     label?: Label
   }
+>
+
+export type SubtaskNewType = PickAndFlatten<
+  Omit<Subtask, "id" | "createdAt" | "updatedAt">
 >
 
 export type LabelNewType = PickAndFlatten<
@@ -77,6 +82,9 @@ export type TaskContextType = {
     dontSetAfter?: boolean
   ) => Promise<TaskAllFields>
   deleteTask: (id: number) => Promise<{ id: number }>
+  createSubtask: (data: SubtaskNewType) => Promise<Subtask>
+  updateSubtask: (data: Subtask) => Promise<Subtask>
+  deleteSubtask: (id: number) => Promise<{ id: number }>
   labels: Label[]
   setLabels: (value: Label[]) => void
   createLabel: (data: LabelNewType) => Promise<Label>
@@ -117,6 +125,8 @@ export type ToolbarContextType = {
   addNextWeek: () => void
   month: string
   isWeekToView: () => boolean
+  taskDialog: TaskAllFields | null
+  setTaskDialog: (value: TaskAllFields | null) => void
 }
 
 export type LabelType = {

@@ -33,6 +33,7 @@
     "@radix-ui/react-checkbox": "^1.0.1",
     "@radix-ui/react-dialog": "^1.0.2",
     "@radix-ui/react-icons": "^1.1.1",
+    "@radix-ui/react-popover": "^1.0.3",
     "@radix-ui/react-select": "^1.2.0",
     "@radix-ui/react-separator": "^1.0.1",
     "@radix-ui/react-toolbar": "^1.0.1",
@@ -51,7 +52,8 @@
     "react-beautiful-dnd": "^13.1.1",
     "react-color": "^2.19.3",
     "react-dom": "18.2.0",
-    "react-resizable": "^3.0.4"
+    "react-resizable": "^3.0.4",
+    "react-simple-timefield": "^3.3.1"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.8",

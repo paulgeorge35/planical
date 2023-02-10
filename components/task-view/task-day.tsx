@@ -19,8 +19,8 @@ const TaskDay = ({ day }: TaskDayProps) => {
   const [isAdding, setIsAdding] = useState(false)
   const [newTask, setNewTask] = useState<TaskNewTypeOpt>()
   return (
-    <span className="flex h-full flex-col  p-2">
-      <span className="flex w-[16vw] items-center pb-2">
+    <span className="flex h-full flex-col p-2 pt-3">
+      <span className="flex w-[16vw] items-center pb-3">
         <h1 className="font-satoshi text-xl font-semibold">
           {format(day, "EEE")}
           <span className="text-neutral-500"> {format(day, "MMM dd")}</span>
@@ -31,8 +31,11 @@ const TaskDay = ({ day }: TaskDayProps) => {
       </span>
       <div className="flex h-full flex-col">
         <NewTaskButton
-          className="mb-2"
-          tasks={tasks ? tasks.filter((task) => task?.date === day) : []}
+          className="mb-4"
+          tasks={tasks.filter(
+            (task) =>
+              task && task.date && compareDates(new Date(task.date), day)
+          )}
           toggle={() => {
             setIsAdding(true)
             setNewTask({
@@ -47,6 +50,7 @@ const TaskDay = ({ day }: TaskDayProps) => {
               archived: false,
               labelId: null,
               index: newTaskPosition === "TOP" ? 0 : 1,
+              indexes: [],
             })
           }}
         />

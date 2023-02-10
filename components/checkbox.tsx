@@ -1,14 +1,15 @@
 import { cn } from "@/lib/utils"
 import * as RadixCheckbox from "@radix-ui/react-checkbox"
 import { CheckIcon, DividerHorizontalIcon } from "@radix-ui/react-icons"
-import { ReactNode } from "react"
+import { MouseEventHandler, ReactNode } from "react"
 
 type CheckboxProps = {
   className?: string
   rootClassName?: string
   checked: boolean | "indeterminate"
-  onChange?: (value: boolean | "indeterminate") => void
   label?: ReactNode
+  onChange?: (value: boolean | "indeterminate") => void
+  onClick?: MouseEventHandler<HTMLButtonElement>
 }
 
 const Checkbox = ({
@@ -17,6 +18,7 @@ const Checkbox = ({
   checked,
   onChange,
   label,
+  onClick,
 }: CheckboxProps) => (
   <div className={cn("flex items-center", rootClassName)}>
     <RadixCheckbox.Root
@@ -26,6 +28,7 @@ const Checkbox = ({
         checked ? "border-green-600 bg-green-600" : "bg-transparent",
         className
       )}
+      onClick={onClick}
       checked={checked}
       onCheckedChange={onChange}
     >

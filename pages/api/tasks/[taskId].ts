@@ -24,8 +24,8 @@ const postBodySchema = z.object({
     .default(null)
     .transform((d) => (d ? new Date(d) : null)),
   archived: z.boolean().default(false),
-  estimate: z.number().nullable().default(null),
-  actual: z.number().nullable().default(null),
+  estimate: z.number().default(0),
+  actual: z.number().default(0),
   labelId: z.number().nullable().default(null),
   index: z.number().optional().default(0),
 })
@@ -41,8 +41,8 @@ const patchBodySchema = z.object({
     .nullable()
     .transform((d) => (d ? new Date(d) : null)),
   archived: z.boolean(),
-  estimate: z.number().nullable(),
-  actual: z.number().nullable(),
+  estimate: z.number(),
+  actual: z.number(),
   labelId: z.number().nullable(),
   userId: z.string(),
   index: z.number(),
@@ -123,7 +123,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
   }
 
-  res.setHeader("Allow", ["GET", "POST", "DELETE"])
+  res.setHeader("Allow", ["GET", "POST", "PATCH", "DELETE"])
   res.status(425).end(`Method ${req.method} is not allowed.`)
 }
 

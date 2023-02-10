@@ -83,7 +83,12 @@ const SidebarRight = ({
         <span className="flex h-full w-full flex-col space-y-2">
           <NewTaskButton
             className="mb-2"
-            tasks={tasks.filter((task) => task && task.date === dateToView)}
+            tasks={tasks.filter(
+              (task) =>
+                task &&
+                task.date &&
+                compareDates(new Date(task.date), dateToView)
+            )}
             toggle={() => {
               setIsAdding(true)
               setNewTask({
@@ -98,6 +103,7 @@ const SidebarRight = ({
                 archived: false,
                 labelId: null,
                 index: newTaskPosition === "TOP" ? 0 : 1,
+                indexes: [],
               })
             }}
           />

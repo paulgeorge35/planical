@@ -373,11 +373,34 @@ export const getSubtasksByTaskId = async (taskId: number) => {
   }
 }
 
-export const createSubtask = async (subtask: Omit<Subtask, "id">) => {
+export const createSubtask = async (
+  subtask: Omit<Subtask, "id" | "createdAt" | "updatedAt">,
+  authId: string
+) => {
   try {
+    const task = await prisma.task.findUnique({
+      where: {
+        id: subtask.taskId,
+      },
+    })
+    if (!task) throw new NextkitError(404, "Task does not exist.")
+
+    if (task.userId !== authId)
+      throw new NextkitError(405, "You can only delete your own tasks.")
+
     const subtaskCreated = await prisma.subtask.create({
       data: subtask,
     })
+
+    await prisma.task.update({
+      where: {
+        id: subtask.taskId,
+      },
+      data: {
+        indexes: [subtaskCreated.id, ...task.indexes],
+      },
+    })
+
     return {
       subtask: subtaskCreated,
     }
@@ -386,8 +409,18 @@ export const createSubtask = async (subtask: Omit<Subtask, "id">) => {
   }
 }
 
-export const updateSubtask = async (subtask: Subtask) => {
+export const updateSubtask = async (subtask: Subtask, authId: string) => {
   try {
+    const task = await prisma.task.findUnique({
+      where: {
+        id: subtask.taskId,
+      },
+    })
+    if (!task) throw new NextkitError(404, "Task does not exist.")
+
+    if (task.userId !== authId)
+      throw new NextkitError(405, "You can only delete your own tasks.")
+
     const subtaskUpdated = await prisma.subtask.update({
       where: {
         id: subtask.id,
@@ -402,8 +435,26 @@ export const updateSubtask = async (subtask: Subtask) => {
   }
 }
 
-export const deleteSubtask = async (id: number) => {
+export const deleteSubtask = async (id: number, authId: string) => {
   try {
+    const subtask = await prisma.subtask.findUnique({
+      where: {
+        id,
+      },
+    })
+    if (!subtask) throw new NextkitError(404, "Subtask does not exist.")
+
+    const task = await prisma.task.findUnique({
+      where: {
+        id: subtask.taskId,
+      },
+    })
+
+    if (!task) throw new NextkitError(404, "Task does not exist.")
+
+    if (task.userId !== authId)
+      throw new NextkitError(405, "You can only delete your own tasks.")
+
     await prisma.subtask.delete({
       where: {
         id,
@@ -411,6 +462,7 @@ export const deleteSubtask = async (id: number) => {
     })
     return {
       id,
+      taskId: task.id,
     }
   } catch (error) {
     return { error }
