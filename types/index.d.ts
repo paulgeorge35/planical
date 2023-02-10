@@ -159,3 +159,79 @@ export type SubtaskNoIDType = Omit<SubtaskType, "id">
 export type TaskNewType = PickAndFlatten<
   Omit<Task, "id" | "createdAt" | "updatedAt" | "userId">
 >
+
+type Responders = {
+  // optional
+  onBeforeCapture?: OnBeforeCaptureResponder
+  onBeforeDragStart?: OnBeforeDragStartResponder
+  onDragStart?: OnDragStartResponder
+  onDragUpdate?: OnDragUpdateResponder
+  // required
+  onDragEnd: OnDragEndResponder
+}
+
+type OnBeforeCaptureResponder = (before: BeforeCapture) => mixed
+type OnBeforeDragStartResponder = (start: DragStart) => mixed
+type OnDragStartResponder = (
+  start: DragStart,
+  provided: ResponderProvided
+) => mixed
+type OnDragUpdateResponder = (
+  update: DragUpdate,
+  provided: ResponderProvided
+) => mixed
+type OnDragEndResponder = (
+  result: DropResult,
+  provided: ResponderProvided
+) => mixed
+
+type BeforeCapture = {
+  draggableId: DraggableId
+  mode: MovementMode
+}
+
+type DraggableRubric = {
+  draggableId: DraggableId
+  type: TypeId
+  source: DraggableLocation
+}
+
+type DragStart = PickAndFlatten<
+  DraggableRubric & {
+    mode: MovementMode
+  }
+>
+
+type DragUpdate = PickAndFlatten<
+  DragStart & {
+    // populated if in a reorder position
+    destination?: DraggableLocation
+    // populated if combining with another draggable
+    combine?: Combine
+  }
+>
+
+// details about the draggable that is being combined with
+type Combine = {
+  draggableId: DraggableId
+  droppableId: DroppableId
+}
+
+export type DropResult = PickAndFlatten<
+  DragUpdate & {
+    reason: DropReason
+  }
+>
+
+type DropReason = "DROP" | "CANCEL"
+
+type DraggableLocation = {
+  droppableId: DroppableId
+  // the position of the droppable within a droppable
+  index: number
+}
+
+// There are two modes that a drag can be in
+// FLUID: everything is done in response to highly granular input (eg mouse)
+// SNAP: items snap between positions (eg keyboard);
+type MovementMode = "FLUID" | "SNAP"

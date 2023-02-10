@@ -20,8 +20,9 @@ import { cn } from "@/lib/utils"
 import MobileNav from "@/components/mobile-nav"
 import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react"
 import { useRouter } from "next/navigation"
-import { DragDropContext } from "react-beautiful-dnd"
+import { DragDropContext, DropResult } from "react-beautiful-dnd"
 import { TaskContext } from "@/contexts/TaskContextProvider"
+import { TaskAllFields } from "types"
 
 export default function Home() {
   const mounted = useMounted()
@@ -41,7 +42,7 @@ export default function Home() {
   }, [profileDialogueOpen])
 
   const onTaskDragEnd = useCallback(
-    (result) => {
+    (result: DropResult) => {
       console.log(result)
       console.log(tasks)
       if (!result.destination) return
@@ -52,7 +53,7 @@ export default function Home() {
         return
       const draggedTask = tasks.find(
         (task) => task.id === parseInt(result.draggableId)
-      )
+      ) as TaskAllFields
       updateTask(
         {
           ...draggedTask,
@@ -61,14 +62,14 @@ export default function Home() {
           date:
             result.destination.droppableId === "dump"
               ? null
-              : result.destination.droppableId,
+              : new Date(result.destination.droppableId),
         },
         true
       )
       setTasks([
         ...tasks.map((task) => {
           console.log(task.date ? new Date(task.date) : null)
-          if (task.id === parseInt(result.draggableId)) {
+          if (task.id === parseInt(result.draggableId) && result.destination) {
             console.log(result.destination.droppableId)
             console.log(new Date(result.destination.droppableId))
             return {
@@ -81,8 +82,15 @@ export default function Home() {
                   : new Date(result.destination.droppableId),
             }
           } else if (
-            (task.dump && result.destination.droppableId === "dump") ||
-            new Date(task.date) === result.destination.droppableId
+            (task.dump &&
+              result.destination &&
+              result.destination.droppableId === "dump" &&
+              result.destination) ||
+            (result.destination &&
+              task.date &&
+              new Date(
+                typeof task.date === "string" ? task.date : task.date.toString()
+              ) === new Date(result.destination.droppableId))
           ) {
             if (task.index >= result.destination.index) {
               return {
@@ -96,7 +104,10 @@ export default function Home() {
       ])
       console.log([
         ...tasks.map((task) => {
-          if (task.id === parseInt(result.draggableId))
+          console.log(task.date ? new Date(task.date) : null)
+          if (task.id === parseInt(result.draggableId) && result.destination) {
+            console.log(result.destination.droppableId)
+            console.log(new Date(result.destination.droppableId))
             return {
               ...task,
               index: result.destination.index,
@@ -104,11 +115,18 @@ export default function Home() {
               date:
                 result.destination.droppableId === "dump"
                   ? null
-                  : result.destination.droppableId,
+                  : new Date(result.destination.droppableId),
             }
-          else if (
-            (task.dump && result.destination.droppableId === "dump") ||
-            new Date(task.date) === result.destination.droppableId
+          } else if (
+            (task.dump &&
+              result.destination &&
+              result.destination.droppableId === "dump" &&
+              result.destination) ||
+            (result.destination &&
+              task.date &&
+              new Date(
+                typeof task.date === "string" ? task.date : task.date.toString()
+              ) === new Date(result.destination.droppableId))
           ) {
             if (task.index >= result.destination.index) {
               return {
