@@ -49,25 +49,24 @@ const TaskComponent = ({ data, className, index }: TaskProps) => {
         ),
       ])
     }
-  }, [data, completeTaskOnSubtasksCompletion])
+  }, [data, completeTaskOnSubtasksCompletion, tasks, setTasks, updateTask])
 
   const handleCheckChange = useCallback(() => {
     if (!data.done) {
-      updateTask({ ...data, done: true })
-      //   setTasks([
-      //     ...tasks.map((task) =>
-      //       task.id === data.id ? { ...data, done: true } : task
-      //     ),
-      //   ])
+      updateTask({ ...data, done: true }, true)
+      setTasks([
+        ...tasks.filter((task) => task.id !== data.id),
+        { ...data, done: true },
+      ])
     } else {
-      updateTask({ ...data, done: false })
-      //   setTasks([
-      //     ...tasks.map((task) =>
-      //       task.id === data.id ? { ...data, done: false } : task
-      //     ),
-      //   ])
+      updateTask({ ...data, done: false }, true)
+      setTasks([
+        ...tasks.map((task) =>
+          task.id === data.id ? { ...data, done: false } : task
+        ),
+      ])
     }
-  }, [data])
+  }, [data, tasks, setTasks, updateTask])
 
   return (
     <Draggable draggableId={data.id.toString()} index={index}>

@@ -72,7 +72,7 @@ export const TaskContextProvider = ({
         }),
       })
     ).json()
-    if (res && dontSetAfter === true)
+    if (res && dontSetAfter !== true)
       setTasks([...tasks.filter((l) => (l.id !== res.task.id ? l : res.task))])
     return res
   }

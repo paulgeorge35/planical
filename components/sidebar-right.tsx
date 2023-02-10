@@ -111,12 +111,7 @@ const SidebarRight = ({
               }}
             />
           )}
-          <Droppable
-            droppableId={dateToView
-              .toISOString()
-              .split("T")[0]
-              .replaceAll("-", "/")}
-          >
+          <Droppable droppableId={dateToView.toString()}>
             {(provided, snapshot) => (
               <div
                 ref={provided.innerRef}
@@ -132,6 +127,7 @@ const SidebarRight = ({
                       task?.date &&
                       compareDates(new Date(task.date), dateToView)
                   )
+                  .sort((a, b) => a?.index - b?.index)
                   .map((task, index) => (
                     <TaskComponent key={index} index={index} data={task} />
                   ))}
