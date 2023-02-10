@@ -16,7 +16,7 @@ import { SidebarContext } from "@/contexts/SidebarContextProvider"
 
 import { useMounted } from "@/hooks/use-mounted"
 
-import { cn } from "@/lib/utils"
+import { cn, compareDates } from "@/lib/utils"
 import MobileNav from "@/components/mobile-nav"
 import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react"
 import { useRouter } from "next/navigation"
@@ -43,8 +43,12 @@ export default function Home() {
 
   const onTaskDragEnd = useCallback(
     (result: DropResult) => {
-      console.log(result)
-      console.log(tasks)
+      console.log(
+        tasks.map((task) => ({
+          title: task.title,
+          index: task.index,
+        }))
+      )
       if (!result.destination) return
       if (
         result.destination.index === result.source.index &&
@@ -66,78 +70,58 @@ export default function Home() {
         },
         true
       )
-      setTasks([
-        ...tasks.map((task) => {
-          console.log(task.date ? new Date(task.date) : null)
-          if (task.id === parseInt(result.draggableId) && result.destination) {
-            console.log(result.destination.droppableId)
-            console.log(new Date(result.destination.droppableId))
-            return {
-              ...task,
-              index: result.destination.index,
-              dump: result.destination.droppableId === "dump",
-              date:
-                result.destination.droppableId === "dump"
-                  ? null
-                  : new Date(result.destination.droppableId),
-            }
-          } else if (
-            (task.dump &&
-              result.destination &&
-              result.destination.droppableId === "dump" &&
-              result.destination) ||
-            (result.destination &&
-              task.date &&
-              new Date(
-                typeof task.date === "string" ? task.date : task.date.toString()
-              ) === new Date(result.destination.droppableId))
-          ) {
-            if (task.index >= result.destination.index) {
+      setTasks(
+        [
+          ...tasks.reverse().map((task) => {
+            if (
+              task.id === parseInt(result.draggableId) &&
+              result.destination
+            ) {
               return {
                 ...task,
-                index: task.index + 1,
+                index: result.destination.index,
+                dump: result.destination.droppableId === "dump",
+                date:
+                  result.destination.droppableId === "dump"
+                    ? null
+                    : new Date(result.destination.droppableId),
+              }
+            } else if (
+              (task.dump &&
+                result.destination &&
+                result.destination.droppableId === "dump") ||
+              (result.destination &&
+                task.date &&
+                compareDates(
+                  new Date(
+                    typeof task.date === "string"
+                      ? task.date
+                      : task.date.toString()
+                  ),
+                  new Date(result.destination.droppableId)
+                ))
+            ) {
+              console.log(
+                `[#${result.destination.index}] ${draggedTask.title}`,
+                `[#${task.index}${
+                  task.index >= result.destination.index
+                    ? `->${task.index + 1}`
+                    : ""
+                }] ${task.title}`,
+                task.index >= result.destination.index
+              )
+              if (task.index >= result.destination.index) {
+                return {
+                  ...task,
+                  index: task.index + 1,
+                }
               }
             }
-          }
-          return task
-        }),
-      ])
-      console.log([
-        ...tasks.map((task) => {
-          console.log(task.date ? new Date(task.date) : null)
-          if (task.id === parseInt(result.draggableId) && result.destination) {
-            console.log(result.destination.droppableId)
-            console.log(new Date(result.destination.droppableId))
-            return {
-              ...task,
-              index: result.destination.index,
-              dump: result.destination.droppableId === "dump",
-              date:
-                result.destination.droppableId === "dump"
-                  ? null
-                  : new Date(result.destination.droppableId),
-            }
-          } else if (
-            (task.dump &&
-              result.destination &&
-              result.destination.droppableId === "dump" &&
-              result.destination) ||
-            (result.destination &&
-              task.date &&
-              new Date(
-                typeof task.date === "string" ? task.date : task.date.toString()
-              ) === new Date(result.destination.droppableId))
-          ) {
-            if (task.index >= result.destination.index) {
-              return {
-                ...task,
-                index: task.index + 1,
-              }
-            }
-          }
-          return task
-        }),
-      ])
+
+            return task
+          }),
+        ].reverse()
+      )
     },
     [tasks]
   )

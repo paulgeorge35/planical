@@ -154,8 +154,9 @@ const SidebarLeft = ({
                   (task) =>
                     task && task.dump === true && task.archived === false
                 )
+                .sort((a, b) => a?.index - b?.index)
                 .map((task, index) => (
-                  <TaskComponent key={index} index={index} data={task} />
+                  <TaskComponent key={task.id} index={index} data={task} />
                 ))}
               {provided.placeholder}
             </div>

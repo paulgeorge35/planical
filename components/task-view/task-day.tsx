@@ -75,6 +75,7 @@ const TaskDay = ({ day }: TaskDayProps) => {
                   (task) =>
                     task?.date && compareDates(new Date(task?.date), day)
                 )
+                .sort((a, b) => a?.index - b?.index)
                 .map((task, index) => (
                   <TaskComponent key={index} index={index} data={task} />
                 ))}
