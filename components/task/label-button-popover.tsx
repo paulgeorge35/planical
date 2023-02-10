@@ -87,6 +87,7 @@ const LabelButtonPopover = ({
                 )
                 .map((label: Label) => (
                   <Button
+                    key={label.id}
                     onClick={(e) => {
                       e.stopPropagation()
                       if (updateLabel) updateLabel(label.id)
