@@ -1,12 +1,13 @@
 import * as Toolbar from "@radix-ui/react-toolbar"
 import { cn } from "@/lib/utils"
 import { IconProps } from "@radix-ui/react-icons/dist/types"
+import { MouseEventHandler } from "react"
 
 type ButtonType = {
   children?: React.ReactNode
   className?: string
   rootClassName?: string
-  onClick?: () => void
+  onClick?: MouseEventHandler<HTMLButtonElement>
   disabled?: boolean
   icon?: React.ForwardRefExoticComponent<
     IconProps & React.RefAttributes<SVGSVGElement>

@@ -1,7 +1,7 @@
 import { TaskContext } from "@/contexts/TaskContextProvider"
 import { ToolbarContext } from "@/contexts/ToolbarContextProvider"
 import { cn } from "@/lib/utils"
-import { Task } from "@prisma/client"
+import { Subtask, Task } from "@prisma/client"
 import { useCallback, useContext, useEffect, useState } from "react"
 import { Draggable } from "react-beautiful-dnd"
 import { TaskAllFields } from "types"
@@ -9,6 +9,7 @@ import Checkbox from "./checkbox"
 import SubtaskSection from "./task/subtask-section"
 import TaskShortActions from "./task/task-short-actions"
 import TimePreview from "./task/task-time-preview"
+import TimeSection from "./task/time-section"
 
 type TaskProps = {
   data: TaskAllFields
@@ -19,8 +20,11 @@ type TaskProps = {
 const TaskComponent = ({ data, className, index }: TaskProps) => {
   const [checked, setChecked] = useState<boolean | "indeterminate">(false)
   const [extended, setExtended] = useState<boolean>(false)
-  const { updateTask, tasks, setTasks } = useContext(TaskContext)
-  const { completeTaskOnSubtasksCompletion } = useContext(ToolbarContext)
+  const [timeExtended, setTimeExtended] = useState<boolean>(false)
+  const { updateTask, createSubtask, updateSubtask, tasks, setTasks } =
+    useContext(TaskContext)
+  const { completeTaskOnSubtasksCompletion, setTaskDialog } =
+    useContext(ToolbarContext)
 
   useEffect(() => {
     if (data.done === true) {
@@ -29,14 +33,14 @@ const TaskComponent = ({ data, className, index }: TaskProps) => {
     } else if (!data.subtasks || data.subtasks.length === 0) {
       setChecked(false)
       return
-    }
-    setChecked(
-      data.subtasks
-        ? data.subtasks.every((subtask) => subtask.done === true)
+    } else
+      setChecked(
+        data.subtasks.every((subtask) => subtask.done === true)
           ? true
+          : data.subtasks.every((subtask) => subtask.done === false)
+          ? false
           : "indeterminate"
-        : false
-    )
+      )
     if (
       data.subtasks &&
       data.subtasks.every((subtask) => subtask.done === true) &&
@@ -68,13 +72,45 @@ const TaskComponent = ({ data, className, index }: TaskProps) => {
     }
   }, [data, tasks, setTasks, updateTask])
 
+  const handleChangeTime = useCallback(
+    (field: "actual" | "estimate", value: string) => {
+      const newValue = value
+        .split(":")
+        .map((value) => parseInt(value) as number)
+        .reduce((acc, cur) => {
+          return acc * 100 + cur
+        })
+      updateTask({ ...data, [field]: newValue }, true)
+      setTasks([
+        ...tasks.filter((task) => task.id !== data.id),
+        { ...data, [field]: newValue },
+      ])
+    },
+    [data, tasks, setTasks, updateTask]
+  )
+
+  const handleChangeLabel = useCallback(
+    (labelId: number) => {
+      updateTask({ ...data, labelId }, true)
+      setTasks([
+        ...tasks.map((task) =>
+          task.id !== data.id ? task : { ...data, labelId }
+        ),
+      ])
+    },
+    [data, tasks, setTasks, updateTask]
+  )
+
   return (
     <Draggable draggableId={data.id.toString()} index={index}>
-      {(provided) => (
-        <span
+      {(provided, snapshot) => (
+        <a
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setTaskDialog(data)
+          }}
           className={cn(
             "group flex w-full cursor-pointer flex-col rounded-xl border p-3",
             "border-neutral-200 bg-white text-neutral-800",
@@ -86,17 +122,48 @@ const TaskComponent = ({ data, className, index }: TaskProps) => {
           )}
         >
           <span className="flex flex-row items-center">
-            <Checkbox checked={checked} onChange={handleCheckChange} />
-            <p className={cn("grow px-2 text-xs")}>{data.title}</p>
-            <TimePreview actual={data.actual} estimate={data.estimate} />
+            <Checkbox
+              checked={checked}
+              onChange={handleCheckChange}
+              onClick={(e) => e.stopPropagation()}
+            />
+            <a
+              onClick={(e) => {
+                if (e.target === e.currentTarget) setTaskDialog(data)
+              }}
+              className={cn("grow px-2 text-xs")}
+            >
+              {data.title}
+            </a>
+            <TimePreview
+              actual={data.actual}
+              estimate={data.estimate}
+              toggleExtended={() => setTimeExtended(!timeExtended)}
+            />
           </span>
           <TaskShortActions
             data={data}
-            extended={extended}
+            extended={extended && snapshot.isDragging === false}
             toggleExtended={() => setExtended(!extended)}
+            isDragging={snapshot.isDragging}
+            updateTask={(labelId: number) => handleChangeLabel(labelId)}
           />
-          <SubtaskSection extended={extended} subtasks={data.subtasks} />
-        </span>
+          <TimeSection
+            extended={timeExtended}
+            actual={data.actual}
+            estimate={data.estimate}
+            updateTask={handleChangeTime}
+          />
+          <SubtaskSection
+            extended={extended}
+            subtasks={data.subtasks}
+            type="EXISTING"
+            createSubtask={(title: string) => {
+              createSubtask({ title, taskId: data.id, done: false, index: 0 })
+            }}
+            updateSubtask={(subtask: Subtask) => updateSubtask(subtask)}
+          />
+        </a>
       )}
     </Draggable>
   )

@@ -80,7 +80,7 @@ const NewTaskForm = ({
         toggleExtended={() => setExtended(!extended)}
         persistent={true}
       />
-      <SubtaskSection extended={extended} subtasks={[]} />
+      <SubtaskSection extended={extended} subtasks={[]} type="NEW" />
     </span>
   )
 }

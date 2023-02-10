@@ -25,8 +25,8 @@ model Task {
     title       String
     notes       String?
     recurrent   Boolean      @default(false)
-    estimate    Int?
-    actual      Int?
+    estimate    Int          @default(0)
+    actual      Int          @default(0)
     date        DateTime?
     dump        Boolean      @default(true)
     done        Boolean      @default(false)
@@ -38,6 +38,7 @@ model Task {
     userId      String       @db.Uuid
     user        Profile      @relation(fields: [userId], references: [id])
     index       Int          @default(0)
+    indexes     Int[]
     createdAt   DateTime     @default(now())
     updatedAt   DateTime     @updatedAt
 }
@@ -48,6 +49,7 @@ model Subtask {
     done      Boolean  @default(false)
     taskId    Int
     task      Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+    index     Int      @default(0)
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 }

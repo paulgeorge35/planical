@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState } from "react"
 import addDays from "date-fns/esm/fp/addDays/index.js"
-import { DayOfWeekNumber, ToolbarContextType } from "types"
+import { DayOfWeekNumber, TaskAllFields, ToolbarContextType } from "types"
 import {
   getWeekIntervalFromDate,
   getWeekIntervalOfDate,
@@ -30,6 +30,8 @@ export const ToolbarContext = createContext({
   addNextWeek: () => null,
   month: format(new Date(), "MMM yyyy"),
   isWeekToView: () => false,
+  taskDialog: null,
+  setTaskDialog: (_: TaskAllFields | null) => null,
 } as ToolbarContextType)
 
 export const ToolbarContextProvider = ({
@@ -63,6 +65,7 @@ export const ToolbarContextProvider = ({
   const [weekFromNow, setWeekFromNow] = useState<Date[]>(
     getWeekIntervalFromDate(today)
   )
+  const [taskDialog, setTaskDialog] = useState<TaskAllFields | null>(null)
 
   useEffect(() => {
     setWeekToView(getWeekIntervalOfDate(dateToView, firstDayOfWeek))
@@ -99,6 +102,8 @@ export const ToolbarContextProvider = ({
       ]),
     month: format(weekToView[6], "MMM yyyy"),
     isWeekToView: () => isWeekToView(today, weekToView),
+    taskDialog,
+    setTaskDialog: (value: TaskAllFields | null) => setTaskDialog(value),
   }
   return (
     <ToolbarContext.Provider value={value}>{children}</ToolbarContext.Provider>

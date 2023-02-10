@@ -23,6 +23,7 @@ import { useRouter } from "next/navigation"
 import { DragDropContext, DropResult } from "react-beautiful-dnd"
 import { TaskContext } from "@/contexts/TaskContextProvider"
 import { TaskAllFields } from "types"
+import { ToolbarContext } from "@/contexts/ToolbarContextProvider"
 
 export default function Home() {
   const mounted = useMounted()
@@ -32,6 +33,7 @@ export default function Home() {
 
   const { mainView, left, right, sidebarLeftWidth, setSidebarLeftWidth } =
     useContext(SidebarContext)
+  const { taskDialog, setTaskDialog } = useContext(ToolbarContext)
   const { updateTask, tasks, setTasks } = useContext(TaskContext)
   const [profileDialogueOpen, setProfileDialogueOpen] = useState(false)
   const [newAccountDialogOpen, setNewAccountDialogOpen] = useState(false)
@@ -43,12 +45,6 @@ export default function Home() {
 
   const onTaskDragEnd = useCallback(
     (result: DropResult) => {
-      console.log(
-        tasks.map((task) => ({
-          title: task.title,
-          index: task.index,
-        }))
-      )
       if (!result.destination) return
       if (
         result.destination.index === result.source.index &&
@@ -101,15 +97,6 @@ export default function Home() {
                   new Date(result.destination.droppableId)
                 ))
             ) {
-              console.log(
-                `[#${result.destination.index}] ${draggedTask.title}`,
-                `[#${task.index}${
-                  task.index >= result.destination.index
-                    ? `->${task.index + 1}`
-                    : ""
-                }] ${task.title}`,
-                task.index >= result.destination.index
-              )
               if (task.index >= result.destination.index) {
                 return {
                   ...task,
@@ -169,6 +156,14 @@ export default function Home() {
           <WelcomeDialogContent
             onClose={() => setNewAccountDialogOpen(false)}
           />
+        </Dialog>
+        <Dialog
+          className={cn("max-w-[600px] p-6 py-8")}
+          open={taskDialog !== null}
+          toggle={() => setTaskDialog(null)}
+          dismissOnEscapeKey={true}
+        >
+          TASK
         </Dialog>
         <SidebarLeft
           left={left}

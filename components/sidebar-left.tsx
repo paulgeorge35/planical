@@ -111,7 +111,7 @@ const SidebarLeft = ({
       <div className="flex h-full flex-col space-y-2 p-3 pt-0">
         <NewTaskButton
           className="mb-2"
-          tasks={tasks}
+          tasks={tasks.filter((task) => task.dump === true)}
           toggle={() => {
             setIsAdding(true)
             setNewTask({
@@ -126,6 +126,7 @@ const SidebarLeft = ({
               archived: false,
               labelId: null,
               index: newTaskPosition === "TOP" ? 0 : 1,
+              indexes: [],
             })
           }}
         />
