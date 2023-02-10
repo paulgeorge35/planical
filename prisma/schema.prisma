@@ -15,6 +15,7 @@ model Profile {
     avatar_url String?
     labels     Label[]
     tasks      Task[]
+    columns    Column[]
     createdAt  DateTime @default(now())
     updatedAt  DateTime @updatedAt
 }
@@ -36,7 +37,7 @@ model Task {
     label       Label?       @relation(fields: [labelId], references: [id])
     userId      String       @db.Uuid
     user        Profile      @relation(fields: [userId], references: [id])
-    index       String       @default("-1")
+    index       Int          @default(0)
     createdAt   DateTime     @default(now())
     updatedAt   DateTime     @updatedAt
 }
@@ -71,6 +72,14 @@ model Recurrence {
     task      Task           @relation(fields: [taskId], references: [id], onDelete: Cascade)
     createdAt DateTime       @default(now())
     updatedAt DateTime       @updatedAt
+}
+
+model Column {
+    id       Int     @id @default(autoincrement())
+    identity String  @unique @default("dump")
+    index    Int[]
+    userId   String  @db.Uuid
+    user     Profile @relation(fields: [userId], references: [id])
 }
 
 enum RecurrenceType {

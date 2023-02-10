@@ -5,10 +5,10 @@ import TaskComponent from "./task"
 import { SidebarContext } from "@/contexts/SidebarContextProvider"
 import useMediaQuery from "@/hooks/use-media-query"
 import NewTaskForm from "./new-task-form"
-import { Label, Subtask, Task } from "@prisma/client"
-import { PickAndFlatten, TaskNewTypeOpt } from "types"
+import { TaskNewTypeOpt } from "types"
 import { TaskContext } from "@/contexts/TaskContextProvider"
 import { Droppable } from "react-beautiful-dnd"
+import { ToolbarContext } from "@/contexts/ToolbarContextProvider"
 
 const SidebarLeft = ({
   left,
@@ -21,6 +21,7 @@ const SidebarLeft = ({
 }) => {
   const isPhone = useMediaQuery("(max-width: 639px)")
   const { mainView } = useContext(SidebarContext)
+  const { newTaskPosition } = useContext(ToolbarContext)
   const sidebarRef = React.useRef<HTMLInputElement>(null)
   const [isResizing, setIsResizing] = React.useState(false)
   const [isAdding, setIsAdding] = React.useState(false)
@@ -61,8 +62,8 @@ const SidebarLeft = ({
       ref={sidebarRef}
       onMouseDown={(e) => e.preventDefault()}
       className={cn(
-        "relative min-h-full grow border-r-[0.5px] border-neutral-200 bg-slate-50 transition-all",
-        "dark:border-neutral-600 dark:bg-neutral-900",
+        "relative flex min-h-full grow flex-col border-r-[0.5px] border-neutral-200 bg-slate-50 transition-all",
+        "dark:border-neutral-600 dark:bg-neutral-900 ",
         !left && !isPhone && "w-0 overflow-hidden p-0",
         isResizing && "border-red-500 transition-none dark:border-red-500",
         mainView === "TASKS"
@@ -107,7 +108,7 @@ const SidebarLeft = ({
       >
         🧠 Brain Dump
       </h1>
-      <div className="flex flex-col space-y-2 p-3 pt-0">
+      <div className="flex h-full flex-col space-y-2 p-3 pt-0">
         <NewTaskButton
           className="mb-2"
           tasks={tasks}
@@ -124,7 +125,7 @@ const SidebarLeft = ({
               done: false,
               archived: false,
               labelId: null,
-              index: "-1",
+              index: newTaskPosition === "TOP" ? 0 : 1,
             })
           }}
         />
@@ -139,15 +140,19 @@ const SidebarLeft = ({
           />
         )}
         <Droppable droppableId="dump">
-          {(provided) => (
+          {(provided, snapshot) => (
             <div
               ref={provided.innerRef}
               {...provided.droppableProps}
-              className="flex flex-col space-y-2"
+              className={cn(
+                "flex grow flex-col space-y-2 rounded-lg transition-colors duration-200 ease-in-out",
+                snapshot.isDraggingOver && "bg-purple-500/5"
+              )}
             >
               {tasks
                 ?.filter(
-                  (task) => task.dump === true && task.archived === false
+                  (task) =>
+                    task && task.dump === true && task.archived === false
                 )
                 .map((task, index) => (
                   <TaskComponent key={index} index={index} data={task} />

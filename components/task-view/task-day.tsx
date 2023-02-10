@@ -1,6 +1,6 @@
 import { TaskContext } from "@/contexts/TaskContextProvider"
 import { ToolbarContext } from "@/contexts/ToolbarContextProvider"
-import { compareDates } from "@/lib/utils"
+import { adjustDateToTimezone, cn, compareDates } from "@/lib/utils"
 import { format } from "date-fns"
 import { useContext, useState } from "react"
 import { Droppable } from "react-beautiful-dnd"
@@ -14,12 +14,12 @@ type TaskDayProps = {
 }
 
 const TaskDay = ({ day }: TaskDayProps) => {
-  const { today } = useContext(ToolbarContext)
+  const { today, newTaskPosition } = useContext(ToolbarContext)
   const { tasks } = useContext(TaskContext)
   const [isAdding, setIsAdding] = useState(false)
   const [newTask, setNewTask] = useState<TaskNewTypeOpt>()
   return (
-    <span className="p-2">
+    <span className="flex h-full flex-col  p-2">
       <span className="flex w-[16vw] items-center pb-2">
         <h1 className="font-satoshi text-xl font-semibold">
           {format(day, "EEE")}
@@ -29,10 +29,10 @@ const TaskDay = ({ day }: TaskDayProps) => {
           <p className="pl-2 text-xs text-primary">Today</p>
         )}
       </span>
-      <div className="flex flex-col space-y-2">
+      <div className="flex h-full flex-col">
         <NewTaskButton
           className="mb-2"
-          tasks={tasks.filter((task) => task.date === day)}
+          tasks={tasks ? tasks.filter((task) => task?.date === day) : []}
           toggle={() => {
             setIsAdding(true)
             setNewTask({
@@ -46,7 +46,7 @@ const TaskDay = ({ day }: TaskDayProps) => {
               done: false,
               archived: false,
               labelId: null,
-              index: "-1",
+              index: newTaskPosition === "TOP" ? 0 : 1,
             })
           }}
         />
@@ -60,18 +60,20 @@ const TaskDay = ({ day }: TaskDayProps) => {
             }}
           />
         )}
-        <Droppable
-          droppableId={day.toISOString().split("T")[0].replaceAll("-", "/")}
-        >
-          {(provided) => (
+        <Droppable droppableId={day.toString()}>
+          {(provided, snapshot) => (
             <div
               ref={provided.innerRef}
               {...provided.droppableProps}
-              className="flex flex-col space-y-2"
+              className={cn(
+                "flex grow flex-col space-y-2 rounded-lg transition-colors duration-200 ease-in-out",
+                snapshot.isDraggingOver && "bg-purple-500/5"
+              )}
             >
               {tasks
                 ?.filter(
-                  (task) => task.date && compareDates(new Date(task.date), day)
+                  (task) =>
+                    task?.date && compareDates(new Date(task?.date), day)
                 )
                 .map((task, index) => (
                   <TaskComponent key={index} index={index} data={task} />

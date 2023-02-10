@@ -229,7 +229,7 @@ const CalendarBody = ({ weekToView }: { weekToView?: Date[] }) => {
                       key={index}
                       hour={index}
                       isCurrentHour={
-                        index === today.getHours() &&
+                        index === new Date().getHours() &&
                         (weekToView || false) &&
                         ((weekToView.length > 1 && isWeekToView()) ||
                           (weekToView.length === 1 &&
@@ -242,7 +242,7 @@ const CalendarBody = ({ weekToView }: { weekToView?: Date[] }) => {
                         key={`${index}${indexSecond}}`}
                         date={date}
                         isToday={
-                          index === today.getHours() &&
+                          index === new Date().getHours() &&
                           compareDates(date, today)
                         }
                         hourProgress={hourProgress}

@@ -92,6 +92,17 @@ export function isWeekToView(date: Date, week: Date[]) {
 export const formatTime = (time: number) =>
   `${Math.floor(time / 100)}:${time % 100 === 0 ? "00" : time % 100}`
 
+export const adjustDateToTimezone = (date: Date) => {
+  var newDate = new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000)
+
+  var offset = date.getTimezoneOffset() / 60
+  var hours = date.getHours()
+
+  newDate.setHours(hours - offset)
+
+  return newDate
+}
+
 export const ProfileDialogTabSections = [
   {
     title: "User Settings",

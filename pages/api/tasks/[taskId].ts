@@ -27,7 +27,7 @@ const postBodySchema = z.object({
   estimate: z.number().nullable().default(null),
   actual: z.number().nullable().default(null),
   labelId: z.number().nullable().default(null),
-  index: z.string().optional().default("-1"),
+  index: z.number().optional().default(0),
 })
 const patchBodySchema = z.object({
   id: z.number(),
@@ -45,7 +45,7 @@ const patchBodySchema = z.object({
   actual: z.number().nullable(),
   labelId: z.number().nullable(),
   userId: z.string(),
-  index: z.string(),
+  index: z.number(),
 })
 const deleteParamsSchema = z.number()
 

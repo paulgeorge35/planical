@@ -19,14 +19,15 @@ const SidebarRight = ({
   right: boolean
   mainView: "CALENDAR" | "TASKS"
 }) => {
-  const { today, dateToView, prevDay, nextDay } = useContext(ToolbarContext)
+  const { today, dateToView, prevDay, nextDay, newTaskPosition } =
+    useContext(ToolbarContext)
   const [isAdding, setIsAdding] = useState(false)
   const [newTask, setNewTask] = useState<TaskNewTypeOpt>()
   const { tasks } = useContext(TaskContext)
   return (
     <div
       className={cn(
-        "min-h-full w-[300px] overflow-hidden border-l-[0.5px] border-neutral-200 bg-slate-50 p-3",
+        "flex min-h-full w-[300px] flex-col overflow-hidden border-l-[0.5px] border-neutral-200 bg-slate-50 p-3",
         "dark:border-neutral-600 dark:bg-neutral-900",
         right ? "block" : "hidden",
         mainView === "CALENDAR"
@@ -79,10 +80,10 @@ const SidebarRight = ({
         </span>
       )}
       {mainView === "CALENDAR" ? (
-        <span className="flex w-full flex-col space-y-2">
+        <span className="flex h-full w-full flex-col space-y-2">
           <NewTaskButton
             className="mb-2"
-            tasks={tasks.filter((task) => task.date === dateToView)}
+            tasks={tasks.filter((task) => task && task.date === dateToView)}
             toggle={() => {
               setIsAdding(true)
               setNewTask({
@@ -96,7 +97,7 @@ const SidebarRight = ({
                 done: false,
                 archived: false,
                 labelId: null,
-                index: "-1",
+                index: newTaskPosition === "TOP" ? 0 : 1,
               })
             }}
           />
@@ -116,16 +117,20 @@ const SidebarRight = ({
               .split("T")[0]
               .replaceAll("-", "/")}
           >
-            {(provided) => (
+            {(provided, snapshot) => (
               <div
                 ref={provided.innerRef}
                 {...provided.droppableProps}
-                className="flex flex-col space-y-2"
+                className={cn(
+                  "flex grow flex-col space-y-2 rounded-lg transition-colors duration-200 ease-in-out",
+                  snapshot.isDraggingOver && "bg-purple-500/5"
+                )}
               >
                 {tasks
                   ?.filter(
                     (task) =>
-                      task.date && compareDates(new Date(task.date), dateToView)
+                      task?.date &&
+                      compareDates(new Date(task.date), dateToView)
                   )
                   .map((task, index) => (
                     <TaskComponent key={index} index={index} data={task} />

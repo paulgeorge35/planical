@@ -17,10 +17,7 @@ const TasksView = ({ sidebarLeftWidth }: TaskViewProps) => {
       className="flex h-full w-full flex-row justify-start space-x-2 overflow-x-scroll"
     >
       {weekFromNow.map((day, index) => (
-        <TaskDay
-          key={index}
-          day={new Date(day.toISOString().split("T")[0].replaceAll("-", "/"))}
-        />
+        <TaskDay key={index} day={day} />
       ))}
     </div>
   )

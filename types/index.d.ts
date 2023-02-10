@@ -72,7 +72,10 @@ export type TaskContextType = {
   tasks: TaskAllFields[]
   setTasks: (value: TaskAllFields[]) => void
   createTask: (data: TaskNewTypeOpt) => Promise<TaskAllFields>
-  updateTask: (data: TaskAllFields) => Promise<TaskAllFields>
+  updateTask: (
+    data: TaskAllFields,
+    dontSetAfter?: boolean
+  ) => Promise<TaskAllFields>
   deleteTask: (id: number) => Promise<{ id: number }>
   labels: Label[]
   setLabels: (value: Label[]) => void
@@ -98,6 +101,7 @@ export type DayOfWeekNumber = 0 | 1 | 2 | 3 | 4 | 5 | 6
 export type ToolbarContextType = {
   today: Date
   completeTaskOnSubtasksCompletion: boolean
+  newTaskPosition: "TOP" | "BOTTOM"
   setCompleteTaskOnSubtasksCompletion: (_: boolean) => void
   firstDayOfWeek: DayOfWeekNumber
   setFirstDayOfWeek: (value: DayOfWeekNumber) => void

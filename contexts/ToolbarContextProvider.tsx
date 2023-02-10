@@ -12,6 +12,7 @@ import { useLocalStorage } from "@/hooks/use-local-storage"
 export const ToolbarContext = createContext({
   today: new Date(new Date().toISOString().split("T")[0].replaceAll("-", "/")),
   completeTaskOnSubtasksCompletion: true,
+  newTaskPosition: "TOP",
   setCompleteTaskOnSubtasksCompletion: (_: boolean) => null,
   firstDayOfWeek: 1,
   setFirstDayOfWeek: (_: DayOfWeekNumber) => null,
@@ -48,6 +49,11 @@ export const ToolbarContextProvider = ({
     setCompleteTaskOnSubtasksCompletion,
   ] = useLocalStorage("completeTaskOnSubtasksCompletion", true)
 
+  const [newTaskPosition, setNewTaskPosition] = useLocalStorage(
+    "newTaskPosition",
+    "TOP"
+  )
+
   const [dateToView, setDateToView] = useState<Date>(
     new Date(new Date().toISOString().split("T")[0].replaceAll("-", "/"))
   )
@@ -69,6 +75,8 @@ export const ToolbarContextProvider = ({
     completeTaskOnSubtasksCompletion,
     setCompleteTaskOnSubtasksCompletion: (value: boolean) =>
       setCompleteTaskOnSubtasksCompletion(value),
+    newTaskPosition: newTaskPosition as "TOP" | "BOTTOM",
+    setNewTaskPosition: (value: "TOP" | "BOTTOM") => setNewTaskPosition(value),
     firstDayOfWeek,
     setFirstDayOfWeek: (value: DayOfWeekNumber) => setFirstDayOfWeek(value),
     dateToView,

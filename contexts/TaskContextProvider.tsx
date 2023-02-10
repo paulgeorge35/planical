@@ -58,7 +58,7 @@ export const TaskContextProvider = ({
     return res
   }
 
-  const updateTask = async (data?: TaskAllFields) => {
+  const updateTask = async (data?: TaskAllFields, dontSetAfter?: boolean) => {
     if (!data) return
     const res = await (
       await fetch("/api/tasks/update", {
@@ -72,7 +72,8 @@ export const TaskContextProvider = ({
         }),
       })
     ).json()
-    if (res) setTasks([...tasks.filter((l) => l.id !== res.task.id), res.task])
+    if (res && dontSetAfter === true)
+      setTasks([...tasks.filter((l) => (l.id !== res.task.id ? l : res.task))])
     return res
   }
 
