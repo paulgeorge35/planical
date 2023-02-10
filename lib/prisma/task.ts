@@ -60,7 +60,9 @@ export const createTask = async (
   try {
     const existingColumn = await prisma.column.findFirst({
       where: {
-        identity: task.dump ? "dump" : task.date.toISOString().split("T")[0],
+        identity: task.dump
+          ? "dump"
+          : (task.date as Date).toISOString().split("T")[0],
       },
     })
     let taskIndex = !existingColumn
@@ -75,7 +77,9 @@ export const createTask = async (
       let newIndexes = existingColumn.index.splice(taskIndex, 0, taskCreated.id)
       await prisma.column.update({
         where: {
-          identity: task.dump ? "dump" : task.date.toISOString().split("T")[0],
+          identity: task.dump
+            ? "dump"
+            : (task.date as Date).toISOString().split("T")[0],
         },
         data: {
           index: newIndexes,
@@ -86,7 +90,7 @@ export const createTask = async (
         data: {
           identity: task.dump
             ? "dump"
-            : new Date(task.date).toISOString().split("T")[0],
+            : new Date(task.date as Date).toISOString().split("T")[0],
           index: [taskCreated.id],
           userId: task.userId,
         },
@@ -127,7 +131,7 @@ export const updateTask = async (
       where: {
         identity: taskToUpdate?.dump
           ? "dump"
-          : taskToUpdate?.date.toISOString().split("T")[0],
+          : (taskToUpdate?.date as Date).toISOString().split("T")[0],
       },
     })
     console.log("Source column: ", JSON.stringify(sourceColumn, null, 2))
@@ -137,7 +141,7 @@ export const updateTask = async (
       where: {
         identity: taskToUpdate?.dump
           ? "dump"
-          : taskToUpdate?.date.toISOString().split("T")[0],
+          : (taskToUpdate?.date as Date).toISOString().split("T")[0],
       },
       data: {
         index: sourceColumn?.index.filter((index) => index !== task.id),
@@ -151,7 +155,9 @@ export const updateTask = async (
     // Find destination column
     const destinationColumn = await prisma.column.findFirst({
       where: {
-        identity: task.dump ? "dump" : task.date.toISOString().split("T")[0],
+        identity: task.dump
+          ? "dump"
+          : (task.date as Date).toISOString().split("T")[0],
       },
     })
     console.log(
@@ -165,7 +171,7 @@ export const updateTask = async (
         where: {
           identity: taskUpdated.dump
             ? "dump"
-            : taskUpdated.date.toISOString().split("T")[0],
+            : (taskUpdated.date as Date).toISOString().split("T")[0],
         },
         data: {
           index: [
@@ -184,7 +190,7 @@ export const updateTask = async (
         data: {
           identity: task.dump
             ? "dump"
-            : new Date(task.date).toISOString().split("T")[0],
+            : new Date(task.date as Date).toISOString().split("T")[0],
           index: [taskUpdated.id],
           userId: task.userId,
         },
@@ -211,18 +217,18 @@ export const deleteTask = async (id: number, authId: string) => {
     })
     const existingColumn = await prisma.column.findFirst({
       where: {
-        identity: taskToDelete.dump
+        identity: taskToDelete?.dump
           ? "dump"
-          : taskToDelete.date.toISOString().split("T")[0],
+          : (taskToDelete?.date as Date).toISOString().split("T")[0],
       },
     })
-    if (existingColumn) {
+    if (existingColumn && taskToDelete) {
       let newIndexes = existingColumn.index.filter((index) => index !== id)
       await prisma.column.update({
         where: {
           identity: taskToDelete.dump
             ? "dump"
-            : taskToDelete.date.toISOString().split("T")[0],
+            : (taskToDelete.date as Date).toISOString().split("T")[0],
         },
         data: {
           index: newIndexes,
