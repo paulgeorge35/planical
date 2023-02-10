@@ -10,10 +10,15 @@ import { format } from "date-fns"
 import { useLocalStorage } from "@/hooks/use-local-storage"
 
 export const ToolbarContext = createContext({
-  today: new Date(),
+  today: new Date(new Date().toISOString().split("T")[0].replaceAll("-", "/")),
+  completeTaskOnSubtasksCompletion: true,
+  newTaskPosition: "TOP",
+  setCompleteTaskOnSubtasksCompletion: (_: boolean) => null,
   firstDayOfWeek: 1,
   setFirstDayOfWeek: (_: DayOfWeekNumber) => null,
-  dateToView: new Date(),
+  dateToView: new Date(
+    new Date().toISOString().split("T")[0].replaceAll("-", "/")
+  ),
   nextDay: () => null,
   prevDay: () => null,
   resetToday: () => null,
@@ -32,12 +37,26 @@ export const ToolbarContextProvider = ({
 }: {
   children: React.ReactNode
 }) => {
-  let today = new Date()
+  let today = new Date(
+    new Date().toISOString().split("T")[0].replaceAll("-", "/")
+  )
   const [firstDayOfWeek, setFirstDayOfWeek] = useLocalStorage<DayOfWeekNumber>(
     "firstDayOfWeek",
     1
   )
-  const [dateToView, setDateToView] = useState<Date>(new Date())
+  const [
+    completeTaskOnSubtasksCompletion,
+    setCompleteTaskOnSubtasksCompletion,
+  ] = useLocalStorage("completeTaskOnSubtasksCompletion", true)
+
+  const [newTaskPosition, setNewTaskPosition] = useLocalStorage(
+    "newTaskPosition",
+    "TOP"
+  )
+
+  const [dateToView, setDateToView] = useState<Date>(
+    new Date(new Date().toISOString().split("T")[0].replaceAll("-", "/"))
+  )
   const [weekToView, setWeekToView] = useState<Date[]>(
     getWeekIntervalOfDate(today, firstDayOfWeek)
   )
@@ -50,7 +69,14 @@ export const ToolbarContextProvider = ({
   }, [dateToView, firstDayOfWeek, getWeekIntervalOfDate, setWeekToView])
 
   const value = {
-    today: new Date(),
+    today: new Date(
+      new Date().toISOString().split("T")[0].replaceAll("-", "/")
+    ),
+    completeTaskOnSubtasksCompletion,
+    setCompleteTaskOnSubtasksCompletion: (value: boolean) =>
+      setCompleteTaskOnSubtasksCompletion(value),
+    newTaskPosition: newTaskPosition as "TOP" | "BOTTOM",
+    setNewTaskPosition: (value: "TOP" | "BOTTOM") => setNewTaskPosition(value),
     firstDayOfWeek,
     setFirstDayOfWeek: (value: DayOfWeekNumber) => setFirstDayOfWeek(value),
     dateToView,

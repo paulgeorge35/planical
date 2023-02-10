@@ -28,23 +28,26 @@ export const getTaskById = async (id: number) => {
 export const getTasksByUserId = async (
   authId: string,
   archived: boolean = false,
-  done: boolean = false
+  onlyUndone: boolean = false
 ) => {
   try {
     const tasks = await prisma.task.findMany({
       where: {
         userId: authId,
         archived,
-        done,
+        ...(onlyUndone && { done: false }),
       },
       include: {
         label: true,
         subtasks: true,
         recurrences: true,
       },
+      orderBy: {
+        date: "asc",
+      },
     })
     return {
-      tasks,
+      tasks: tasks.sort((a, b) => a.index - b.index),
     }
   } catch (error) {
     return { error }
@@ -55,9 +58,44 @@ export const createTask = async (
   task: Omit<Task, "id" | "createdAt" | "updatedAt">
 ) => {
   try {
-    const taskCreated = await prisma.task.create({
-      data: task,
+    const existingColumn = await prisma.column.findFirst({
+      where: {
+        identity: task.dump
+          ? "dump"
+          : (task.date as Date).toISOString().split("T")[0],
+      },
     })
+    let taskIndex = !existingColumn
+      ? 0
+      : task.index === 0
+      ? 0
+      : existingColumn.index.length
+    const taskCreated = await prisma.task.create({
+      data: { ...task, index: taskIndex },
+    })
+    if (existingColumn) {
+      let newIndexes = existingColumn.index.splice(taskIndex, 0, taskCreated.id)
+      await prisma.column.update({
+        where: {
+          identity: task.dump
+            ? "dump"
+            : (task.date as Date).toISOString().split("T")[0],
+        },
+        data: {
+          index: newIndexes,
+        },
+      })
+    } else {
+      await prisma.column.create({
+        data: {
+          identity: task.dump
+            ? "dump"
+            : new Date(task.date as Date).toISOString().split("T")[0],
+          index: [taskCreated.id],
+          userId: task.userId,
+        },
+      })
+    }
     return {
       task: taskCreated,
     }
@@ -79,12 +117,89 @@ export const updateTask = async (
     if (taskToUpdate?.userId !== authId)
       throw new NextkitError(405, "You can only update your own tasks.")
 
+    // Update task
     const taskUpdated = await prisma.task.update({
       where: {
         id: task.id,
       },
       data: task,
     })
+    console.log("Task Updated: ", JSON.stringify(taskUpdated, null, 2))
+
+    // Find source column
+    const sourceColumn = await prisma.column.findFirst({
+      where: {
+        identity: taskToUpdate?.dump
+          ? "dump"
+          : (taskToUpdate?.date as Date).toISOString().split("T")[0],
+      },
+    })
+    console.log("Source column: ", JSON.stringify(sourceColumn, null, 2))
+
+    // Update source column
+    const sourceColumnUpdated = await prisma.column.update({
+      where: {
+        identity: taskToUpdate?.dump
+          ? "dump"
+          : (taskToUpdate?.date as Date).toISOString().split("T")[0],
+      },
+      data: {
+        index: sourceColumn?.index.filter((index) => index !== task.id),
+      },
+    })
+    console.log(
+      "Source column updated: ",
+      JSON.stringify(sourceColumnUpdated, null, 2)
+    )
+
+    // Find destination column
+    const destinationColumn = await prisma.column.findFirst({
+      where: {
+        identity: task.dump
+          ? "dump"
+          : (task.date as Date).toISOString().split("T")[0],
+      },
+    })
+    console.log(
+      "Destination column: ",
+      JSON.stringify(destinationColumn, null, 2)
+    )
+
+    // Update or Create destination column
+    if (destinationColumn) {
+      const destinationColumnUpdated = await prisma.column.update({
+        where: {
+          identity: taskUpdated.dump
+            ? "dump"
+            : (taskUpdated.date as Date).toISOString().split("T")[0],
+        },
+        data: {
+          index: [
+            ...destinationColumn.index.slice(0, task.index),
+            task.id,
+            ...destinationColumn.index.slice(task.index),
+          ],
+        },
+      })
+      console.log(
+        "Destination column updated: ",
+        JSON.stringify(destinationColumnUpdated, null, 2)
+      )
+    } else {
+      const destinationColumnCreated = await prisma.column.create({
+        data: {
+          identity: task.dump
+            ? "dump"
+            : new Date(task.date as Date).toISOString().split("T")[0],
+          index: [taskUpdated.id],
+          userId: task.userId,
+        },
+      })
+      console.log(
+        "Destination column created: ",
+        JSON.stringify(destinationColumnCreated, null, 2)
+      )
+    }
     return {
       task: taskUpdated,
     }
@@ -100,6 +215,26 @@ export const deleteTask = async (id: number, authId: string) => {
         id: id,
       },
     })
+    const existingColumn = await prisma.column.findFirst({
+      where: {
+        identity: taskToDelete?.dump
+          ? "dump"
+          : (taskToDelete?.date as Date).toISOString().split("T")[0],
+      },
+    })
+    if (existingColumn && taskToDelete) {
+      let newIndexes = existingColumn.index.filter((index) => index !== id)
+      await prisma.column.update({
+        where: {
+          identity: taskToDelete.dump
+            ? "dump"
+            : (taskToDelete.date as Date).toISOString().split("T")[0],
+        },
+        data: {
+          index: newIndexes,
+        },
+      })
+    }
     if (taskToDelete?.userId !== authId)
       throw new NextkitError(405, "You can only delete your own tasks.")
     await prisma.task.delete({

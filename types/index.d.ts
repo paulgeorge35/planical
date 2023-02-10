@@ -1,4 +1,24 @@
+import { Label, Subtask, Task } from "@prisma/client"
 import internal from "stream"
+
+export type TaskAllFields = PickAndFlatten<
+  Task & { subtasks: Subtask[]; label: Label }
+>
+
+export type SubtaskNewType = PickAndFlatten<
+  Omit<Subtask, "id" | "createdAt" | "updatedAt">
+>
+
+export type TaskNewTypeOpt = PickAndFlatten<
+  Omit<Task, "id" | "createdAt" | "updatedAt" | "userId"> & {
+    subtasks?: SubtaskNewType[]
+    label?: Label
+  }
+>
+
+export type LabelNewType = PickAndFlatten<
+  Omit<Label, "id" | "createdAt" | "updatedAt" | "userId">
+>
 
 export type PickAndFlatten<T> = {
   [K in keyof T]: T[K]
@@ -48,6 +68,23 @@ export type SessionContextType = {
   signOut: () => void
 }
 
+export type TaskContextType = {
+  tasks: TaskAllFields[]
+  setTasks: (value: TaskAllFields[]) => void
+  createTask: (data: TaskNewTypeOpt) => Promise<TaskAllFields>
+  updateTask: (
+    data: TaskAllFields,
+    dontSetAfter?: boolean
+  ) => Promise<TaskAllFields>
+  deleteTask: (id: number) => Promise<{ id: number }>
+  labels: Label[]
+  setLabels: (value: Label[]) => void
+  createLabel: (data: LabelNewType) => Promise<Label>
+  updateLabel: (data?: Label) => Promise<Label>
+  deleteLabel: (id: number) => Promise<{ id: number }>
+  isFetching: boolean
+}
+
 export type SidebarContextType = {
   left: boolean
   setLeft: (value: boolean) => void
@@ -63,6 +100,9 @@ export type DayOfWeekNumber = 0 | 1 | 2 | 3 | 4 | 5 | 6
 
 export type ToolbarContextType = {
   today: Date
+  completeTaskOnSubtasksCompletion: boolean
+  newTaskPosition: "TOP" | "BOTTOM"
+  setCompleteTaskOnSubtasksCompletion: (_: boolean) => void
   firstDayOfWeek: DayOfWeekNumber
   setFirstDayOfWeek: (value: DayOfWeekNumber) => void
   dateToView: Date
@@ -88,7 +128,7 @@ export type LabelType = {
 export type LabelNoIDType = Omit<LabelType, "id">
 
 export type TaskType = {
-  id: string
+  id: number
   title: string
   notes: string
   recurrent: boolean
@@ -106,7 +146,7 @@ export type TaskType = {
 export type TaskNoIDType = Omit<TaskType, "id">
 
 export type SubtaskType = {
-  id: string
+  id: number
   title: string
   done: boolean
   taskId: string
@@ -115,3 +155,83 @@ export type SubtaskType = {
 }
 
 export type SubtaskNoIDType = Omit<SubtaskType, "id">
+
+export type TaskNewType = PickAndFlatten<
+  Omit<Task, "id" | "createdAt" | "updatedAt" | "userId">
+>
+
+type Responders = {
+  // optional
+  onBeforeCapture?: OnBeforeCaptureResponder
+  onBeforeDragStart?: OnBeforeDragStartResponder
+  onDragStart?: OnDragStartResponder
+  onDragUpdate?: OnDragUpdateResponder
+  // required
+  onDragEnd: OnDragEndResponder
+}
+
+type OnBeforeCaptureResponder = (before: BeforeCapture) => mixed
+type OnBeforeDragStartResponder = (start: DragStart) => mixed
+type OnDragStartResponder = (
+  start: DragStart,
+  provided: ResponderProvided
+) => mixed
+type OnDragUpdateResponder = (
+  update: DragUpdate,
+  provided: ResponderProvided
+) => mixed
+type OnDragEndResponder = (
+  result: DropResult,
+  provided: ResponderProvided
+) => mixed
+
+type BeforeCapture = {
+  draggableId: DraggableId
+  mode: MovementMode
+}
+
+type DraggableRubric = {
+  draggableId: DraggableId
+  type: TypeId
+  source: DraggableLocation
+}
+
+type DragStart = PickAndFlatten<
+  DraggableRubric & {
+    mode: MovementMode
+  }
+>
+
+type DragUpdate = PickAndFlatten<
+  DragStart & {
+    // populated if in a reorder position
+    destination?: DraggableLocation
+    // populated if combining with another draggable
+    combine?: Combine
+  }
+>
+
+// details about the draggable that is being combined with
+type Combine = {
+  draggableId: DraggableId
+  droppableId: DroppableId
+}
+
+export type DropResult = PickAndFlatten<
+  DragUpdate & {
+    reason: DropReason
+  }
+>
+
+type DropReason = "DROP" | "CANCEL"
+
+type DraggableLocation = {
+  droppableId: DroppableId
+  // the position of the droppable within a droppable
+  index: number
+}
+
+// There are two modes that a drag can be in
+// FLUID: everything is done in response to highly granular input (eg mouse)
+// SNAP: items snap between positions (eg keyboard);
+type MovementMode = "FLUID" | "SNAP"

@@ -1,11 +1,16 @@
 import { ToolbarContext } from "@/contexts/ToolbarContextProvider"
 import { cn, compareDates } from "@/lib/utils"
 import { format } from "date-fns"
-import { useContext } from "react"
+import { useContext, useState } from "react"
 import CalendarBody from "./calendar/calendar-body"
 import CalendarHeader from "./calendar/calendar-header"
 import NewTaskButton from "./new-task-button"
 import { ChevronLeftIcon } from "@radix-ui/react-icons"
+import { TaskNewTypeOpt } from "types"
+import { TaskContext } from "@/contexts/TaskContextProvider"
+import NewTaskForm from "./new-task-form"
+import TaskComponent from "./task"
+import { Droppable } from "react-beautiful-dnd"
 
 const SidebarRight = ({
   right,
@@ -14,11 +19,15 @@ const SidebarRight = ({
   right: boolean
   mainView: "CALENDAR" | "TASKS"
 }) => {
-  const { today, dateToView, prevDay, nextDay } = useContext(ToolbarContext)
+  const { today, dateToView, prevDay, nextDay, newTaskPosition } =
+    useContext(ToolbarContext)
+  const [isAdding, setIsAdding] = useState(false)
+  const [newTask, setNewTask] = useState<TaskNewTypeOpt>()
+  const { tasks } = useContext(TaskContext)
   return (
     <div
       className={cn(
-        "min-h-full w-[300px] overflow-hidden border-l-[0.5px] border-neutral-200 bg-slate-50 p-3",
+        "flex min-h-full w-[300px] flex-col overflow-hidden border-l-[0.5px] border-neutral-200 bg-slate-50 p-3",
         "dark:border-neutral-600 dark:bg-neutral-900",
         right ? "block" : "hidden",
         mainView === "CALENDAR"
@@ -71,8 +80,65 @@ const SidebarRight = ({
         </span>
       )}
       {mainView === "CALENDAR" ? (
-        <span className="w-full">
-          <NewTaskButton className="mb-2" tasks={[]} />
+        <span className="flex h-full w-full flex-col space-y-2">
+          <NewTaskButton
+            className="mb-2"
+            tasks={tasks.filter((task) => task && task.date === dateToView)}
+            toggle={() => {
+              setIsAdding(true)
+              setNewTask({
+                title: "",
+                notes: "",
+                recurrent: false,
+                estimate: 0,
+                actual: 0,
+                date: dateToView,
+                dump: false,
+                done: false,
+                archived: false,
+                labelId: null,
+                index: newTaskPosition === "TOP" ? 0 : 1,
+              })
+            }}
+          />
+          {isAdding && newTask !== undefined && (
+            <NewTaskForm
+              data={newTask}
+              setTaskData={setNewTask}
+              onBlur={() => {
+                setIsAdding(false)
+                setNewTask(undefined)
+              }}
+            />
+          )}
+          <Droppable
+            droppableId={dateToView
+              .toISOString()
+              .split("T")[0]
+              .replaceAll("-", "/")}
+          >
+            {(provided, snapshot) => (
+              <div
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+                className={cn(
+                  "flex grow flex-col space-y-2 rounded-lg transition-colors duration-200 ease-in-out",
+                  snapshot.isDraggingOver && "bg-purple-500/5"
+                )}
+              >
+                {tasks
+                  ?.filter(
+                    (task) =>
+                      task?.date &&
+                      compareDates(new Date(task.date), dateToView)
+                  )
+                  .map((task, index) => (
+                    <TaskComponent key={index} index={index} data={task} />
+                  ))}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
         </span>
       ) : (
         <span className="w-full">

@@ -1,3 +1,4 @@
+import { PickAndFlatten } from "types"
 import {
   deleteTask,
   getTaskById,
@@ -8,19 +9,25 @@ import type { NextApiRequest, NextApiResponse } from "next"
 import { z } from "zod"
 import { NextkitError } from "nextkit"
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs"
+import { Task } from "@prisma/client"
 
 const getParamsSchema = z.number()
 const postBodySchema = z.object({
   title: z.string(),
-  notes: z.string().nullable(),
-  recurrent: z.boolean(),
-  done: z.boolean(),
-  dump: z.boolean(),
-  date: z.date().nullable(),
-  archived: z.boolean(),
-  estimate: z.number().nullable(),
-  actual: z.number().nullable(),
-  labelId: z.number().nullable(),
+  notes: z.string().nullable().default(null),
+  recurrent: z.boolean().default(false),
+  done: z.boolean().default(false),
+  dump: z.boolean().default(false),
+  date: z
+    .string()
+    .nullable()
+    .default(null)
+    .transform((d) => (d ? new Date(d) : null)),
+  archived: z.boolean().default(false),
+  estimate: z.number().nullable().default(null),
+  actual: z.number().nullable().default(null),
+  labelId: z.number().nullable().default(null),
+  index: z.number().optional().default(0),
 })
 const patchBodySchema = z.object({
   id: z.number(),
@@ -29,12 +36,16 @@ const patchBodySchema = z.object({
   recurrent: z.boolean(),
   done: z.boolean(),
   dump: z.boolean(),
-  date: z.date().nullable(),
+  date: z
+    .string()
+    .nullable()
+    .transform((d) => (d ? new Date(d) : null)),
   archived: z.boolean(),
   estimate: z.number().nullable(),
   actual: z.number().nullable(),
   labelId: z.number().nullable(),
   userId: z.string(),
+  index: z.number(),
 })
 const deleteParamsSchema = z.number()
 
@@ -58,13 +69,18 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       if (error) throw new NextkitError(400, JSON.stringify(error))
       return res.status(200).json({ task })
     } catch (error) {
-      throw new NextkitError(500, JSON.stringify(error))
+      if (error instanceof z.ZodError) {
+        return res.status(422).json(error.issues)
+      }
+      return res.status(500).json({ error })
     }
   }
 
   if (req.method === "POST") {
     try {
-      const data = postBodySchema.parse(req.body)
+      const data = postBodySchema.parse(req.body) as PickAndFlatten<
+        Omit<Task, "id" | "createdAt" | "updatedAt">
+      >
       const { task, error } = await createTask({
         ...data,
         userId: session.user.id,
@@ -72,18 +88,24 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       if (error) throw new NextkitError(400, JSON.stringify(error))
       return res.status(200).json({ task })
     } catch (error) {
-      throw new NextkitError(500, JSON.stringify(error))
+      if (error instanceof z.ZodError) {
+        return res.status(422).json(error.issues)
+      }
+      return res.status(500).json({ error })
     }
   }
 
   if (req.method === "PATCH") {
     try {
-      const data = patchBodySchema.parse(req.body)
+      const data = patchBodySchema.parse(req.body) as Task
       const { task, error } = await updateTask(data, session.user.id)
       if (error) throw new NextkitError(400, JSON.stringify(error))
       return res.status(200).json({ task })
     } catch (error) {
-      throw new NextkitError(500, JSON.stringify(error))
+      if (error instanceof z.ZodError) {
+        return res.status(422).json(error.issues)
+      }
+      return res.status(500).json({ error })
     }
   }
 

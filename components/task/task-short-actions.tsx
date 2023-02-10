@@ -1,27 +1,30 @@
-import { cn } from "@/lib/utils"
 import { Component1Icon, LoopIcon } from "@radix-ui/react-icons"
-import { TaskType } from "types"
+import { cn } from "@/lib/utils"
+import { TaskAllFields, TaskNewTypeOpt } from "types"
 import LabelColorBubble from "./label-color-bubble"
 
 type TaskShortActionsProps = {
-  data: TaskType
+  data: TaskAllFields | TaskNewTypeOpt
   toggleExtended: () => void
   extended: boolean
   className?: string
+  persistent?: boolean
 }
 
 const TaskShortActions = ({
   className,
   extended,
   toggleExtended,
+  persistent,
   data: { label, recurrent, subtasks },
 }: TaskShortActionsProps) => {
   return (
     <span
       className={cn(
-        "flex flex-row items-center space-x-2 pl-6",
+        "flex flex-row items-center space-x-2 pt-2",
         "text-neutral-600",
         "dark:text-neutral-400",
+        persistent ? "pl-2" : "pl-6",
         className
       )}
     >
@@ -39,8 +42,8 @@ const TaskShortActions = ({
       ) : (
         <a
           className={cn(
-            "hidden flex-row items-center text-[0.65rem]",
-            "group-hover:flex",
+            "flex-row items-center text-[0.65rem]",
+            persistent ? "flex" : "hidden group-hover:flex",
             "hover:text-black",
             "dark:hover:text-white"
           )}
@@ -51,7 +54,8 @@ const TaskShortActions = ({
       {!recurrent && (
         <LoopIcon
           className={cn(
-            "hidden h-3 w-3 group-hover:block",
+            "h-3 w-3",
+            persistent ? "block" : "hidden group-hover:block",
             "hover:text-blue-500"
           )}
         />
@@ -59,15 +63,16 @@ const TaskShortActions = ({
       <a
         onClick={toggleExtended}
         className={cn(
-          "flex flex-row items-center",
+          "flex-row items-center",
           "hover:text-blue-500",
-          extended && "text-blue-500"
+          extended && "text-blue-500",
+          persistent ? "flex" : "hidden group-hover:flex"
         )}
       >
         <Component1Icon
           className={cn("flex h-3 w-3 items-center justify-center")}
         />
-        {subtasks.length !== 0 && (
+        {subtasks && subtasks.length !== 0 && (
           <span className="pl-1 font-satoshi text-[0.65rem]">{`${
             subtasks.filter((s) => s.done).length
           } / ${subtasks.length}`}</span>

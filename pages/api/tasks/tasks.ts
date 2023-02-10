@@ -6,7 +6,7 @@ import { z } from "zod"
 
 const getParamsSchema = z.object({
   archived: z.boolean().optional().default(false),
-  done: z.boolean().optional().default(false),
+  onlyUndone: z.boolean().optional().default(false),
 })
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -23,11 +23,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
   if (req.method === "GET") {
     try {
-      const { archived, done } = getParamsSchema.parse(req.query.id)
+      const { archived, onlyUndone } = getParamsSchema.parse(req.query)
       const { tasks, error } = await getTasksByUserId(
         session.user.id,
         archived,
-        done
+        onlyUndone
       )
       if (error) throw new NextkitError(400, JSON.stringify(error))
       return res.status(200).json({ tasks })

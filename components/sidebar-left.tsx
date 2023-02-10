@@ -1,10 +1,14 @@
 import { cn } from "@/lib/utils"
 import React, { useContext } from "react"
-import { TaskType } from "types"
 import NewTaskButton from "./new-task-button"
-import Task from "./task"
+import TaskComponent from "./task"
 import { SidebarContext } from "@/contexts/SidebarContextProvider"
 import useMediaQuery from "@/hooks/use-media-query"
+import NewTaskForm from "./new-task-form"
+import { TaskNewTypeOpt } from "types"
+import { TaskContext } from "@/contexts/TaskContextProvider"
+import { Droppable } from "react-beautiful-dnd"
+import { ToolbarContext } from "@/contexts/ToolbarContextProvider"
 
 const SidebarLeft = ({
   left,
@@ -17,8 +21,12 @@ const SidebarLeft = ({
 }) => {
   const isPhone = useMediaQuery("(max-width: 639px)")
   const { mainView } = useContext(SidebarContext)
+  const { newTaskPosition } = useContext(ToolbarContext)
   const sidebarRef = React.useRef<HTMLInputElement>(null)
   const [isResizing, setIsResizing] = React.useState(false)
+  const [isAdding, setIsAdding] = React.useState(false)
+  const [newTask, setNewTask] = React.useState<TaskNewTypeOpt>()
+  const { tasks } = useContext(TaskContext)
 
   const startResizing = React.useCallback(() => {
     setIsResizing(true)
@@ -49,83 +57,13 @@ const SidebarLeft = ({
     }
   }, [resize, stopResizing])
 
-  const MockTasks: TaskType[] = [
-    {
-      id: "1",
-      title: "Task 1",
-      notes: "This is a note",
-      recurrent: false,
-      dump: false,
-      done: false,
-      estimate: 0,
-      actual: 15,
-      userId: "1",
-      label: {
-        id: "1",
-        name: "Label 1",
-        color: "#FF0000",
-      },
-      subtasks: [
-        {
-          id: "1",
-          title: "Subtask 1 which is longer",
-          done: false,
-          taskId: "1",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          id: "2",
-          title: "Subtask 2",
-          done: true,
-          taskId: "1",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-      ],
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: "2",
-      title: "Task 2",
-      notes: "This is a note",
-      recurrent: false,
-      dump: false,
-      done: false,
-      estimate: 145,
-      actual: 250,
-      userId: "1",
-      subtasks: [
-        {
-          id: "1",
-          title: "Subtask 1",
-          done: false,
-          taskId: "1",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          id: "2",
-          title: "Subtask 2",
-          done: true,
-          taskId: "1",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-      ],
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-  ]
-
   return (
     <div
       ref={sidebarRef}
       onMouseDown={(e) => e.preventDefault()}
       className={cn(
-        "relative min-h-full grow border-r-[0.5px] border-neutral-200 bg-slate-50 transition-all",
-        "dark:border-neutral-600 dark:bg-neutral-900",
+        "relative flex min-h-full grow flex-col border-r-[0.5px] border-neutral-200 bg-slate-50 transition-all",
+        "dark:border-neutral-600 dark:bg-neutral-900 ",
         !left && !isPhone && "w-0 overflow-hidden p-0",
         isResizing && "border-red-500 transition-none dark:border-red-500",
         mainView === "TASKS"
@@ -170,11 +108,59 @@ const SidebarLeft = ({
       >
         🧠 Brain Dump
       </h1>
-      <div className="flex flex-col space-y-2 p-3 pt-0">
-        <NewTaskButton className="mb-2" tasks={MockTasks} />
-        {MockTasks.map((task, index) => (
-          <Task key={index} data={task} />
-        ))}
+      <div className="flex h-full flex-col space-y-2 p-3 pt-0">
+        <NewTaskButton
+          className="mb-2"
+          tasks={tasks}
+          toggle={() => {
+            setIsAdding(true)
+            setNewTask({
+              title: "",
+              notes: "",
+              recurrent: false,
+              estimate: 0,
+              actual: 0,
+              date: null,
+              dump: true,
+              done: false,
+              archived: false,
+              labelId: null,
+              index: newTaskPosition === "TOP" ? 0 : 1,
+            })
+          }}
+        />
+        {isAdding && newTask !== undefined && (
+          <NewTaskForm
+            data={newTask}
+            setTaskData={setNewTask}
+            onBlur={() => {
+              setIsAdding(false)
+              setNewTask(undefined)
+            }}
+          />
+        )}
+        <Droppable droppableId="dump">
+          {(provided, snapshot) => (
+            <div
+              ref={provided.innerRef}
+              {...provided.droppableProps}
+              className={cn(
+                "flex grow flex-col space-y-2 rounded-lg transition-colors duration-200 ease-in-out",
+                snapshot.isDraggingOver && "bg-purple-500/5"
+              )}
+            >
+              {tasks
+                ?.filter(
+                  (task) =>
+                    task && task.dump === true && task.archived === false
+                )
+                .map((task, index) => (
+                  <TaskComponent key={index} index={index} data={task} />
+                ))}
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
       </div>
     </div>
   )

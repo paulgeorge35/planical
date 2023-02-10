@@ -6,10 +6,12 @@ import {
   Pencil1Icon,
   TrashIcon,
 } from "@radix-ui/react-icons"
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useContext, useEffect, useState } from "react"
 import { LabelNoIDType, PickAndFlatten } from "types"
 import { GithubPicker } from "react-color"
 import { Label } from "@prisma/client"
+import { Spinnaker } from "@next/font/google"
+import { TaskContext } from "@/contexts/TaskContextProvider"
 
 interface LabelProps extends LabelNoIDType {
   id?: number
@@ -148,23 +150,9 @@ const Label = ({
   )
 }
 
-async function getLabels() {
-  const res = await (
-    await fetch("/api/labels/labels", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      cache: "no-store",
-    })
-  ).json()
-  return res
-}
-
 type LabelsSettingsProps = {}
 
 const LabelsSettings = ({}: LabelsSettingsProps) => {
-  const [labels, setLabels] = useState<Label[]>()
   const [search, setSearch] = useState<string>("")
   const [editing, setEditing] = useState<boolean[]>([])
   const [newLabel, setNewLabel] =
@@ -172,69 +160,8 @@ const LabelsSettings = ({}: LabelsSettingsProps) => {
       PickAndFlatten<Omit<Label, "id" | "createdAt" | "userId" | "updatedAt">>
     >()
   const [editedLabel, setEditedLabel] = useState<Label>()
-
-  const fetchData = async () => {
-    const { labels } = await getLabels()
-    setLabels(labels)
-  }
-
-  useEffect(() => {
-    fetchData()
-  }, [])
-
-  const createLabel = async (
-    data: PickAndFlatten<
-      Omit<Label, "id" | "createdAt" | "updatedAt" | "userId">
-    >
-  ) => {
-    const res = await (
-      await fetch("/api/labels/create", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        cache: "no-store",
-        body: JSON.stringify({
-          name: data.name,
-          color: data.color,
-        }),
-      })
-    ).json()
-    fetchData()
-    return res
-  }
-
-  const updateLabel = async (data?: Label) => {
-    if (!data) return
-    const res = await (
-      await fetch("/api/labels/update", {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        cache: "no-store",
-        body: JSON.stringify({
-          ...data,
-        }),
-      })
-    ).json()
-    fetchData()
-    return res
-  }
-
-  const deleteLabel = async (id: number) => {
-    const res = await (
-      await fetch(`/api/labels/delete?id=${id}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        cache: "no-store",
-      })
-    ).json()
-    fetchData()
-    return res
-  }
+  const { labels, isFetching, createLabel, updateLabel, deleteLabel } =
+    useContext(TaskContext)
 
   const toggleEdit = useCallback(
     (index: number, value: boolean, label: Label) => {
@@ -269,7 +196,7 @@ const LabelsSettings = ({}: LabelsSettingsProps) => {
     if (labels) setEditing(Array.from({ length: labels.length }, () => false))
   }, [labels])
 
-  return Array.isArray(labels) ? (
+  return (
     <div className="flex h-full grow flex-col ">
       <div
         className={cn(
@@ -320,6 +247,7 @@ const LabelsSettings = ({}: LabelsSettingsProps) => {
                   name: "",
                 })
               }}
+              disabled={isFetching}
             >
               Create Label
             </Button>
@@ -350,36 +278,47 @@ const LabelsSettings = ({}: LabelsSettingsProps) => {
             }}
           />
         )}
-        {labels
-          .filter((label) =>
-            search
-              .toLowerCase()
-              .split(/[\s,.-_]+/)
-              .some((word) => label.name.toLowerCase().includes(word))
-          )
-          .map((label, index) => (
-            <Label
-              key={index}
-              {...label}
-              editedLabel={editedLabel}
-              editing={editing[index]}
-              disabled={
-                editing.reduce((acc, curr) => acc || curr, false) ||
-                typeof newLabel !== "undefined"
-              }
-              toggleEdit={() => toggleEdit(index, editing[index], label)}
-              onLabelChange={(name) => updateLabelFields("name", name)}
-              onLabelColorChange={(color) => updateLabelFields("color", color)}
-              onLabelSave={async () => {
-                await updateLabel(editedLabel)
-                toggleEdit(index, editing[index], label)
-              }}
-              onLabelDelete={() => deleteLabel(label.id)}
-            />
-          ))}
+
+        {isFetching ? (
+          <div className={cn("flex grow flex-col items-center justify-center")}>
+            <span className={cn("text-sm text-neutral-600")}>
+              Loading labels...
+            </span>
+          </div>
+        ) : (
+          labels
+            .filter((label) =>
+              search
+                .toLowerCase()
+                .split(/[\s,.-_]+/)
+                .some((word) => label.name.toLowerCase().includes(word))
+            )
+            .map((label, index) => (
+              <Label
+                key={index}
+                {...label}
+                editedLabel={editedLabel}
+                editing={editing[index]}
+                disabled={
+                  editing.reduce((acc, curr) => acc || curr, false) ||
+                  typeof newLabel !== "undefined"
+                }
+                toggleEdit={() => toggleEdit(index, editing[index], label)}
+                onLabelChange={(name) => updateLabelFields("name", name)}
+                onLabelColorChange={(color) =>
+                  updateLabelFields("color", color)
+                }
+                onLabelSave={async () => {
+                  await updateLabel(editedLabel)
+                  toggleEdit(index, editing[index], label)
+                }}
+                onLabelDelete={() => deleteLabel(label.id)}
+              />
+            ))
+        )}
       </div>
     </div>
-  ) : null
+  )
 }
 
 export default LabelsSettings
