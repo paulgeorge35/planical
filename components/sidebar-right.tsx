@@ -82,7 +82,7 @@ const SidebarRight = ({
         <span className="flex w-full flex-col space-y-2">
           <NewTaskButton
             className="mb-2"
-            tasks={tasks.filter((task) => task.date === today)}
+            tasks={tasks.filter((task) => task.date === dateToView)}
             toggle={() => {
               setIsAdding(true)
               setNewTask({
@@ -91,8 +91,8 @@ const SidebarRight = ({
                 recurrent: false,
                 estimate: 0,
                 actual: 0,
-                date: null,
-                dump: true,
+                date: dateToView,
+                dump: false,
                 done: false,
                 archived: false,
                 labelId: null,
@@ -111,7 +111,10 @@ const SidebarRight = ({
             />
           )}
           <Droppable
-            droppableId={today.toISOString().split("T")[0].replaceAll("-", "/")}
+            droppableId={dateToView
+              .toISOString()
+              .split("T")[0]
+              .replaceAll("-", "/")}
           >
             {(provided) => (
               <div
@@ -122,7 +125,7 @@ const SidebarRight = ({
                 {tasks
                   ?.filter(
                     (task) =>
-                      task.date && compareDates(new Date(task.date), today)
+                      task.date && compareDates(new Date(task.date), dateToView)
                   )
                   .map((task, index) => (
                     <TaskComponent key={index} index={index} data={task} />

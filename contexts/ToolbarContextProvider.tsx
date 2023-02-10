@@ -15,7 +15,9 @@ export const ToolbarContext = createContext({
   setCompleteTaskOnSubtasksCompletion: (_: boolean) => null,
   firstDayOfWeek: 1,
   setFirstDayOfWeek: (_: DayOfWeekNumber) => null,
-  dateToView: new Date(),
+  dateToView: new Date(
+    new Date().toISOString().split("T")[0].replaceAll("-", "/")
+  ),
   nextDay: () => null,
   prevDay: () => null,
   resetToday: () => null,
@@ -46,7 +48,9 @@ export const ToolbarContextProvider = ({
     setCompleteTaskOnSubtasksCompletion,
   ] = useLocalStorage("completeTaskOnSubtasksCompletion", true)
 
-  const [dateToView, setDateToView] = useState<Date>(new Date())
+  const [dateToView, setDateToView] = useState<Date>(
+    new Date(new Date().toISOString().split("T")[0].replaceAll("-", "/"))
+  )
   const [weekToView, setWeekToView] = useState<Date[]>(
     getWeekIntervalOfDate(today, firstDayOfWeek)
   )

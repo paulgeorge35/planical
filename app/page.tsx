@@ -20,6 +20,7 @@ import { cn } from "@/lib/utils"
 import MobileNav from "@/components/mobile-nav"
 import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react"
 import { useRouter } from "next/navigation"
+import { DragDropContext } from "react-beautiful-dnd"
 
 export default function Home() {
   const mounted = useMounted()
@@ -60,62 +61,64 @@ export default function Home() {
   }, [mounted, newAccount])
 
   return (
-    <div className="flex h-screen flex-row">
-      <MobileNav />
-      <Dialog
-        className="p-0"
-        open={profileDialogueOpen}
-        toggle={toggleProfileDialogue}
-        dismissOnEscapeKey={true}
-      >
-        <ProfileDialogContent />
-      </Dialog>
-      <Dialog
-        className={cn("max-w-[600px] p-6 py-8")}
-        open={newAccountDialogOpen}
-        toggle={() => setNewAccountDialogOpen(false)}
-        closeButton={false}
-      >
-        <WelcomeDialogContent onClose={() => setNewAccountDialogOpen(false)} />
-      </Dialog>
-      <SidebarLeft
-        left={left}
-        sidebarWidth={sidebarLeftWidth}
-        setSidebarWidth={setSidebarLeftWidth}
-      />
-      <span className="flex flex-col">
-        <div
-          className={cn(
-            "flex h-12 border-b-[0.5px] border-neutral-200 bg-white",
-            "dark:border-neutral-600 dark:bg-neutral-900",
-            "phone:hidden"
-          )}
+    <DragDropContext onDragEnd={() => null}>
+      <div className="flex h-screen flex-row">
+        <MobileNav />
+        <Dialog
+          className="p-0"
+          open={profileDialogueOpen}
+          toggle={toggleProfileDialogue}
+          dismissOnEscapeKey={true}
         >
-          <Toolbar openProfileDialogue={() => setProfileDialogueOpen(true)} />
-          <TasksToolbar right={right} mainView={mainView} />
-        </div>
-        <span className="flex h-full flex-row">
-          <main
+          <ProfileDialogContent />
+        </Dialog>
+        <Dialog
+          className={cn("max-w-[600px] p-6 py-8")}
+          open={newAccountDialogOpen}
+          toggle={() => setNewAccountDialogOpen(false)}
+          closeButton={false}
+        >
+          <WelcomeDialogContent
+            onClose={() => setNewAccountDialogOpen(false)}
+          />
+        </Dialog>
+        <SidebarLeft
+          left={left}
+          sidebarWidth={sidebarLeftWidth}
+          setSidebarWidth={setSidebarLeftWidth}
+        />
+        <span className="flex flex-col">
+          <div
             className={cn(
-              "flex h-full flex-1 flex-col items-center justify-center p-0",
-              "dark:bg-neutral-800",
-              mainView === "CALENDAR"
-                ? "bg-white dark:bg-neutral-800"
-                : "bg-slate-50 dark:bg-neutral-900",
+              "flex h-12 border-b-[0.5px] border-neutral-200 bg-white",
+              "dark:border-neutral-600 dark:bg-neutral-900",
               "phone:hidden"
             )}
           >
-            {mainView === "CALENDAR" ? (
-              <CalendarView />
-            ) : (
-              <TasksView sidebarLeftWidth={left ? sidebarLeftWidth : 1} />
-            )}
-          </main>
-          {/* {(!isPhone || mainView === "CALENDAR") && ( */}
-          <SidebarRight right={right} mainView={mainView} />
-          {/* )} */}
+            <Toolbar openProfileDialogue={() => setProfileDialogueOpen(true)} />
+            <TasksToolbar right={right} mainView={mainView} />
+          </div>
+          <span className="flex h-full flex-row">
+            <main
+              className={cn(
+                "flex h-full flex-1 flex-col items-center justify-center p-0",
+                "dark:bg-neutral-800",
+                mainView === "CALENDAR"
+                  ? "bg-white dark:bg-neutral-800"
+                  : "bg-slate-50 dark:bg-neutral-900",
+                "phone:hidden"
+              )}
+            >
+              {mainView === "CALENDAR" ? (
+                <CalendarView />
+              ) : (
+                <TasksView sidebarLeftWidth={left ? sidebarLeftWidth : 1} />
+              )}
+            </main>
+            <SidebarRight right={right} mainView={mainView} />
+          </span>
         </span>
-      </span>
-    </div>
+      </div>
+    </DragDropContext>
   )
 }

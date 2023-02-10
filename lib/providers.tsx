@@ -31,7 +31,8 @@ export function Providers({
               storageKey="theme"
               themes={["system", "dark", "light"]}
             >
-              <DroppableRoot>{children}</DroppableRoot>
+              {/* <DroppableRoot>{children}</DroppableRoot> */}
+              {children}
             </ThemeProvider>
           </SidebarContextProvider>
         </ToolbarContextProvider>
