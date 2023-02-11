@@ -45,15 +45,19 @@ export default function Home() {
 
   const onTaskDragEnd = useCallback(
     (result: DropResult) => {
+      // No destination
       if (!result.destination) return
+      // Same destination
       if (
         result.destination.index === result.source.index &&
         result.destination.droppableId === result.source.droppableId
       )
         return
+      // Find dragged task
       const draggedTask = tasks.find(
         (task) => task.id === parseInt(result.draggableId)
       ) as TaskAllFields
+      // Update dragged task with new index and date/dump
       updateTask(
         {
           ...draggedTask,
@@ -66,13 +70,41 @@ export default function Home() {
         },
         true
       )
+      // Update task indexes and dragged task (in local state)
       setTasks(
         [
           ...tasks.reverse().map((task) => {
             if (
+              (task.dump &&
+                result.destination &&
+                result.destination.droppableId === "dump") ||
+              (result.destination &&
+                task.date &&
+                compareDates(
+                  new Date(
+                    typeof task.date === "string"
+                      ? task.date
+                      : task.date.toString()
+                  ),
+                  new Date(result.destination.droppableId)
+                ))
+            )
+              console.log(
+                `[${task.index}]${
+                  result.destination && task.index >= result.destination.index
+                    ? `->[${task.index + 1}]`
+                    : ""
+                } ${task.title}`
+              )
+            // If it's the dragged task, update index and date/dump
+            if (
               task.id === parseInt(result.draggableId) &&
               result.destination
             ) {
+              console.log(
+                `[${draggedTask.index}->${result.destination.index}] ${draggedTask.title}`
+              )
+
               return {
                 ...task,
                 index: result.destination.index,
@@ -83,6 +115,7 @@ export default function Home() {
                     : new Date(result.destination.droppableId),
               }
             } else if (
+              // If it's another task from the destination column
               (task.dump &&
                 result.destination &&
                 result.destination.droppableId === "dump") ||
@@ -97,6 +130,7 @@ export default function Home() {
                   new Date(result.destination.droppableId)
                 ))
             ) {
+              // and its index is greater than the dragged task's index (it's below the dragged task) then increment its index by 1
               if (task.index >= result.destination.index) {
                 return {
                   ...task,
@@ -104,7 +138,7 @@ export default function Home() {
                 }
               }
             }
-
+            // If it's a task from the destination column and its index is less than the dragged task's index (it's above the dragged task)
             return task
           }),
         ].reverse()
