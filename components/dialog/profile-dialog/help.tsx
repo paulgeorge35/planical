@@ -56,14 +56,14 @@ const Help = ({}: HelpProps) => {
             Contact support
           </label>
           <a
-            href="mailto:paultibulca@gmail.com"
+            href="mailto:contact@paulgeorge.dev"
             className={cn(
               "text-md flex max-w-[50%] cursor-pointer items-center py-2 font-satoshi transition-colors duration-200 ease-in-out",
               "text-purple-500 hover:text-purple-700",
               "dark:text-purple-500 dark:hover:text-purple-700"
             )}
           >
-            paultibulca@gmail.com <ArrowRightIcon className="ml-2 h-5 w-5" />
+            contact@paulgeorge.dev <ArrowRightIcon className="ml-2 h-5 w-5" />
           </a>
         </fieldset>
       </div>
