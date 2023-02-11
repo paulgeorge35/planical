@@ -12,10 +12,19 @@ import { useLocalStorage } from "@/hooks/use-local-storage"
 export const ToolbarContext = createContext({
   today: new Date(new Date().toISOString().split("T")[0].replaceAll("-", "/")),
   USER_PREF_COMPLETE_TASKS_AUTO: true,
-  USER_PREF_NEW_TASK_POSITION: "TOP",
   setCompleteTaskOnSubtasksCompletion: (_: boolean) => null,
+  USER_PREF_NEW_TASK_POSITION: "TOP",
+  setNewTaskPosition: (_: "TOP" | "BOTTOM") => null,
   USER_PREF_FIRST_DAY_OF_WEEK: 1,
   setFirstDayOfWeek: (_: DayOfWeekNumber) => null,
+  USER_PREF_SHOW_WEEKENDS: true,
+  setShowWeekends: (_: boolean) => null,
+  USER_PREF_ROLL_OVER_TASKS: true,
+  setRollOverTasksToTheNextDay: (_: boolean) => null,
+  USER_PREF_ROLL_OVER_TASKS_POSITION: "TOP",
+  setRollOverTasksPosition: (_: "TOP" | "BOTTOM") => null,
+  USER_PREF_MOVE_COMPLETED_TASKS_TO_THE_BOTTOM: true,
+  setMoveCompletedTasksSubtasksToTheBottom: (_: boolean) => null,
   dateToView: new Date(
     new Date().toISOString().split("T")[0].replaceAll("-", "/")
   ),
@@ -105,6 +114,19 @@ export const ToolbarContextProvider = ({
     setNewTaskPosition: (value: "TOP" | "BOTTOM") => setNewTaskPosition(value),
     USER_PREF_FIRST_DAY_OF_WEEK,
     setFirstDayOfWeek: (value: DayOfWeekNumber) => setFirstDayOfWeek(value),
+    USER_PREF_SHOW_WEEKENDS,
+    setShowWeekends: (value: boolean) => setShowWeekends(value),
+    USER_PREF_ROLL_OVER_TASKS,
+    setRollOverTasksToTheNextDay: (value: boolean) =>
+      setRollOverTasksToTheNextDay(value),
+    USER_PREF_ROLL_OVER_TASKS_POSITION: USER_PREF_ROLL_OVER_TASKS_POSITION as
+      | "TOP"
+      | "BOTTOM",
+    setRollOverTasksPosition: (value: "TOP" | "BOTTOM") =>
+      setRollOverTasksPosition(value),
+    USER_PREF_MOVE_COMPLETED_TASKS_TO_THE_BOTTOM,
+    setMoveCompletedTasksSubtasksToTheBottom: (value: boolean) =>
+      setMoveCompletedTasksSubtasksToTheBottom(value),
     dateToView,
     nextDay: () => setDateToView(addDays(1, dateToView)),
     prevDay: () => setDateToView(addDays(-1, dateToView)),

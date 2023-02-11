@@ -109,10 +109,19 @@ export type DayOfWeekNumber = 0 | 1 | 2 | 3 | 4 | 5 | 6
 export type ToolbarContextType = {
   today: Date
   USER_PREF_COMPLETE_TASKS_AUTO: boolean
-  USER_PREF_NEW_TASK_POSITION: "TOP" | "BOTTOM"
   setCompleteTaskOnSubtasksCompletion: (_: boolean) => void
+  USER_PREF_NEW_TASK_POSITION: "TOP" | "BOTTOM"
+  setNewTaskPosition: (_: "TOP" | "BOTTOM") => void
   USER_PREF_FIRST_DAY_OF_WEEK: DayOfWeekNumber
   setFirstDayOfWeek: (value: DayOfWeekNumber) => void
+  USER_PREF_SHOW_WEEKENDS: boolean
+  setShowWeekends: (value: boolean) => void
+  USER_PREF_ROLL_OVER_TASKS: boolean
+  setRollOverTasksToTheNextDay: (value: boolean) => void
+  USER_PREF_ROLL_OVER_TASKS_POSITION: "TOP" | "BOTTOM"
+  setRollOverTasksPosition: (value: "TOP" | "BOTTOM") => void
+  USER_PREF_MOVE_COMPLETED_TASKS_TO_THE_BOTTOM: boolean
+  setMoveCompletedTasksSubtasksToTheBottom: (value: boolean) => void
   dateToView: Date
   nextDay: () => void
   prevDay: () => void

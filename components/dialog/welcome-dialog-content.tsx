@@ -1,4 +1,4 @@
-import { useContext, useState } from "react"
+import { useState } from "react"
 import Image from "next/image"
 import {
   CheckIcon,
@@ -12,7 +12,7 @@ import Separator from "../separator"
 import supabase from "@/lib/supabase"
 import { cn } from "@/lib/utils"
 import rocket from "../../assets/images/rocket.svg"
-import { SessionContext } from "@/contexts/SessionContextProvider"
+import { useSession } from "@supabase/auth-helpers-react"
 
 type WelcomeDialogContentProps = {
   onClose: () => void
@@ -22,19 +22,19 @@ const WelcomeDialogContent = ({ onClose }: WelcomeDialogContentProps) => {
   const [page, setPage] = useState(0)
   const [loading, setLoading] = useState(false)
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null)
-  const { session } = useContext(SessionContext)
+  const session = useSession()
 
   const uploadPhoto = async (e: any) => {
     setLoading(true)
     await supabase.storage
       .from("avatars")
-      .upload(`public/${session?.id}.png`, e.target.files[0], {
+      .upload(`public/${session?.user?.id}.png`, e.target.files[0], {
         cacheControl: "3600",
         upsert: true,
       })
     const { data: fetch } = await supabase.storage
       .from("avatars")
-      .createSignedUrl(`public/${session?.id}.png`, 60, {
+      .createSignedUrl(`public/${session?.user?.id}.png`, 60, {
         transform: {
           width: 100,
           height: 100,

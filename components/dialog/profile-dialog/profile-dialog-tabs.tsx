@@ -105,7 +105,7 @@ const ProfileDialogTabs = ({
     await supabase.auth.signOut()
   }
   return (
-    <div className={cn("flex h-full grow flex-col", className)}>
+    <div className={cn("flex h-full max-h-[85vh] grow flex-col", className)}>
       {sections.map((section, index) => (
         <ProfileDialogSection
           key={index}
