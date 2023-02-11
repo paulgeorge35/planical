@@ -11,7 +11,8 @@ type PersonalizationSettingsProps = {}
 
 const PersonalizationSettings = ({}: PersonalizationSettingsProps) => {
   const { theme, setTheme } = useTheme()
-  const { firstDayOfWeek, setFirstDayOfWeek } = useContext(ToolbarContext)
+  const { USER_PREF_FIRST_DAY_OF_WEEK, setFirstDayOfWeek } =
+    useContext(ToolbarContext)
   const mounted = useMounted()
   const themes = [
     { label: "Use system preferences", value: "system" },
@@ -76,7 +77,7 @@ const PersonalizationSettings = ({}: PersonalizationSettingsProps) => {
             <Select
               size="sm"
               condensed
-              value={firstDayOfWeek.toString()}
+              value={USER_PREF_FIRST_DAY_OF_WEEK.toString()}
               onChange={(value) =>
                 mounted && setFirstDayOfWeek(parseInt(value) as DayOfWeekNumber)
               }

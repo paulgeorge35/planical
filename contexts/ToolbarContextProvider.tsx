@@ -11,10 +11,10 @@ import { useLocalStorage } from "@/hooks/use-local-storage"
 
 export const ToolbarContext = createContext({
   today: new Date(new Date().toISOString().split("T")[0].replaceAll("-", "/")),
-  completeTaskOnSubtasksCompletion: true,
-  newTaskPosition: "TOP",
+  USER_PREF_COMPLETE_TASKS_AUTO: true,
+  USER_PREF_NEW_TASK_POSITION: "TOP",
   setCompleteTaskOnSubtasksCompletion: (_: boolean) => null,
-  firstDayOfWeek: 1,
+  USER_PREF_FIRST_DAY_OF_WEEK: 1,
   setFirstDayOfWeek: (_: DayOfWeekNumber) => null,
   dateToView: new Date(
     new Date().toISOString().split("T")[0].replaceAll("-", "/")
@@ -42,25 +42,39 @@ export const ToolbarContextProvider = ({
   let today = new Date(
     new Date().toISOString().split("T")[0].replaceAll("-", "/")
   )
-  const [firstDayOfWeek, setFirstDayOfWeek] = useLocalStorage<DayOfWeekNumber>(
-    "firstDayOfWeek",
-    1
-  )
-  const [
-    completeTaskOnSubtasksCompletion,
-    setCompleteTaskOnSubtasksCompletion,
-  ] = useLocalStorage("completeTaskOnSubtasksCompletion", true)
 
-  const [newTaskPosition, setNewTaskPosition] = useLocalStorage(
-    "newTaskPosition",
+  const [USER_PREF_NEW_TASK_POSITION, setNewTaskPosition] = useLocalStorage(
+    "USER_PREF_NEW_TASK_POSITION",
     "TOP"
+  )
+
+  const [USER_PREF_ROLL_OVER_TASKS, setRollOverTasksToTheNextDay] =
+    useLocalStorage("USER_PREF_ROLL_OVER_TASKS", true)
+
+  const [USER_PREF_ROLL_OVER_TASKS_POSITION, setRollOverTasksPosition] =
+    useLocalStorage("USER_PREF_ROLL_OVER_TASKS_POSITION", "TOP")
+
+  const [
+    USER_PREF_MOVE_COMPLETED_TASKS_TO_THE_BOTTOM,
+    setMoveCompletedTasksSubtasksToTheBottom,
+  ] = useLocalStorage("USER_PREF_MOVE_COMPLETED_TASKS_TO_THE_BOTTOM", true)
+
+  const [USER_PREF_COMPLETE_TASKS_AUTO, setCompleteTaskOnSubtasksCompletion] =
+    useLocalStorage("USER_PREF_COMPLETE_TASKS_AUTO", true)
+
+  const [USER_PREF_FIRST_DAY_OF_WEEK, setFirstDayOfWeek] =
+    useLocalStorage<DayOfWeekNumber>("USER_PREF_FIRST_DAY_OF_WEEK", 1)
+
+  const [USER_PREF_SHOW_WEEKENDS, setShowWeekends] = useLocalStorage(
+    "USER_PREF_SHOW_WEEKENDS",
+    true
   )
 
   const [dateToView, setDateToView] = useState<Date>(
     new Date(new Date().toISOString().split("T")[0].replaceAll("-", "/"))
   )
   const [weekToView, setWeekToView] = useState<Date[]>(
-    getWeekIntervalOfDate(today, firstDayOfWeek)
+    getWeekIntervalOfDate(today, USER_PREF_FIRST_DAY_OF_WEEK)
   )
   const [weekFromNow, setWeekFromNow] = useState<Date[]>(
     getWeekIntervalFromDate(today)
@@ -68,19 +82,28 @@ export const ToolbarContextProvider = ({
   const [taskDialog, setTaskDialog] = useState<TaskAllFields | null>(null)
 
   useEffect(() => {
-    setWeekToView(getWeekIntervalOfDate(dateToView, firstDayOfWeek))
-  }, [dateToView, firstDayOfWeek, getWeekIntervalOfDate, setWeekToView])
+    setWeekToView(
+      getWeekIntervalOfDate(dateToView, USER_PREF_FIRST_DAY_OF_WEEK)
+    )
+  }, [
+    dateToView,
+    USER_PREF_FIRST_DAY_OF_WEEK,
+    getWeekIntervalOfDate,
+    setWeekToView,
+  ])
 
   const value = {
     today: new Date(
       new Date().toISOString().split("T")[0].replaceAll("-", "/")
     ),
-    completeTaskOnSubtasksCompletion,
+    USER_PREF_COMPLETE_TASKS_AUTO,
     setCompleteTaskOnSubtasksCompletion: (value: boolean) =>
       setCompleteTaskOnSubtasksCompletion(value),
-    newTaskPosition: newTaskPosition as "TOP" | "BOTTOM",
+    USER_PREF_NEW_TASK_POSITION: USER_PREF_NEW_TASK_POSITION as
+      | "TOP"
+      | "BOTTOM",
     setNewTaskPosition: (value: "TOP" | "BOTTOM") => setNewTaskPosition(value),
-    firstDayOfWeek,
+    USER_PREF_FIRST_DAY_OF_WEEK,
     setFirstDayOfWeek: (value: DayOfWeekNumber) => setFirstDayOfWeek(value),
     dateToView,
     nextDay: () => setDateToView(addDays(1, dateToView)),

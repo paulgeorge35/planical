@@ -108,10 +108,10 @@ export type DayOfWeekNumber = 0 | 1 | 2 | 3 | 4 | 5 | 6
 
 export type ToolbarContextType = {
   today: Date
-  completeTaskOnSubtasksCompletion: boolean
-  newTaskPosition: "TOP" | "BOTTOM"
+  USER_PREF_COMPLETE_TASKS_AUTO: boolean
+  USER_PREF_NEW_TASK_POSITION: "TOP" | "BOTTOM"
   setCompleteTaskOnSubtasksCompletion: (_: boolean) => void
-  firstDayOfWeek: DayOfWeekNumber
+  USER_PREF_FIRST_DAY_OF_WEEK: DayOfWeekNumber
   setFirstDayOfWeek: (value: DayOfWeekNumber) => void
   dateToView: Date
   nextDay: () => void
