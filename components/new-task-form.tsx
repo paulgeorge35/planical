@@ -24,7 +24,7 @@ const NewTaskForm = ({
   return (
     <span
       className={cn(
-        "group flex w-full cursor-pointer flex-col rounded-xl border p-3 pt-0",
+        "group mb-4 flex w-full cursor-pointer flex-col rounded-xl border p-3 pt-0",
         "border-neutral-200 bg-white text-neutral-800",
         "dark:border-neutral-800 dark:bg-neutral-800 dark:text-white",
         className

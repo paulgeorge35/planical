@@ -108,9 +108,9 @@ const SidebarLeft = ({
       >
         🧠 Brain Dump
       </h1>
-      <div className="flex h-full flex-col space-y-2 p-3 pt-0">
+      <div className="flex h-full flex-col p-3 pt-0">
         <NewTaskButton
-          className="mb-2"
+          className="mb-4"
           tasks={tasks.filter((task) => task.dump === true)}
           toggle={() => {
             setIsAdding(true)

@@ -82,7 +82,7 @@ const SidebarRight = ({
       {mainView === "CALENDAR" ? (
         <span className="flex h-full w-full flex-col space-y-2">
           <NewTaskButton
-            className="mb-2"
+            className="mb-4"
             tasks={tasks.filter(
               (task) =>
                 task &&
