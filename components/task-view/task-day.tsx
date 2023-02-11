@@ -70,7 +70,7 @@ const TaskDay = ({ day }: TaskDayProps) => {
               ref={provided.innerRef}
               {...provided.droppableProps}
               className={cn(
-                "flex grow flex-col space-y-2 rounded-lg transition-colors duration-200 ease-in-out",
+                "flex grow flex-col rounded-lg transition-colors duration-200 ease-in-out",
                 snapshot.isDraggingOver && "bg-purple-500/5"
               )}
             >
@@ -81,7 +81,12 @@ const TaskDay = ({ day }: TaskDayProps) => {
                 )
                 .sort((a, b) => a?.index - b?.index)
                 .map((task, index) => (
-                  <TaskComponent key={index} index={index} data={task} />
+                  <TaskComponent
+                    key={index}
+                    index={index}
+                    data={task}
+                    className="mb-2"
+                  />
                 ))}
               {provided.placeholder}
             </div>
