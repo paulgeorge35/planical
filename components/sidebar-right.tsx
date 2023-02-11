@@ -19,7 +19,7 @@ const SidebarRight = ({
   right: boolean
   mainView: "CALENDAR" | "TASKS"
 }) => {
-  const { today, dateToView, prevDay, nextDay, newTaskPosition } =
+  const { today, dateToView, prevDay, nextDay, USER_PREF_NEW_TASK_POSITION } =
     useContext(ToolbarContext)
   const [isAdding, setIsAdding] = useState(false)
   const [newTask, setNewTask] = useState<TaskNewTypeOpt>()
@@ -82,7 +82,7 @@ const SidebarRight = ({
       {mainView === "CALENDAR" ? (
         <span className="flex h-full w-full flex-col space-y-2">
           <NewTaskButton
-            className="mb-2"
+            className="mb-4"
             tasks={tasks.filter(
               (task) =>
                 task &&
@@ -102,7 +102,7 @@ const SidebarRight = ({
                 done: false,
                 archived: false,
                 labelId: null,
-                index: newTaskPosition === "TOP" ? 0 : 1,
+                index: USER_PREF_NEW_TASK_POSITION === "TOP" ? 0 : 1,
                 indexes: [],
               })
             }}
@@ -123,7 +123,7 @@ const SidebarRight = ({
                 ref={provided.innerRef}
                 {...provided.droppableProps}
                 className={cn(
-                  "flex grow flex-col space-y-2 rounded-lg transition-colors duration-200 ease-in-out",
+                  "flex grow flex-col rounded-lg transition-colors duration-200 ease-in-out",
                   snapshot.isDraggingOver && "bg-purple-500/5"
                 )}
               >
@@ -135,7 +135,12 @@ const SidebarRight = ({
                   )
                   .sort((a, b) => a?.index - b?.index)
                   .map((task, index) => (
-                    <TaskComponent key={index} index={index} data={task} />
+                    <TaskComponent
+                      key={index}
+                      index={index}
+                      data={task}
+                      className="mb-2"
+                    />
                   ))}
                 {provided.placeholder}
               </div>

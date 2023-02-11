@@ -34,10 +34,16 @@ export function absoluteUrl(path: string) {
   return `${process.env.NEXT_PUBLIC_APP_URL}${path}`
 }
 
-export function getWeekIntervalOfDate(date: Date, firstDayOfWeek: number = 1) {
+export function getWeekIntervalOfDate(
+  date: Date,
+  USER_PREF_FIRST_DAY_OF_WEEK: number = 1
+) {
   let dateCopy = new Date(date.getTime())
   const day = dateCopy.getDay()
-  const start = addDays(-day + (day === 0 ? -6 : firstDayOfWeek), dateCopy)
+  const start = addDays(
+    -day + (day === 0 ? -6 : USER_PREF_FIRST_DAY_OF_WEEK),
+    dateCopy
+  )
   const end = addDays(6, start)
   const dates = []
   for (let dateCopy = start; dateCopy <= end; dateCopy = addDays(1, dateCopy)) {
@@ -84,6 +90,11 @@ export function compareDates(date1: Date, date2: Date) {
     date1.getDate() === date2.getDate()
   )
 }
+
+export const removeUndefined = (obj: any) =>
+  Object.keys(obj).forEach((key) =>
+    obj[key] === undefined ? delete obj[key] : {}
+  )
 
 export function isWeekToView(date: Date, week: Date[]) {
   return week.some((day) => compareDates(date, day))

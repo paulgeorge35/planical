@@ -11,6 +11,7 @@ specifiers:
   '@radix-ui/react-popover': ^1.0.3
   '@radix-ui/react-select': ^1.2.0
   '@radix-ui/react-separator': ^1.0.1
+  '@radix-ui/react-switch': ^1.0.1
   '@radix-ui/react-toolbar': ^1.0.1
   '@supabase/auth-helpers-nextjs': ^0.5.4
   '@supabase/auth-helpers-react': ^0.3.1
@@ -69,6 +70,7 @@ dependencies:
   '@radix-ui/react-popover': 1.0.3_yyloj25vv7zmuk3uh3z5jonzqq
   '@radix-ui/react-select': 1.2.0_yyloj25vv7zmuk3uh3z5jonzqq
   '@radix-ui/react-separator': 1.0.1_biqbaboplfbrettd7655fr4n2y
+  '@radix-ui/react-switch': 1.0.1_biqbaboplfbrettd7655fr4n2y
   '@radix-ui/react-toolbar': 1.0.1_biqbaboplfbrettd7655fr4n2y
   '@supabase/auth-helpers-nextjs': 0.5.4_qtvf6mjfeick7xf5purdyuznsu
   '@supabase/auth-helpers-react': 0.3.1_qtvf6mjfeick7xf5purdyuznsu
@@ -1149,6 +1151,24 @@ packages:
       '@babel/runtime': 7.20.7
       '@radix-ui/react-compose-refs': 1.0.0_react@18.2.0
       react: 18.2.0
+    dev: false
+
+  /@radix-ui/react-switch/1.0.1_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-tTxGluMtwrc5ffgAiOSMrYIx0r3vSTcgM4Vl8rqfpXcHt6ryB9B0OlFKUOiDpKASXlhvzfHf4Y0AYKJdpzjL8w==}
+    peerDependencies:
+      react: ^16.8 || ^17.0 || ^18.0
+      react-dom: ^16.8 || ^17.0 || ^18.0
+    dependencies:
+      '@babel/runtime': 7.20.7
+      '@radix-ui/primitive': 1.0.0
+      '@radix-ui/react-compose-refs': 1.0.0_react@18.2.0
+      '@radix-ui/react-context': 1.0.0_react@18.2.0
+      '@radix-ui/react-primitive': 1.0.1_biqbaboplfbrettd7655fr4n2y
+      '@radix-ui/react-use-controllable-state': 1.0.0_react@18.2.0
+      '@radix-ui/react-use-previous': 1.0.0_react@18.2.0
+      '@radix-ui/react-use-size': 1.0.0_react@18.2.0
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
     dev: false
 
   /@radix-ui/react-toggle-group/1.0.1_biqbaboplfbrettd7655fr4n2y:

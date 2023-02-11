@@ -14,7 +14,7 @@ type TaskDayProps = {
 }
 
 const TaskDay = ({ day }: TaskDayProps) => {
-  const { today, newTaskPosition } = useContext(ToolbarContext)
+  const { today, USER_PREF_NEW_TASK_POSITION } = useContext(ToolbarContext)
   const { tasks } = useContext(TaskContext)
   const [isAdding, setIsAdding] = useState(false)
   const [newTask, setNewTask] = useState<TaskNewTypeOpt>()
@@ -49,7 +49,7 @@ const TaskDay = ({ day }: TaskDayProps) => {
               done: false,
               archived: false,
               labelId: null,
-              index: newTaskPosition === "TOP" ? 0 : 1,
+              index: USER_PREF_NEW_TASK_POSITION === "TOP" ? 0 : 1,
               indexes: [],
             })
           }}
@@ -70,7 +70,7 @@ const TaskDay = ({ day }: TaskDayProps) => {
               ref={provided.innerRef}
               {...provided.droppableProps}
               className={cn(
-                "flex grow flex-col space-y-2 rounded-lg transition-colors duration-200 ease-in-out",
+                "flex grow flex-col rounded-lg transition-colors duration-200 ease-in-out",
                 snapshot.isDraggingOver && "bg-purple-500/5"
               )}
             >
@@ -81,7 +81,12 @@ const TaskDay = ({ day }: TaskDayProps) => {
                 )
                 .sort((a, b) => a?.index - b?.index)
                 .map((task, index) => (
-                  <TaskComponent key={index} index={index} data={task} />
+                  <TaskComponent
+                    key={index}
+                    index={index}
+                    data={task}
+                    className="mb-2"
+                  />
                 ))}
               {provided.placeholder}
             </div>

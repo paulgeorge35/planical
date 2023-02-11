@@ -21,7 +21,7 @@ const SidebarLeft = ({
 }) => {
   const isPhone = useMediaQuery("(max-width: 639px)")
   const { mainView } = useContext(SidebarContext)
-  const { newTaskPosition } = useContext(ToolbarContext)
+  const { USER_PREF_NEW_TASK_POSITION } = useContext(ToolbarContext)
   const sidebarRef = React.useRef<HTMLInputElement>(null)
   const [isResizing, setIsResizing] = React.useState(false)
   const [isAdding, setIsAdding] = React.useState(false)
@@ -108,9 +108,9 @@ const SidebarLeft = ({
       >
         🧠 Brain Dump
       </h1>
-      <div className="flex h-full flex-col space-y-2 p-3 pt-0">
+      <div className="flex h-full flex-col p-3 pt-0">
         <NewTaskButton
-          className="mb-2"
+          className="mb-4"
           tasks={tasks.filter((task) => task.dump === true)}
           toggle={() => {
             setIsAdding(true)
@@ -125,7 +125,7 @@ const SidebarLeft = ({
               done: false,
               archived: false,
               labelId: null,
-              index: newTaskPosition === "TOP" ? 0 : 1,
+              index: USER_PREF_NEW_TASK_POSITION === "TOP" ? 0 : 1,
               indexes: [],
             })
           }}
@@ -146,7 +146,7 @@ const SidebarLeft = ({
               ref={provided.innerRef}
               {...provided.droppableProps}
               className={cn(
-                "flex grow flex-col space-y-2 rounded-lg transition-colors duration-200 ease-in-out",
+                "flex grow flex-col rounded-lg transition-colors duration-200 ease-in-out",
                 snapshot.isDraggingOver && "bg-purple-500/5"
               )}
             >
@@ -157,7 +157,12 @@ const SidebarLeft = ({
                 )
                 .sort((a, b) => a?.index - b?.index)
                 .map((task, index) => (
-                  <TaskComponent key={task.id} index={index} data={task} />
+                  <TaskComponent
+                    key={task.id}
+                    index={index}
+                    data={task}
+                    className="mb-2"
+                  />
                 ))}
               {provided.placeholder}
             </div>

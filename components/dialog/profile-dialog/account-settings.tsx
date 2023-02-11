@@ -10,7 +10,7 @@ type AccountSettingsProps = {
 
 const AccountSettings = ({ fullName, email }: AccountSettingsProps) => {
   return (
-    <div className="flex h-full grow flex-col ">
+    <div className="flex h-full max-h-[85vh] grow flex-col">
       <div
         className={cn(
           "w-full border-b-[1px] p-4",

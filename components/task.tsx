@@ -23,37 +23,36 @@ const TaskComponent = ({ data, className, index }: TaskProps) => {
   const [timeExtended, setTimeExtended] = useState<boolean>(false)
   const { updateTask, createSubtask, updateSubtask, tasks, setTasks } =
     useContext(TaskContext)
-  const { completeTaskOnSubtasksCompletion, setTaskDialog } =
+  const { USER_PREF_COMPLETE_TASKS_AUTO, setTaskDialog } =
     useContext(ToolbarContext)
 
   useEffect(() => {
-    if (data.done === true) {
-      setChecked(true)
-      return
-    } else if (!data.subtasks || data.subtasks.length === 0) {
-      setChecked(false)
-      return
-    } else
-      setChecked(
-        data.subtasks.every((subtask) => subtask.done === true)
-          ? true
-          : data.subtasks.every((subtask) => subtask.done === false)
-          ? false
-          : "indeterminate"
-      )
+    setChecked(data.done)
+  }, [data, setChecked])
+
+  useEffect(() => {
     if (
+      data.done === false &&
       data.subtasks &&
-      data.subtasks.every((subtask) => subtask.done === true) &&
-      completeTaskOnSubtasksCompletion
+      data.subtasks.every((subtask) => subtask.done === true) === true &&
+      checked === data.done &&
+      USER_PREF_COMPLETE_TASKS_AUTO === true
     ) {
-      updateTask({ ...data, done: true })
+      updateTask({ ...data, done: true }, true)
       setTasks([
         ...tasks.map((task) =>
           task.id === data.id ? { ...data, done: true } : task
         ),
       ])
     }
-  }, [data, completeTaskOnSubtasksCompletion, tasks, setTasks, updateTask])
+  }, [
+    data,
+    USER_PREF_COMPLETE_TASKS_AUTO,
+    updateTask,
+    checked,
+    setTasks,
+    tasks,
+  ])
 
   const handleCheckChange = useCallback(() => {
     if (!data.done) {
@@ -104,7 +103,7 @@ const TaskComponent = ({ data, className, index }: TaskProps) => {
   return (
     <Draggable draggableId={data.id.toString()} index={index}>
       {(provided, snapshot) => (
-        <a
+        <span
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
@@ -163,7 +162,7 @@ const TaskComponent = ({ data, className, index }: TaskProps) => {
             }}
             updateSubtask={(subtask: Subtask) => updateSubtask(subtask)}
           />
-        </a>
+        </span>
       )}
     </Draggable>
   )
