@@ -1,13 +1,19 @@
 import { createContext, useEffect, useState } from "react"
 import addDays from "date-fns/esm/fp/addDays/index.js"
-import { DayOfWeekNumber, TaskAllFields, ToolbarContextType } from "types"
+import {
+  DayOfWeekNumber,
+  PickAndFlatten,
+  TaskAllFields,
+  ToolbarContextType,
+} from "types"
 import {
   getWeekIntervalFromDate,
   getWeekIntervalOfDate,
   isWeekToView,
 } from "@/lib/utils"
 import { format } from "date-fns"
-import { useLocalStorage } from "@/hooks/use-local-storage"
+import { UserSettings } from "@prisma/client"
+import { useLocalStorageWithDB } from "@/hooks/use-local-storage-db"
 
 export const ToolbarContext = createContext({
   today: new Date(new Date().toISOString().split("T")[0].replaceAll("-", "/")),
@@ -52,29 +58,30 @@ export const ToolbarContextProvider = ({
     new Date().toISOString().split("T")[0].replaceAll("-", "/")
   )
 
-  const [USER_PREF_NEW_TASK_POSITION, setNewTaskPosition] = useLocalStorage(
-    "USER_PREF_NEW_TASK_POSITION",
-    "TOP"
-  )
+  const [USER_PREF_NEW_TASK_POSITION, setNewTaskPosition] =
+    useLocalStorageWithDB("USER_PREF_NEW_TASK_POSITION", "TOP")
 
   const [USER_PREF_ROLL_OVER_TASKS, setRollOverTasksToTheNextDay] =
-    useLocalStorage("USER_PREF_ROLL_OVER_TASKS", true)
+    useLocalStorageWithDB("USER_PREF_ROLL_OVER_TASKS", true)
 
   const [USER_PREF_ROLL_OVER_TASKS_POSITION, setRollOverTasksPosition] =
-    useLocalStorage("USER_PREF_ROLL_OVER_TASKS_POSITION", "TOP")
+    useLocalStorageWithDB("USER_PREF_ROLL_OVER_TASKS_POSITION", "TOP")
 
   const [
     USER_PREF_MOVE_COMPLETED_TASKS_TO_THE_BOTTOM,
     setMoveCompletedTasksSubtasksToTheBottom,
-  ] = useLocalStorage("USER_PREF_MOVE_COMPLETED_TASKS_TO_THE_BOTTOM", true)
+  ] = useLocalStorageWithDB(
+    "USER_PREF_MOVE_COMPLETED_TASKS_TO_THE_BOTTOM",
+    true
+  )
 
   const [USER_PREF_COMPLETE_TASKS_AUTO, setCompleteTaskOnSubtasksCompletion] =
-    useLocalStorage("USER_PREF_COMPLETE_TASKS_AUTO", true)
+    useLocalStorageWithDB("USER_PREF_COMPLETE_TASKS_AUTO", true)
 
   const [USER_PREF_FIRST_DAY_OF_WEEK, setFirstDayOfWeek] =
-    useLocalStorage<DayOfWeekNumber>("USER_PREF_FIRST_DAY_OF_WEEK", 1)
+    useLocalStorageWithDB<DayOfWeekNumber>("USER_PREF_FIRST_DAY_OF_WEEK", 1)
 
-  const [USER_PREF_SHOW_WEEKENDS, setShowWeekends] = useLocalStorage(
+  const [USER_PREF_SHOW_WEEKENDS, setShowWeekends] = useLocalStorageWithDB(
     "USER_PREF_SHOW_WEEKENDS",
     true
   )
@@ -89,6 +96,26 @@ export const ToolbarContextProvider = ({
     getWeekIntervalFromDate(today)
   )
   const [taskDialog, setTaskDialog] = useState<TaskAllFields | null>(null)
+
+  const patchSettings = async (
+    settings: PickAndFlatten<Omit<Partial<UserSettings>, "id" | "userId">>
+  ) => {
+    const res = await (
+      await fetch("/api/users/settings", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        cache: "force-cache",
+        body: JSON.stringify({
+          ...settings,
+        }),
+      })
+    ).json()
+    for (const [key, value] of Object.entries(res.settings)) {
+      localStorage.setItem(key, JSON.stringify(value))
+    }
+  }
 
   useEffect(() => {
     setWeekToView(
@@ -106,27 +133,58 @@ export const ToolbarContextProvider = ({
       new Date().toISOString().split("T")[0].replaceAll("-", "/")
     ),
     USER_PREF_COMPLETE_TASKS_AUTO,
-    setCompleteTaskOnSubtasksCompletion: (value: boolean) =>
-      setCompleteTaskOnSubtasksCompletion(value),
+    setCompleteTaskOnSubtasksCompletion: (value: boolean) => {
+      setCompleteTaskOnSubtasksCompletion(value)
+      patchSettings({
+        USER_PREF_COMPLETE_TASKS_AUTO: value,
+      })
+    },
     USER_PREF_NEW_TASK_POSITION: USER_PREF_NEW_TASK_POSITION as
       | "TOP"
       | "BOTTOM",
-    setNewTaskPosition: (value: "TOP" | "BOTTOM") => setNewTaskPosition(value),
+    setNewTaskPosition: (value: "TOP" | "BOTTOM") => {
+      setNewTaskPosition(value)
+      patchSettings({
+        USER_PREF_NEW_TASK_POSITION: value,
+      })
+    },
     USER_PREF_FIRST_DAY_OF_WEEK,
-    setFirstDayOfWeek: (value: DayOfWeekNumber) => setFirstDayOfWeek(value),
+    setFirstDayOfWeek: (value: DayOfWeekNumber) => {
+      setFirstDayOfWeek(value)
+      patchSettings({
+        USER_PREF_FIRST_DAY_OF_WEEK: value,
+      })
+    },
     USER_PREF_SHOW_WEEKENDS,
-    setShowWeekends: (value: boolean) => setShowWeekends(value),
+    setShowWeekends: (value: boolean) => {
+      setShowWeekends(value)
+      patchSettings({
+        USER_PREF_SHOW_WEEKENDS: value,
+      })
+    },
     USER_PREF_ROLL_OVER_TASKS,
-    setRollOverTasksToTheNextDay: (value: boolean) =>
-      setRollOverTasksToTheNextDay(value),
+    setRollOverTasksToTheNextDay: (value: boolean) => {
+      setRollOverTasksToTheNextDay(value)
+      patchSettings({
+        USER_PREF_ROLL_OVER_TASKS: value,
+      })
+    },
     USER_PREF_ROLL_OVER_TASKS_POSITION: USER_PREF_ROLL_OVER_TASKS_POSITION as
       | "TOP"
       | "BOTTOM",
-    setRollOverTasksPosition: (value: "TOP" | "BOTTOM") =>
-      setRollOverTasksPosition(value),
+    setRollOverTasksPosition: (value: "TOP" | "BOTTOM") => {
+      setRollOverTasksPosition(value)
+      patchSettings({
+        USER_PREF_ROLL_OVER_TASKS_POSITION: value,
+      })
+    },
     USER_PREF_MOVE_COMPLETED_TASKS_TO_THE_BOTTOM,
-    setMoveCompletedTasksSubtasksToTheBottom: (value: boolean) =>
-      setMoveCompletedTasksSubtasksToTheBottom(value),
+    setMoveCompletedTasksSubtasksToTheBottom: (value: boolean) => {
+      setMoveCompletedTasksSubtasksToTheBottom(value)
+      patchSettings({
+        USER_PREF_MOVE_COMPLETED_TASKS_TO_THE_BOTTOM: value,
+      })
+    },
     dateToView,
     nextDay: () => setDateToView(addDays(1, dateToView)),
     prevDay: () => setDateToView(addDays(-1, dateToView)),

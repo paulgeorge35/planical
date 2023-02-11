@@ -29,6 +29,14 @@ export type PickAndFlatten<T> = {
   [K in keyof T]: T[K]
 } & {}
 
+export type DeepPartial<T> = {
+  [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P]
+}
+
+export type Partial<T> = {
+  [P in keyof T]?: T[P]
+}
+
 export interface UserSession {
   id: string
   aud: string

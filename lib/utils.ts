@@ -91,6 +91,11 @@ export function compareDates(date1: Date, date2: Date) {
   )
 }
 
+export const removeUndefined = (obj: any) =>
+  Object.keys(obj).forEach((key) =>
+    obj[key] === undefined ? delete obj[key] : {}
+  )
+
 export function isWeekToView(date: Date, week: Date[]) {
   return week.some((day) => compareDates(date, day))
 }

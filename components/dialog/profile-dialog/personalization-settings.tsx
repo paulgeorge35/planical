@@ -4,9 +4,10 @@ import Switch from "@/components/switch"
 import { ToolbarContext } from "@/contexts/ToolbarContextProvider"
 import { useMounted } from "@/hooks/use-mounted"
 import { cn } from "@/lib/utils"
+import { Theme, UserSettings } from "@prisma/client"
 import { useTheme } from "next-themes"
 import { useContext } from "react"
-import { DayOfWeekNumber } from "types"
+import { DayOfWeekNumber, PickAndFlatten } from "types"
 
 type PersonalizationSettingsProps = {}
 
@@ -48,6 +49,26 @@ const PersonalizationSettings = ({}: PersonalizationSettingsProps) => {
     { label: "Bottom of the list", value: "BOTTOM" },
   ]
 
+  const patchSettings = async (
+    settings: PickAndFlatten<Omit<Partial<UserSettings>, "id" | "userId">>
+  ) => {
+    const res = await (
+      await fetch("/api/users/settings", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        cache: "force-cache",
+        body: JSON.stringify({
+          ...settings,
+        }),
+      })
+    ).json()
+    for (const [key, value] of Object.entries(res.settings)) {
+      localStorage.setItem(key, value as string)
+    }
+  }
+
   return (
     <div className="flex h-full max-h-[85vh] grow flex-col">
       <div
@@ -75,7 +96,12 @@ const PersonalizationSettings = ({}: PersonalizationSettingsProps) => {
             </label>
             <Select
               value={theme || ""}
-              onChange={(value) => mounted && setTheme(value)}
+              onChange={(value) => {
+                if (mounted) {
+                  setTheme(value)
+                  patchSettings({ theme: value as Theme })
+                }
+              }}
               options={themes}
             />
           </fieldset>

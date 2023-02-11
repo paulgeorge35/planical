@@ -8,16 +8,17 @@ datasource db {
 }
 
 model Profile {
-    id         String   @id(map: "profile_pkey") @db.Uuid
-    username   String?  @unique(map: "profile_username_key")
-    email      String   @unique
+    id         String        @id(map: "profile_pkey") @db.Uuid
+    username   String?       @unique(map: "profile_username_key")
+    email      String        @unique
     full_name  String?
     avatar_url String?
     labels     Label[]
     tasks      Task[]
     columns    Column[]
-    createdAt  DateTime @default(now())
-    updatedAt  DateTime @updatedAt
+    createdAt  DateTime      @default(now())
+    settings   UserSettings?
+    updatedAt  DateTime      @updatedAt
 }
 
 model Task {
@@ -84,6 +85,21 @@ model Column {
     user     Profile @relation(fields: [userId], references: [id])
 }
 
+model UserSettings {
+    id                                           Int      @id @unique @default(autoincrement())
+    theme                                        Theme    @default(system)
+    USER_PREF_NEW_TASK_POSITION                  Position @default(TOP)
+    USER_PREF_ROLL_OVER_TASKS                    Boolean  @default(true)
+    USER_PREF_ROLL_OVER_TASKS_POSITION           Position @default(TOP)
+    USER_PREF_MOVE_COMPLETED_TASKS_TO_THE_BOTTOM Boolean  @default(true)
+    USER_PREF_COMPLETE_TASKS_AUTO                Boolean  @default(false)
+    USER_PREF_FIRST_DAY_OF_WEEK                  Int      @default(1)
+    USER_PREF_SHOW_WEEKENDS                      Boolean  @default(true)
+    userId                                       String   @unique @db.Uuid
+    user                                         Profile  @relation(fields: [userId], references: [id])
+    updatedAt                                    DateTime @updatedAt
+}
+
 enum RecurrenceType {
     DAILY
     DAILY_WEEKDAYS
@@ -92,4 +108,15 @@ enum RecurrenceType {
     MONTHLY
     BIMONTHLY
     YEARLY
+}
+
+enum Theme {
+    light
+    dark
+    system
+}
+
+enum Position {
+    TOP
+    BOTTOM
 }
