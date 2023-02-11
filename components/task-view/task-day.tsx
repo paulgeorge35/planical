@@ -14,7 +14,7 @@ type TaskDayProps = {
 }
 
 const TaskDay = ({ day }: TaskDayProps) => {
-  const { today, newTaskPosition } = useContext(ToolbarContext)
+  const { today, USER_PREF_NEW_TASK_POSITION } = useContext(ToolbarContext)
   const { tasks } = useContext(TaskContext)
   const [isAdding, setIsAdding] = useState(false)
   const [newTask, setNewTask] = useState<TaskNewTypeOpt>()
@@ -49,7 +49,7 @@ const TaskDay = ({ day }: TaskDayProps) => {
               done: false,
               archived: false,
               labelId: null,
-              index: newTaskPosition === "TOP" ? 0 : 1,
+              index: USER_PREF_NEW_TASK_POSITION === "TOP" ? 0 : 1,
               indexes: [],
             })
           }}

@@ -16,7 +16,7 @@ const ProfileDialogContent = ({}: ProfileDialogContentProps) => {
   >(ProfileDialogTabSections[0].tabs[0].value)
 
   return (
-    <span className="flex flex-row">
+    <span className="flex h-full w-full flex-row">
       <div
         className={cn(
           "w-[300px] border-r-[1px] p-4 ",

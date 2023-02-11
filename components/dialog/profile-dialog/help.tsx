@@ -1,15 +1,14 @@
 import Separator from "@/components/separator"
-import { SessionContext } from "@/contexts/SessionContextProvider"
 import { cn } from "@/lib/utils"
 import { ArrowRightIcon } from "@radix-ui/react-icons"
-import { useContext } from "react"
+import { useSession } from "@supabase/auth-helpers-react"
 
 type HelpProps = {}
 
 const Help = ({}: HelpProps) => {
-  const { session } = useContext(SessionContext)
+  const session = useSession()
   return (
-    <div className="flex h-full grow flex-col ">
+    <div className="flex h-full max-h-[85vh] grow flex-col">
       <div
         className={cn(
           "w-full border-b-[1px] p-4",
@@ -86,7 +85,7 @@ const Help = ({}: HelpProps) => {
               "dark:text-neutral-200"
             )}
           >
-            {session?.id}
+            {session?.user?.id}
           </a>
         </fieldset>
       </div>

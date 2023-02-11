@@ -23,7 +23,7 @@ const TaskComponent = ({ data, className, index }: TaskProps) => {
   const [timeExtended, setTimeExtended] = useState<boolean>(false)
   const { updateTask, createSubtask, updateSubtask, tasks, setTasks } =
     useContext(TaskContext)
-  const { completeTaskOnSubtasksCompletion, setTaskDialog } =
+  const { USER_PREF_COMPLETE_TASKS_AUTO, setTaskDialog } =
     useContext(ToolbarContext)
 
   useEffect(() => {
@@ -36,7 +36,7 @@ const TaskComponent = ({ data, className, index }: TaskProps) => {
       data.subtasks &&
       data.subtasks.every((subtask) => subtask.done === true) === true &&
       checked === data.done &&
-      completeTaskOnSubtasksCompletion === true
+      USER_PREF_COMPLETE_TASKS_AUTO === true
     ) {
       updateTask({ ...data, done: true }, true)
       setTasks([
@@ -47,7 +47,7 @@ const TaskComponent = ({ data, className, index }: TaskProps) => {
     }
   }, [
     data,
-    completeTaskOnSubtasksCompletion,
+    USER_PREF_COMPLETE_TASKS_AUTO,
     updateTask,
     checked,
     setTasks,

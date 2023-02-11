@@ -19,7 +19,7 @@ const SidebarRight = ({
   right: boolean
   mainView: "CALENDAR" | "TASKS"
 }) => {
-  const { today, dateToView, prevDay, nextDay, newTaskPosition } =
+  const { today, dateToView, prevDay, nextDay, USER_PREF_NEW_TASK_POSITION } =
     useContext(ToolbarContext)
   const [isAdding, setIsAdding] = useState(false)
   const [newTask, setNewTask] = useState<TaskNewTypeOpt>()
@@ -102,7 +102,7 @@ const SidebarRight = ({
                 done: false,
                 archived: false,
                 labelId: null,
-                index: newTaskPosition === "TOP" ? 0 : 1,
+                index: USER_PREF_NEW_TASK_POSITION === "TOP" ? 0 : 1,
                 indexes: [],
               })
             }}

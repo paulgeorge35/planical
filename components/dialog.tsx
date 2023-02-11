@@ -39,7 +39,7 @@ const Dialog = ({
           dismissOnEscapeKey && event.key === "Escape" && toggle()
         }
         className={cn(
-          "fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[850px] translate-x-[-50%] translate-y-[-50%] overflow-hidden rounded-lg p-6 shadow-md animate-in focus:outline-none",
+          "absolute top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[900px] translate-x-[-50%] translate-y-[-50%] overflow-hidden rounded-lg p-6 shadow-md animate-in focus:outline-none",
           "bg-white",
           "dark:bg-neutral-900",
           className
