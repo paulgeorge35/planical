@@ -181,6 +181,23 @@ export const updateTask = async (
           ],
         },
       })
+      await prisma.task.updateMany({
+        where: {
+          id: {
+            not: taskUpdated.id,
+          },
+          index: {
+            gte: task.index,
+          },
+          dump: taskUpdated.dump,
+          date: taskUpdated.date,
+        },
+        data: {
+          index: {
+            increment: 1,
+          },
+        },
+      })
       console.log(
         "Destination column updated: ",
         JSON.stringify(destinationColumnUpdated, null, 2)

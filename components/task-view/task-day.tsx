@@ -82,7 +82,7 @@ const TaskDay = ({ day }: TaskDayProps) => {
                 .sort((a, b) => a?.index - b?.index)
                 .map((task, index) => (
                   <TaskComponent
-                    key={index}
+                    key={task.id}
                     index={index}
                     data={task}
                     className="mb-2"
