@@ -32,7 +32,7 @@ const SidebarRight = ({
         right ? "block" : "hidden",
         mainView === "CALENDAR"
           ? "bg-slate-50 dark:bg-neutral-900"
-          : "absolute right-0 min-h-[calc(100vh-48px)] bg-white p-0 dark:bg-neutral-800 phone:hidden",
+          : "absolute right-0 max-h-[calc(100vh-48px)] min-h-[calc(100vh-48px)] bg-white p-0 dark:bg-neutral-800 phone:hidden",
         "phone:!h-screen phone:!w-screen"
       )}
     >
