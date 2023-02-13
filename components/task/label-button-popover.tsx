@@ -85,7 +85,7 @@ const LabelButtonPopover = ({
                   <Button
                     key={label.id}
                     onClick={() => {
-                      if (updateLabel) updateLabel(label.id)
+                      if (updateLabel) updateLabel(label)
                       setOpen(false)
                     }}
                     className={cn(
