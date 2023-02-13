@@ -123,6 +123,9 @@ export const updateTask = async (
         id: task.id,
       },
       data: task,
+      include: {
+        label: true,
+      },
     })
     console.log("Task Updated: ", JSON.stringify(taskUpdated, null, 2))
 
