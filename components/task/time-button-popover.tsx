@@ -37,10 +37,7 @@ const TimeButtonPopover = ({
     <Popover.Root open={open}>
       <Popover.Trigger asChild>
         <button
-          onClick={(e) => {
-            e.stopPropagation()
-            setOpen(!open)
-          }}
+          onClick={(e) => setOpen(!open)}
           className={cn(
             "border-0 p-0 pl-2 text-xs text-neutral-400 hover:text-neutral-800",
             "dark:text-neutral-400 dark:hover:text-neutral-200"

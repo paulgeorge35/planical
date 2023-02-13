@@ -31,10 +31,7 @@ const LabelButtonPopover = ({
     <Popover.Root open={open}>
       <Popover.Trigger asChild>
         <button
-          onClick={(e) => {
-            e.stopPropagation()
-            setOpen(!open)
-          }}
+          onClick={(e) => setOpen(!open)}
           className={cn("m-0 border-0 p-0")}
           aria-label={`Update task label`}
         >
@@ -88,8 +85,7 @@ const LabelButtonPopover = ({
                 .map((label: Label) => (
                   <Button
                     key={label.id}
-                    onClick={(e) => {
-                      e.stopPropagation()
+                    onClick={() => {
                       if (updateLabel) updateLabel(label.id)
                       setOpen(false)
                     }}
