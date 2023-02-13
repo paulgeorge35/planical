@@ -5,17 +5,16 @@ import {
 } from "@radix-ui/react-icons"
 import { cn } from "@/lib/utils"
 import { TaskAllFields, TaskNewTypeOpt } from "types"
-import LabelColorBubble from "./label-color-bubble"
 import LabelButtonPopover from "./label-button-popover"
 import { useContext, useState } from "react"
 import { TaskContext } from "@/contexts/TaskContextProvider"
-import { Task } from "@prisma/client"
+import { Label } from "@prisma/client"
 
 type TaskShortActionsProps = {
   data: TaskAllFields | TaskNewTypeOpt
   toggleExtended: () => void
   extended: boolean
-  updateTask?: (labelId: number) => void
+  updateTask?: (label: Label) => void
   className?: string
   persistent?: boolean
   isDragging?: boolean
@@ -56,7 +55,7 @@ const TaskShortActions = ({
             labels={labels}
             open={showLabelPopover}
             setOpen={(open: boolean) => setShowLabelPopover(open)}
-            updateLabel={(labelId: number) => updateTask && updateTask(labelId)}
+            updateLabel={(label: Label) => updateTask && updateTask(label)}
           />
         </span>
       ) : (
@@ -74,7 +73,7 @@ const TaskShortActions = ({
             labels={labels}
             open={showLabelPopover}
             setOpen={(open: boolean) => setShowLabelPopover(open)}
-            updateLabel={(labelId: number) => updateTask && updateTask(labelId)}
+            updateLabel={(label: Label) => updateTask && updateTask(label)}
           />
         </span>
       )}
@@ -89,10 +88,7 @@ const TaskShortActions = ({
         />
       )}
       <a
-        onClick={(e) => {
-          e.stopPropagation()
-          toggleExtended()
-        }}
+        onClick={(e) => toggleExtended()}
         className={cn(
           "mr-2 cursor-pointer flex-row items-center",
           "hover:text-blue-500",

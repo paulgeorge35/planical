@@ -24,7 +24,6 @@ const TimePreview = ({
         className
       )}
       onClick={(e) => {
-        e.stopPropagation()
         if (toggleExtended) toggleExtended()
       }}
     >

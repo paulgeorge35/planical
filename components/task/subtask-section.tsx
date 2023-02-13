@@ -30,20 +30,19 @@ const Subtask = ({
   const [inputRef, setInputRef] = useState<HTMLLabelElement | null>(null)
 
   return (
-    <span className="flex w-full flex-row flex-wrap items-start pl-1">
-      <DragHandleDots2Icon
-        className={cn(
-          "mr-2 flex h-4 w-4 cursor-grab items-center justify-center"
-        )}
-      />
-      <Checkbox
-        checked={subtask.done}
-        onChange={() =>
-          updateSubtask && updateSubtask({ ...subtask, done: !subtask.done })
-        }
-        onClick={(e) => e.stopPropagation()}
-      />
+    <span className="inline-flex w-full flex-row flex-wrap items-start pl-1">
       <fieldset className="flex grow flex-row items-center">
+        <DragHandleDots2Icon
+          className={cn(
+            "mr-2 flex h-4 w-4 cursor-grab items-center justify-center"
+          )}
+        />
+        <Checkbox
+          checked={subtask.done}
+          onChange={() =>
+            updateSubtask && updateSubtask({ ...subtask, done: !subtask.done })
+          }
+        />
         <label
           htmlFor="title"
           className="hidden"
@@ -53,17 +52,14 @@ const Subtask = ({
         </label>
         <input
           className={cn(
-            "flex-auto grow resize-none overflow-y-hidden break-words bg-transparent px-2 text-xs outline-none"
+            "h-8 flex-auto grow resize-none overflow-y-hidden break-words bg-transparent px-2 text-xs outline-none"
           )}
           type={"text"}
           id="title"
           name="title"
           value={data.title}
           onChange={(e) => setData({ ...data, title: e.target.value })}
-          onClick={(e) => {
-            e.stopPropagation()
-            inputRef?.click()
-          }}
+          onClick={(e) => inputRef?.click()}
           onKeyDown={(e) => {
             if (e.key === "Enter" && updateSubtask) {
               updateSubtask(data)
@@ -71,17 +67,16 @@ const Subtask = ({
           }}
           onBlur={() => updateSubtask && updateSubtask(data)}
           placeholder="Subtask description"
-          autoFocus
+        />
+        <DotsVerticalIcon
+          className={cn(
+            "flex h-4 w-4 cursor-pointer items-center justify-center",
+            "hover:text-neutral-800",
+            "dark:hover:text-white",
+            "text-neutral-400"
+          )}
         />
       </fieldset>
-      <DotsVerticalIcon
-        className={cn(
-          "flex h-4 w-4 cursor-pointer items-center justify-center",
-          "hover:text-neutral-800",
-          "dark:hover:text-white",
-          "text-neutral-400"
-        )}
-      />
     </span>
   )
 }

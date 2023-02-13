@@ -1,7 +1,7 @@
 import { TaskContext } from "@/contexts/TaskContextProvider"
 import { ToolbarContext } from "@/contexts/ToolbarContextProvider"
 import { cn } from "@/lib/utils"
-import { Subtask, Task } from "@prisma/client"
+import { Label, Subtask, Task } from "@prisma/client"
 import { useCallback, useContext, useEffect, useState } from "react"
 import { Draggable } from "react-beautiful-dnd"
 import { TaskAllFields } from "types"
@@ -89,11 +89,11 @@ const TaskComponent = ({ data, className, index }: TaskProps) => {
   )
 
   const handleChangeLabel = useCallback(
-    (labelId: number) => {
-      updateTask({ ...data, labelId }, true)
+    (label: Label) => {
+      updateTask({ ...data, labelId: label.id }, true)
       setTasks([
         ...tasks.map((task) =>
-          task.id !== data.id ? task : { ...data, labelId }
+          task.id !== data.id ? task : { ...data, labelId: label.id, label }
         ),
       ])
     },
@@ -121,11 +121,7 @@ const TaskComponent = ({ data, className, index }: TaskProps) => {
           )}
         >
           <span className="flex flex-row items-center">
-            <Checkbox
-              checked={checked}
-              onChange={handleCheckChange}
-              onClick={(e) => e.stopPropagation()}
-            />
+            <Checkbox checked={checked} onChange={handleCheckChange} />
             <a
               onClick={(e) => {
                 if (e.target === e.currentTarget) setTaskDialog(data)
@@ -145,7 +141,7 @@ const TaskComponent = ({ data, className, index }: TaskProps) => {
             extended={extended && snapshot.isDragging === false}
             toggleExtended={() => setExtended(!extended)}
             isDragging={snapshot.isDragging}
-            updateTask={(labelId: number) => handleChangeLabel(labelId)}
+            updateTask={(label: Label) => handleChangeLabel(label)}
           />
           <TimeSection
             extended={timeExtended}

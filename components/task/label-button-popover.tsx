@@ -13,7 +13,7 @@ type LabelButtonPopoverProps = {
   open: boolean
   setOpen: (open: boolean) => void
   labels: Label[]
-  updateLabel?: (labelId: number) => void
+  updateLabel?: (label: Label) => void
   className?: string
 }
 
@@ -24,17 +24,13 @@ const LabelButtonPopover = ({
   updateLabel,
   setOpen,
 }: LabelButtonPopoverProps) => {
-  const [data, setData] = useState<Label | null>(label)
   const [search, setSearch] = useState("")
 
   return (
     <Popover.Root open={open}>
       <Popover.Trigger asChild>
         <button
-          onClick={(e) => {
-            e.stopPropagation()
-            setOpen(!open)
-          }}
+          onClick={(e) => setOpen(!open)}
           className={cn("m-0 border-0 p-0")}
           aria-label={`Update task label`}
         >
@@ -88,9 +84,8 @@ const LabelButtonPopover = ({
                 .map((label: Label) => (
                   <Button
                     key={label.id}
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      if (updateLabel) updateLabel(label.id)
+                    onClick={() => {
+                      if (updateLabel) updateLabel(label)
                       setOpen(false)
                     }}
                     className={cn(
