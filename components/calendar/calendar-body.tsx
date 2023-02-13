@@ -3,7 +3,6 @@ import { cn, compareDates } from "@/lib/utils"
 import { TriangleRightIcon } from "@radix-ui/react-icons"
 import { format } from "date-fns"
 import { useContext, useEffect, useRef, useState } from "react"
-import Task from "./task"
 
 type CalendarHourProps = {
   isFirst: boolean

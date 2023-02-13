@@ -1,6 +1,6 @@
 import { TaskContext } from "@/contexts/TaskContextProvider"
 import { ToolbarContext } from "@/contexts/ToolbarContextProvider"
-import { adjustDateToTimezone, cn, compareDates } from "@/lib/utils"
+import { cn, compareDates } from "@/lib/utils"
 import { format } from "date-fns"
 import { useContext, useState } from "react"
 import { Droppable } from "react-beautiful-dnd"
@@ -11,13 +11,15 @@ import TaskComponent from "../task"
 
 type TaskDayProps = {
   day: Date
+  isToday: boolean
 }
 
-const TaskDay = ({ day }: TaskDayProps) => {
-  const { today, USER_PREF_NEW_TASK_POSITION } = useContext(ToolbarContext)
+const TaskDay = ({ day, isToday }: TaskDayProps) => {
+  const { USER_PREF_NEW_TASK_POSITION } = useContext(ToolbarContext)
   const { tasks } = useContext(TaskContext)
   const [isAdding, setIsAdding] = useState(false)
   const [newTask, setNewTask] = useState<TaskNewTypeOpt>()
+
   return (
     <span className="flex h-full flex-col p-2 pt-3">
       <span className="flex w-[16vw] items-center pb-3">
@@ -25,9 +27,7 @@ const TaskDay = ({ day }: TaskDayProps) => {
           {format(day, "EEE")}
           <span className="text-neutral-500"> {format(day, "MMM dd")}</span>
         </h1>
-        {compareDates(today, day) && (
-          <p className="pl-2 text-xs text-primary">Today</p>
-        )}
+        {isToday && <p className="pl-2 text-xs text-primary">Today</p>}
       </span>
       <div className="flex h-full flex-col">
         <NewTaskButton

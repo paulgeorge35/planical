@@ -20,7 +20,8 @@ type ToolbarProps = {
 const Toolbar = ({ openProfileDialogue }: ToolbarProps) => {
   const { mainView, toggleMainView, left, setLeft, right, setRight } =
     useContext(SidebarContext)
-  const { month, nextWeek, prevWeek, resetToday } = useContext(ToolbarContext)
+  const { month, nextWeek, prevWeek, resetToday, dateIntervalToView } =
+    useContext(ToolbarContext)
   return (
     <div className={cn("flex h-full grow items-center justify-between px-4")}>
       <ArrowLeftIcon
@@ -77,7 +78,7 @@ const Toolbar = ({ openProfileDialogue }: ToolbarProps) => {
               rootClassName="h-full"
               className="ml-0"
             >
-              Today
+              Today {dateIntervalToView.length}
             </Button>
           </span>
         )}

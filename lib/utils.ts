@@ -63,6 +63,21 @@ export function getWeekIntervalFromDate(date: Date) {
   return dates
 }
 
+export function getDateIntervalRelativeToDate(
+  date: Date,
+  daysAgo: number,
+  daysAhead: number
+) {
+  let dateCopy = new Date(date.getTime())
+  const start = addDays(-daysAgo, dateCopy)
+  const end = addDays(daysAhead, dateCopy)
+  let dates = []
+  for (let dateCopy = start; dateCopy <= end; dateCopy = addDays(1, dateCopy)) {
+    dates.push(new Date(dateCopy))
+  }
+  return dates
+}
+
 export function getDayToViewFromWeek(week: Date[], day: Date) {
   return week.find((date) => date.getDay() === day.getDay()) as Date
 }

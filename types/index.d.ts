@@ -137,9 +137,12 @@ export type ToolbarContextType = {
   weekToView: Date[]
   nextWeek: () => void
   prevWeek: () => void
-  weekFromNow: Date[]
+  dateIntervalToView: Date[]
+  resetDateIntervalToView: () => void
   addPrevWeek: () => void
   addNextWeek: () => void
+  //   addDaysToInterval: (date: Date, days: number) => void
+  setDateIntervalToView: (interval: Date[]) => void
   month: string
   isWeekToView: () => boolean
   taskDialog: TaskAllFields | null
