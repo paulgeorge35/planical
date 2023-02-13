@@ -88,10 +88,7 @@ const TaskShortActions = ({
         />
       )}
       <a
-        onClick={(e) => {
-          e.stopPropagation()
-          toggleExtended()
-        }}
+        onClick={(e) => toggleExtended()}
         className={cn(
           "mr-2 cursor-pointer flex-row items-center",
           "hover:text-blue-500",

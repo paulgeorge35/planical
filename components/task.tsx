@@ -121,11 +121,7 @@ const TaskComponent = ({ data, className, index }: TaskProps) => {
           )}
         >
           <span className="flex flex-row items-center">
-            <Checkbox
-              checked={checked}
-              onChange={handleCheckChange}
-              onClick={(e) => e.stopPropagation()}
-            />
+            <Checkbox checked={checked} onChange={handleCheckChange} />
             <a
               onClick={(e) => {
                 if (e.target === e.currentTarget) setTaskDialog(data)
