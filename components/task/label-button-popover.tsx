@@ -13,7 +13,7 @@ type LabelButtonPopoverProps = {
   open: boolean
   setOpen: (open: boolean) => void
   labels: Label[]
-  updateLabel?: (labelId: number) => void
+  updateLabel?: (label: Label) => void
   className?: string
 }
 
@@ -24,7 +24,6 @@ const LabelButtonPopover = ({
   updateLabel,
   setOpen,
 }: LabelButtonPopoverProps) => {
-  const [data, setData] = useState<Label | null>(label)
   const [search, setSearch] = useState("")
 
   return (
