@@ -58,7 +58,7 @@ export const TaskContextProvider = ({
         body: JSON.stringify(data),
       })
     ).json()
-    if (res) setTasks([res.task, ...tasks])
+    if (res) setTasksWithIntersect([res.task, ...tasks])
     return res
   }
 
@@ -77,7 +77,9 @@ export const TaskContextProvider = ({
       })
     ).json()
     if (res && dontSetAfter !== true)
-      setTasks([...tasks.filter((l) => (l.id !== res.task.id ? l : res.task))])
+      setTasksWithIntersect([
+        ...tasks.filter((l) => (l.id !== res.task.id ? l : res.task)),
+      ])
     return res
   }
 
@@ -91,7 +93,7 @@ export const TaskContextProvider = ({
         cache: "no-store",
       })
     ).json()
-    if (res) setTasks(tasks.filter((l) => l.id !== res.id))
+    if (res) setTasksWithIntersect(tasks.filter((l) => l.id !== res.id))
     return res
   }
 
@@ -107,7 +109,7 @@ export const TaskContextProvider = ({
       })
     ).json()
     if (res)
-      setTasks([
+      setTasksWithIntersect([
         ...tasks.map((task) =>
           task.id === res.subtask.taskId
             ? {
@@ -138,7 +140,7 @@ export const TaskContextProvider = ({
       })
     ).json()
     if (res)
-      setTasks([
+      setTasksWithIntersect([
         ...tasks.map((task) =>
           task.id === res.subtask.taskId
             ? {
@@ -174,7 +176,7 @@ export const TaskContextProvider = ({
       })
     ).json()
     if (res)
-      setTasks([
+      setTasksWithIntersect([
         ...tasks.map((task) =>
           task.id === res.subtask.taskId
             ? {
@@ -253,11 +255,40 @@ export const TaskContextProvider = ({
     return res
   }
 
+  const setTasksWithIntersect = (tasks: TaskAllFields[]) => {
+    let newTasks = [...tasks.map((t) => ({ ...t, intersectIndex: 0 }))]
+    for (let i = 0; i < newTasks.length; i++) {
+      let count = 0
+      if (newTasks[i].date !== null)
+        for (let j = 0; j < newTasks.length; j++) {
+          if (newTasks[j].date !== null)
+            if (i !== j) {
+              const start1 = new Date(newTasks[i].date as Date | string)
+              const end1 = new Date(
+                start1.getTime() + newTasks[i].estimate * 60000
+              )
+              const start2 = new Date(newTasks[j].date as Date | string)
+              const end2 = new Date(
+                start2.getTime() + newTasks[j].estimate * 60000
+              )
+              if (start1 < end2 && end1 > start2) {
+                count++
+                if (start1 <= start2)
+                  newTasks[j].intersectIndex = newTasks[i].intersectIndex + 1
+                else newTasks[i].intersectIndex = newTasks[j].intersectIndex + 1
+              }
+            }
+        }
+      newTasks[i].intersects = count + 1
+    }
+    setTasks(newTasks)
+  }
+
   const fetchData = async () => {
     setIsFetching(true)
     const { tasks } = await fetchTasks()
     const { labels } = await fetchLabels()
-    setTasks(tasks)
+    setTasksWithIntersect(tasks)
     setLabels(labels)
     setIsFetching(false)
   }
@@ -268,7 +299,7 @@ export const TaskContextProvider = ({
 
   const value = {
     tasks,
-    setTasks: (tasks: TaskAllFields[]) => setTasks(tasks),
+    setTasks: (tasks: TaskAllFields[]) => setTasksWithIntersect(tasks),
     createTask,
     updateTask,
     deleteTask,
