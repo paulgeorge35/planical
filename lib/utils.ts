@@ -11,6 +11,7 @@ import {
   RocketIcon,
   StarIcon,
 } from "@radix-ui/react-icons"
+import { addMinutes, format } from "date-fns"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -30,13 +31,23 @@ export function formatDate(
   })
 }
 
+export function timeIntervalFromDateAndDuration(
+  date: Date | null,
+  minutes: number
+) {
+  const start = (date && new Date(date)) || new Date()
+  const end = addMinutes(start, minutes)
+  return `${format(start, "h:mm")} - ${format(end, "h:mm")}`
+}
+
 export function absoluteUrl(path: string) {
   return `${process.env.NEXT_PUBLIC_APP_URL}${path}`
 }
 
 export function getWeekIntervalOfDate(
   date: Date,
-  USER_PREF_FIRST_DAY_OF_WEEK: number = 1
+  USER_PREF_FIRST_DAY_OF_WEEK: number = 1,
+  USER_PREF_SHOW_WEEKENDS: boolean = true
 ) {
   let dateCopy = new Date(date.getTime())
   const day = dateCopy.getDay()
@@ -49,6 +60,10 @@ export function getWeekIntervalOfDate(
   for (let dateCopy = start; dateCopy <= end; dateCopy = addDays(1, dateCopy)) {
     dates.push(new Date(dateCopy))
   }
+  // Filter out weekends
+  if (!USER_PREF_SHOW_WEEKENDS)
+    return dates.filter((date) => date.getDay() !== 0 && date.getDay() !== 6)
+
   return dates
 }
 

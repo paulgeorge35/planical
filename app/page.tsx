@@ -178,6 +178,7 @@ export default function Home() {
           open={profileDialogueOpen}
           toggle={toggleProfileDialogue}
           dismissOnEscapeKey={true}
+          dismissOnClickOutside={true}
         >
           <ProfileDialogContent />
         </Dialog>
@@ -196,6 +197,7 @@ export default function Home() {
           open={taskDialog !== null}
           toggle={() => setTaskDialog(null)}
           dismissOnEscapeKey={true}
+          dismissOnClickOutside={true}
         >
           TASK
         </Dialog>

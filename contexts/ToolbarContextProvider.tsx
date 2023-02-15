@@ -37,7 +37,7 @@ export const ToolbarContext = createContext({
   nextDay: () => null,
   prevDay: () => null,
   resetToday: () => null,
-  weekToView: getWeekIntervalOfDate(new Date(), 1),
+  weekToView: getWeekIntervalOfDate(new Date(), 1, true),
   nextWeek: () => null,
   prevWeek: () => null,
   weekFromNow: getWeekIntervalFromDate(new Date()),
@@ -90,7 +90,11 @@ export const ToolbarContextProvider = ({
     new Date(new Date().toISOString().split("T")[0].replaceAll("-", "/"))
   )
   const [weekToView, setWeekToView] = useState<Date[]>(
-    getWeekIntervalOfDate(today, USER_PREF_FIRST_DAY_OF_WEEK)
+    getWeekIntervalOfDate(
+      today,
+      USER_PREF_FIRST_DAY_OF_WEEK,
+      USER_PREF_SHOW_WEEKENDS
+    )
   )
   const [weekFromNow, setWeekFromNow] = useState<Date[]>(
     getWeekIntervalFromDate(today)
@@ -119,11 +123,16 @@ export const ToolbarContextProvider = ({
 
   useEffect(() => {
     setWeekToView(
-      getWeekIntervalOfDate(dateToView, USER_PREF_FIRST_DAY_OF_WEEK)
+      getWeekIntervalOfDate(
+        dateToView,
+        USER_PREF_FIRST_DAY_OF_WEEK,
+        USER_PREF_SHOW_WEEKENDS
+      )
     )
   }, [
     dateToView,
     USER_PREF_FIRST_DAY_OF_WEEK,
+    USER_PREF_SHOW_WEEKENDS,
     getWeekIntervalOfDate,
     setWeekToView,
   ])
@@ -203,7 +212,7 @@ export const ToolbarContextProvider = ({
         ...weekFromNow,
         ...getWeekIntervalFromDate(addDays(1, weekFromNow[6])),
       ]),
-    month: format(weekToView[6], "MMM yyyy"),
+    month: format(weekToView[weekToView.length - 1], "MMM yyyy"),
     isWeekToView: () => isWeekToView(today, weekToView),
     taskDialog,
     setTaskDialog: (value: TaskAllFields | null) => setTaskDialog(value),

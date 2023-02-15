@@ -3,7 +3,12 @@ import { Label, Subtask, Task } from "@prisma/client"
 import internal from "stream"
 
 export type TaskAllFields = PickAndFlatten<
-  Task & { subtasks: Subtask[]; label: Label }
+  Task & {
+    subtasks: Subtask[]
+    label: Label
+    intersects?: number
+    intersectIndex?: number
+  }
 >
 
 export type SubtaskNewType = PickAndFlatten<
