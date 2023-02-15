@@ -1,13 +1,10 @@
-import {
-  TaskContext,
-  TaskContextProvider,
-} from "@/contexts/TaskContextProvider"
+import { TaskContext } from "@/contexts/TaskContextProvider"
 import { ToolbarContext } from "@/contexts/ToolbarContextProvider"
 import { cn, compareDates } from "@/lib/utils"
 import { TriangleRightIcon } from "@radix-ui/react-icons"
 import { format } from "date-fns"
 import { useContext, useEffect, useRef, useState } from "react"
-import { Droppable } from "react-beautiful-dnd"
+// import { Droppable } from "react-beautiful-dnd"
 import { TaskAllFields } from "types"
 
 import Task from "./task-card"
@@ -153,33 +150,37 @@ const CalendarTimeSlot = ({
   })
 
   const { tasks } = useContext(TaskContext)
+  const { weekToView } = useContext(ToolbarContext)
   return (
-    <Droppable droppableId={`${interval.start}`}>
-      {(provided, snapshot) => (
-        <div
-          ref={provided.innerRef}
-          {...provided.droppableProps}
-          className={cn(
-            "relative h-2 w-full overflow-visible",
-            snapshot.isDraggingOver && "bg-purple-500/5"
-          )}
-        >
-          {tasks
-            .filter(
-              (t) =>
-                t.date &&
-                compareDates(new Date(t.date), interval.start) &&
-                new Date(t.date).getHours() === hour &&
-                new Date(t.date).getMinutes() >= minute &&
-                new Date(t.date).getMinutes() < minute + 60 / timeSlots
-            )
-            .map((task) => (
-              <Task key={task.id} task={task} />
-            ))}
-          {provided.placeholder}
-        </div>
+    // <Droppable droppableId={`${interval.start}`}>
+    //   {(provided, snapshot) => (
+    <div
+      //   ref={provided.innerRef}
+      //   {...provided.droppableProps}
+      className={cn(
+        "relative h-2 w-full overflow-visible"
+        // snapshot.isDraggingOver && "bg-purple-500/5"
       )}
-    </Droppable>
+    >
+      {tasks
+        .filter(
+          (t) =>
+            t.date &&
+            weekToView.some(
+              (d) => t.date && compareDates(new Date(t.date), d)
+            ) &&
+            compareDates(new Date(t.date), interval.start) &&
+            new Date(t.date).getHours() === hour &&
+            new Date(t.date).getMinutes() >= minute &&
+            new Date(t.date).getMinutes() < minute + 60 / timeSlots
+        )
+        .map((task) => (
+          <Task key={task.id} task={task} />
+        ))}
+      {/* {provided.placeholder} */}
+    </div>
+    //   )}
+    // </Droppable>
     // <div className={cn("relative h-2 w-full overflow-visible")}></div>
   )
 }

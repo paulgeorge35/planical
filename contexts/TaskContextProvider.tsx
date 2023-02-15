@@ -256,12 +256,18 @@ export const TaskContextProvider = ({
   }
 
   const setTasksWithIntersect = (tasks: TaskAllFields[]) => {
-    let newTasks = [...tasks.map((t) => ({ ...t, intersectIndex: 0 }))]
-    for (let i = 0; i < newTasks.length; i++) {
+    let newTasks = [
+      ...tasks.map((t) => ({ ...t, intersects: 0, intersectIndex: 0 })),
+    ]
+    for (let i = 0; i < newTasks.length - 1; i++) {
       let count = 0
       if (newTasks[i].date !== null)
-        for (let j = 0; j < newTasks.length; j++) {
-          if (newTasks[j].date !== null)
+        for (let j = i; j < newTasks.length; j++) {
+          if (
+            newTasks[j].date !== null &&
+            newTasks[i].done !== true &&
+            newTasks[j].done !== true
+          )
             if (i !== j) {
               const start1 = new Date(newTasks[i].date as Date | string)
               const end1 = new Date(
@@ -279,7 +285,7 @@ export const TaskContextProvider = ({
               }
             }
         }
-      newTasks[i].intersects = count + 1
+      newTasks[i].intersects = count
     }
     setTasks(newTasks)
   }

@@ -50,7 +50,7 @@ const Select = ({
           position="popper"
           sideOffset={5}
           className={cn(
-            "w-full rounded border-[1px] px-4 shadow-md",
+            "z-[100] w-full rounded border-[1px] px-4 shadow-md",
             "border-neutral-900 bg-white",
             "dark:border-neutral-500 dark:bg-neutral-900"
           )}
