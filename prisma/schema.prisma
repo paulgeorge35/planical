@@ -8,17 +8,19 @@ datasource db {
 }
 
 model Profile {
-    id         String        @id(map: "profile_pkey") @db.Uuid
-    username   String?       @unique(map: "profile_username_key")
-    email      String        @unique
+    id         String  @id(map: "profile_pkey") @db.Uuid
+    username   String? @unique(map: "profile_username_key")
+    email      String  @unique
     full_name  String?
     avatar_url String?
-    labels     Label[]
-    tasks      Task[]
-    columns    Column[]
-    createdAt  DateTime      @default(now())
-    settings   UserSettings?
-    updatedAt  DateTime      @updatedAt
+
+    labels   Label[]
+    tasks    Task[]
+    columns  Column[]
+    settings UserSettings?
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 }
 
 model Task {

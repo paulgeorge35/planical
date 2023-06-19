@@ -76,10 +76,10 @@ export const TaskContextProvider = ({
         }),
       })
     ).json()
-    if (res && dontSetAfter !== true)
-      setTasksWithIntersect([
-        ...tasks.filter((l) => (l.id !== res.task.id ? l : res.task)),
-      ])
+    if (res && dontSetAfter !== true) console.log("updateTask", res.task, tasks)
+    setTasksWithIntersect([
+      ...tasks.filter((l) => (l.id !== res.task.id ? l : res.task)),
+    ])
     return res
   }
 

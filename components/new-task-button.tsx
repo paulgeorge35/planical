@@ -1,7 +1,6 @@
 import { cn, formatTime } from "@/lib/utils"
 import { Task } from "@prisma/client"
 import { PlusCircledIcon } from "@radix-ui/react-icons"
-import { TaskType } from "types"
 import Button from "./button"
 
 type NewTaskButton = {

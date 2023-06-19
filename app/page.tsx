@@ -24,6 +24,7 @@ import { DragDropContext, DropResult } from "react-beautiful-dnd"
 import { TaskContext } from "@/contexts/TaskContextProvider"
 import { TaskAllFields } from "types"
 import { ToolbarContext } from "@/contexts/ToolbarContextProvider"
+import TaskDialogContent from "@/components/dialog/task-dialog-content"
 
 export default function Home() {
   const mounted = useMounted()
@@ -193,13 +194,14 @@ export default function Home() {
           />
         </Dialog>
         <Dialog
-          className={cn("max-w-[600px] p-6 py-8")}
+          className={cn("max-w-[600px] p-2")}
           open={taskDialog !== null}
           toggle={() => setTaskDialog(null)}
+          closeButton={false}
           dismissOnEscapeKey={true}
           dismissOnClickOutside={true}
         >
-          TASK
+          {taskDialog !== null && <TaskDialogContent task={taskDialog} />}
         </Dialog>
         <SidebarLeft
           left={left}
